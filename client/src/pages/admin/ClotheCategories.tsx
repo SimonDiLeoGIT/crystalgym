@@ -20,10 +20,11 @@ const ClotheCategories = () => {
   const [loading, setLoading] = useState(true);
 
   const [paginatedCategories, setPaginatedCategories] = useState<PaginatedCategoriesInterface | null>(null);
-  // const [currentPage, setCurrentPage] = useState<number>(0)
 
   // const [submiting, setSubmiting] = useState(false);
 
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingName, setEditingName] = useState<string>('');
 
   const { getUser } = useUser();
   
@@ -76,6 +77,10 @@ const ClotheCategories = () => {
     }
   };
 
+  const handleClickEdit = (id: number, name: string) => {
+    setEditingId(id);
+    setEditingName(name);
+  };
 
   return (
     <section className=" w-11/12 lg:w-10/12 m-auto my-12">
@@ -88,9 +93,14 @@ const ClotheCategories = () => {
         {paginatedCategories?.data.categories.map((category, index) => {
           return (
             <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`}>
-              <form className="flex">
-                <input className="w-24" disabled value={category.id} />
-                <input className="flex-1 p-2" disabled value={category.name} />
+              <form key={category.id} className="flex">
+                <fieldset className="flex flex-1" disabled={editingId != category.id}>
+                  <input className="w-24 p-2" disabled value={category.id} />
+                  <input className="flex-1 p-2" value={editingId == category.id ? editingName : category.name} onChange={(e) => setEditingName(e.target.value)}/>
+                </fieldset>
+                <div className="w-24 p-2">
+                  <button type="button" key={category.id} onClick={() => handleClickEdit(category.id, category.name)} className="hover:opacity-60">Edit</button>
+                </div>
               </form>
             </li>
           )
