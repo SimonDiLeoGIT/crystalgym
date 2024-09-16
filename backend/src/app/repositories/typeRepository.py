@@ -11,6 +11,10 @@ class TypeRepository:
     types = db.session.query(Type).all()
     return types
   
+  def get_types_by_id(self, id_type):
+    category = db.session.query(Type).filter(Type.id == id_type).first()
+    return category
+  
   def get_paginated_types(self, page, page_size):
     page = int(page)
     page_size = int(page_size)
@@ -29,3 +33,11 @@ class TypeRepository:
     }
 
     return response
+
+  def update_type(self, id_type, name):
+    if not db.session.query(Type).filter(Type.id == id_type).first():
+      return None
+    category = db.session.query(Type).filter(Type.id == id_type).first()
+    category.name = name
+    db.session.commit()
+    return category

@@ -22,3 +22,9 @@ class TypeService(metaclass=SingletonMeta):
       return [None, 'Categories not found', 404]
     
     return [categories, 'Categories retrieved successfully', 200]
+  
+  def update_type(self, id_type, name):
+    if not self.type_repository.get_types_by_id(id_type):
+      return [None, 'Type not found', 404]
+    category = self.type_repository.update_type(id_type, name)
+    return [category.to_json(), 'Type updated successfully', 200]
