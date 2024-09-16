@@ -1,4 +1,5 @@
 from flask import Blueprint, request
+from flask_jwt_extended import jwt_required
 # import services
 from app.services.typeService import TypeService
 # import utils
@@ -31,6 +32,7 @@ def get_paginated_categories(page=1, page_size=10):
 
 
 @type_bp.route("/categories/admin", methods=["PUT"])
+@jwt_required()
 def update_type():
   data = type_service.update_type(request.json['id_type'], request.json['name'])
   if data[0] is None:

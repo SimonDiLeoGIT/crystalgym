@@ -12,17 +12,10 @@ import Category from "./Category";
 
 const ClotheCategories = () => {
 
-  // const [message, setMessage] = useState<string>('');
-  // const [visibleMessage, setVisibleMessage] = useState<boolean>(false);
-  // const [errorMessage, setErrorMessage] = useState<string>('');
-  // const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
-
   const [user, setUser] = useState<UserDataInterface | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [paginatedCategories, setPaginatedCategories] = useState<PaginatedCategoriesInterface | null>(null);
-
-  // const [submiting, setSubmiting] = useState(false);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   
@@ -45,6 +38,10 @@ const ClotheCategories = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [editingId]);
 
   const fetchCategories = async (page: number = 1) => {
     const response = await CategoryService.getPaginatedCategories(page);
