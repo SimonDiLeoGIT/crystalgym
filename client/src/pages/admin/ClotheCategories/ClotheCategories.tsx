@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import Login from "../Login";
-import { UserDataInterface } from "../../interfaces/UserInterface";
-import { useUser } from "../../hook/useUser";
-import { PaginatedCategoriesInterface } from "../../interfaces/CategoryInterfaces";
-import CategoryService from "../../services/category.service";
+import Login from "../../Login";
+import { UserDataInterface } from "../../../interfaces/UserInterface";
+import { useUser } from "../../../hook/useUser";
+import { PaginatedCategoriesInterface } from "../../../interfaces/CategoryInterfaces";
+import CategoryService from "../../../services/category.service";
 import ReactPaginate from "react-paginate";
-import left_arrow from '../../assets/icons/carousel/left-arrow.svg'
-import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
+import left_arrow from '../../../assets/icons/carousel/left-arrow.svg'
+import right_arrow from '../../../assets/icons/carousel/right-arrow.svg'
+import Category from "./Category";
 
 
 const ClotheCategories = () => {
@@ -24,8 +25,7 @@ const ClotheCategories = () => {
   // const [submiting, setSubmiting] = useState(false);
 
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editingName, setEditingName] = useState<string>('');
-
+  
   const { getUser } = useUser();
   
 
@@ -77,14 +77,10 @@ const ClotheCategories = () => {
     }
   };
 
-  const handleClickEdit = (id: number, name: string) => {
-    setEditingId(id);
-    setEditingName(name);
-  };
 
   return (
     <section className=" w-11/12 lg:w-10/12 m-auto my-12">
-      <h1 className="text-3xl font-bold">Clothe Categories</h1>
+      <h1 className="text-3xl font-bold">Categories</h1>
       <ul className=" rounded-xl overflow-hidden shadow-lg -shadow--color-greyest-violet">
         <li className="flex -bg--color-grey-violet -text--color-white p-2">
           <strong className="w-24">ID</strong>
@@ -93,15 +89,7 @@ const ClotheCategories = () => {
         {paginatedCategories?.data.categories.map((category, index) => {
           return (
             <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`}>
-              <form key={category.id} className="flex">
-                <fieldset className="flex flex-1" disabled={editingId != category.id}>
-                  <input className="w-24 p-2" disabled value={category.id} />
-                  <input className="flex-1 p-2" value={editingId == category.id ? editingName : category.name} onChange={(e) => setEditingName(e.target.value)}/>
-                </fieldset>
-                <div className="w-24 p-2">
-                  <button type="button" key={category.id} onClick={() => handleClickEdit(category.id, category.name)} className="hover:opacity-60">Edit</button>
-                </div>
-              </form>
+              <Category category={category} editingId={editingId} setEditingId={setEditingId} />
             </li>
           )
         })}
