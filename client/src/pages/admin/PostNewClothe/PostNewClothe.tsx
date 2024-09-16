@@ -1,19 +1,19 @@
 import { lazy, useEffect, useState } from "react";
-import { ClotheDataInterface } from "../interfaces/ClothesInterfaces";
-import ClotheService from "../services/clothe.service";
+import { ClotheDataInterface } from "../../../interfaces/ClothesInterfaces";
+import ClotheService from "../../../services/clothe.service";
 
 import '../styles/form.css';
 
-import { UserDataInterface } from "../interfaces/UserInterface";
-import { useUser } from "../hook/useUser";
-import ErrorMessage from "../components/ErrorMessage";
-import { ErrorInterface } from "../interfaces/ErrorInterface";
-import Message from "../components/Message";
+import { UserDataInterface } from "../../../interfaces/UserInterface";
+import { useUser } from "../../../hook/useUser";
+import ErrorMessage from "../../../components/ErrorMessage";
+import { ErrorInterface } from "../../../interfaces/ErrorInterface";
+import Message from "../../../components/Message";
 import { BounceLoader } from "react-spinners";
-import useFetchData from "../hook/useFetchClotheData";
+import useFetchData from "../../../hook/useFetchClotheData";
 
-const Login = lazy(() => import("./Login"))
-const ColorInputs = lazy(() => import("../components/PostClotheForm/ColorInputs"))
+const Login = lazy(() => import("../../Login"))
+const ColorInputs = lazy(() => import("../../../components/PostClotheForm/ColorInputs"))
 
 const PostNewClothe = () => {
 

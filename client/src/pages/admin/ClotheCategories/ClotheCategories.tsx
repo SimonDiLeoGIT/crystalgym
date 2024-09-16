@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react";
-import Login from "../Login";
-import { UserDataInterface } from "../../interfaces/UserInterface";
-import { useUser } from "../../hook/useUser";
-import { PaginatedCategoriesInterface } from "../../interfaces/CategoryInterfaces";
-import CategoryService from "../../services/category.service";
+import Login from "../../Login";
+import { UserDataInterface } from "../../../interfaces/UserInterface";
+import { useUser } from "../../../hook/useUser";
+import { PaginatedCategoriesInterface } from "../../../interfaces/CategoryInterfaces";
+import CategoryService from "../../../services/category.service";
 import ReactPaginate from "react-paginate";
-import left_arrow from '../../assets/icons/carousel/left-arrow.svg'
-import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
+import left_arrow from '../../../assets/icons/carousel/left-arrow.svg'
+import right_arrow from '../../../assets/icons/carousel/right-arrow.svg'
+import Category from "./Category";
 
 
 const ClotheCategories = () => {
-
-  // const [message, setMessage] = useState<string>('');
-  // const [visibleMessage, setVisibleMessage] = useState<boolean>(false);
-  // const [errorMessage, setErrorMessage] = useState<string>('');
-  // const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
 
   const [user, setUser] = useState<UserDataInterface | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [paginatedCategories, setPaginatedCategories] = useState<PaginatedCategoriesInterface | null>(null);
-  // const [currentPage, setCurrentPage] = useState<number>(0)
 
-  // const [submiting, setSubmiting] = useState(false);
-
-
+  const [editingId, setEditingId] = useState<number | null>(null);
+  
   const { getUser } = useUser();
   
 
@@ -44,6 +38,10 @@ const ClotheCategories = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [editingId]);
 
   const fetchCategories = async (page: number = 1) => {
     const response = await CategoryService.getPaginatedCategories(page);
@@ -79,19 +77,16 @@ const ClotheCategories = () => {
 
   return (
     <section className=" w-11/12 lg:w-10/12 m-auto my-12">
-      <h1 className="text-3xl font-bold">Clothe Categories</h1>
+      <h1 className="text-3xl font-bold">Categories</h1>
       <ul className=" rounded-xl overflow-hidden shadow-lg -shadow--color-greyest-violet">
-        <li className="flex -bg--color-grey-violet -text--color-white p-2">
+        <li className="flex -bg--color-grey-violet -text--color-white p-3">
           <strong className="w-24">ID</strong>
           <strong className="flex-1">Name</strong>
         </li>
         {paginatedCategories?.data.categories.map((category, index) => {
           return (
             <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`}>
-              <form className="flex">
-                <input className="w-24" disabled value={category.id} />
-                <input className="flex-1 p-2" disabled value={category.name} />
-              </form>
+              <Category category={category} editingId={editingId} setEditingId={setEditingId} />
             </li>
           )
         })}
