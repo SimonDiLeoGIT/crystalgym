@@ -82,7 +82,7 @@ const ClotheCategories = () => {
     <section className=" w-11/12 lg:w-10/12 m-auto my-12">
       <h1 className="text-3xl font-bold">Categories</h1>
       <ul className=" rounded-xl overflow-hidden shadow-lg -shadow--color-greyest-violet">
-        <li className="flex -bg--color-grey-violet -text--color-white p-2">
+        <li className="flex -bg--color-grey-violet -text--color-white p-3">
           <strong className="w-24">ID</strong>
           <strong className="flex-1">Name</strong>
         </li>
