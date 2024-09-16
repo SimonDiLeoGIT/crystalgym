@@ -13,8 +13,13 @@ export default class CategoryService {
     return response;
   }
 
-  static async updateCategories(id: number, name: string): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/categories/admin`, 'PUT', { 'id_type':id, 'name':name });
+  static async updateCategory(id: number, name: string): Promise<PaginatedCategoriesInterface> {
+    const response = await ApiService.makeRequest(`/category/admin`, 'PUT', { 'id_type':id, 'name':name });
+    return response;
+  }
+
+  static async createCategory(name: string): Promise<PaginatedCategoriesInterface> {
+    const response = await ApiService.makeRequest(`/category/admin`, 'POST', {'name':name });
     return response;
   }
 }

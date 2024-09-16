@@ -8,6 +8,9 @@ import ReactPaginate from "react-paginate";
 import left_arrow from '../../../assets/icons/carousel/left-arrow.svg'
 import right_arrow from '../../../assets/icons/carousel/right-arrow.svg'
 import Category from "./Category";
+import Message from "../../../components/Message";
+import ErrorMessage from "../../../components/ErrorMessage";
+import { ErrorInterface } from "../../../interfaces/ErrorInterface";
 
 
 const ClotheCategories = () => {
@@ -18,6 +21,14 @@ const ClotheCategories = () => {
   const [paginatedCategories, setPaginatedCategories] = useState<PaginatedCategoriesInterface | null>(null);
 
   const [editingId, setEditingId] = useState<number | null>(null);
+
+  const [adding, setAdding] = useState<boolean>(false);
+
+  const [editingName, setEditingName] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [visibleMessage, setVisibleMessage] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
   
   const { getUser } = useUser();
   
@@ -41,7 +52,7 @@ const ClotheCategories = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, [editingId]);
+  }, [editingId,adding]);
 
   const fetchCategories = async (page: number = 1) => {
     const response = await CategoryService.getPaginatedCategories(page);
@@ -74,10 +85,63 @@ const ClotheCategories = () => {
     }
   };
 
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingId == null) return;
+    try {
+      const response = await CategoryService.updateCategory(editingId, editingName);
+      if (response.code === 200) {
+        setMessage(response.message);
+        setVisibleMessage(true);
+        setEditingId(null);
+      } else {
+        setErrorMessage("Error updating category");
+        setVisibleErrorMessage(true);
+      }
+    } catch (error) {
+      const errorResponse: ErrorInterface = error as ErrorInterface;
+      setErrorMessage(errorResponse.message || "An error occurred");
+      setVisibleErrorMessage(true);
+    }
+  }
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await CategoryService.createCategory(editingName);
+      if (response.code === 201) {
+        setMessage(response.message);
+        setVisibleMessage(true);
+        setAdding(false);
+      } else {
+        setErrorMessage("Error creating category");
+        setVisibleErrorMessage(true);
+      }
+    } catch (error) {
+      const errorResponse: ErrorInterface = error as ErrorInterface;
+      setErrorMessage(errorResponse.message || "An error occurred");
+      setVisibleErrorMessage(true);
+    }
+  }
+
+  const handleCancelEditing = () => {
+    setEditingId(null);
+  }
+
+  const handleCancelAdding = () => {
+    setAdding(false);
+  }
 
   return (
     <section className=" w-11/12 lg:w-10/12 m-auto my-12">
-      <h1 className="text-3xl font-bold">Categories</h1>
+      <Message message={message} visible={visibleMessage} setVisible={setVisibleMessage} />
+      <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
+      <header className="flex justify-between mb-2">
+        <h1 className="text-3xl font-bold">Categories</h1>
+        <button onClick={() => setAdding((prev) => !prev)} className="p-2 rounded-lg -bg--color-dark-violet -text--color-white font-semibold hover:opacity-80">
+          Add Category
+        </button>
+      </header>
       <ul className=" rounded-xl overflow-hidden shadow-lg -shadow--color-greyest-violet">
         <li className="flex -bg--color-grey-violet -text--color-white p-3">
           <strong className="w-24">ID</strong>
@@ -86,10 +150,13 @@ const ClotheCategories = () => {
         {paginatedCategories?.data.categories.map((category, index) => {
           return (
             <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`}>
-              <Category category={category} editingId={editingId} setEditingId={setEditingId} />
+              <Category category={category} editingId={editingId} setEditingId={setEditingId} editingName={editingName} setEditingName={setEditingName} handleSubmit={handleUpdate} handleCancel={handleCancelEditing}/>
             </li>
           )
         })}
+        {
+          adding && <Category category={null} editingId={editingId} setEditingId={setEditingId} editingName={editingName} setEditingName={setEditingName} handleSubmit={handleCreate} handleCancel={handleCancelAdding}/>
+        }
       </ul>
       <ReactPaginate 
         breakLabel="..."

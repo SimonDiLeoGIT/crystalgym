@@ -8,6 +8,12 @@ class TypeService(metaclass=SingletonMeta):
     self.type_repository = TypeRepository()
     self.pagination = PaginationHelper()
 
+  def create_type(self, name):
+    category = self.type_repository.create_type(name)
+    if category is None:
+      return [None, 'Category already exists', 409]
+    return [category.to_json(), 'Category created successfully', 201]
+
   def get_categories(self):
     categories = self.type_repository.get_types()
     if categories is None:

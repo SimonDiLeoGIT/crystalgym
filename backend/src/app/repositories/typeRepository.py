@@ -7,6 +7,12 @@ class TypeRepository:
   def __init__(self):
     self.pagination = PaginationHelper()
 
+  def create_type(self, name):
+    category = Type(name=name)
+    db.session.add(category)
+    db.session.commit()
+    return category
+
   def get_types(self):
     types = db.session.query(Type).all()
     return types
