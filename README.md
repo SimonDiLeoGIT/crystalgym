@@ -2,13 +2,13 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SimonDiLeoGIT/crystalgym-ecommerce/main/client/public/CrystalGymLogoDark.png">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/SimonDiLeoGIT/crystalgym-ecommerce/main/client/public/CrystalGymLogo.png">
-    <img alt="CrystalGym Logo." src="https://raw.githubusercontent.com/SimonDiLeoGIT/crystalgym/refs/heads/main/client/src/assets/Mockup.png" width="80px" height="80px">
+    <img alt="CrystalGym Logo." src="https://raw.githubusercontent.com/SimonDiLeoGIT/crystalgym-ecommerce/main/client/public/CrystalGymLogoDark.png" width="80px" height="80px">
   </picture>
   <h1 align="center">CrystalGym</h1>
 </p>
 
 <picture>
-  <img alt="CrystalGym Mockup" src="https://raw.githubusercontent.com/SimonDiLeoGIT/crystalgym-ecommerce/develop/client/public/Mockup.png">
+  <img alt="CrystalGym Mockup" src="https://raw.githubusercontent.com/SimonDiLeoGIT/crystalgym/refs/heads/main/client/src/assets/Mockup.png">
 </picture>
 
 ## Introduction
