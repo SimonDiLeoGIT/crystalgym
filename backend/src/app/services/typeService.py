@@ -8,8 +8,8 @@ class TypeService(metaclass=SingletonMeta):
     self.type_repository = TypeRepository()
     self.pagination = PaginationHelper()
 
-  def create_type(self, name):
-    category = self.type_repository.create_type(name)
+  def create_type(self, name, description):
+    category = self.type_repository.create_type(name, description)
     if category is None:
       return [None, 'Category already exists', 409]
     return [category.to_json(), 'Category created successfully', 201]
@@ -29,8 +29,8 @@ class TypeService(metaclass=SingletonMeta):
     
     return [categories, 'Categories retrieved successfully', 200]
   
-  def update_type(self, id_type, name):
+  def update_type(self, id_type, name, description):
     if not self.type_repository.get_types_by_id(id_type):
       return [None, 'Type not found', 404]
-    category = self.type_repository.update_type(id_type, name)
+    category = self.type_repository.update_type(id_type, name, description)
     return [category.to_json(), 'Type updated successfully', 200]

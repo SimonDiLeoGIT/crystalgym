@@ -1,36 +1,41 @@
 import { useEffect, useState } from "react";
 import Login from "../../Login";
-import { UserDataInterface } from "../../../interfaces/UserInterface";
 import { useUser } from "../../../hook/useUser";
-import { PaginatedCategoriesInterface } from "../../../interfaces/CategoryInterfaces";
+import { CategoryDataInterface, PaginatedCategoriesInterface } from "../../../interfaces/CategoryInterfaces";
 import CategoryService from "../../../services/category.service";
 import ReactPaginate from "react-paginate";
-import left_arrow from '../../../assets/icons/carousel/left-arrow.svg'
-import right_arrow from '../../../assets/icons/carousel/right-arrow.svg'
 import Category from "./Category";
 import Message from "../../../components/Message";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { ErrorInterface } from "../../../interfaces/ErrorInterface";
+import left_arrow from '../../../assets/icons/carousel/left-arrow.svg'
+import right_arrow from '../../../assets/icons/carousel/right-arrow.svg'
+import edit_icon from "../../../assets/icons/edit-cover-1481-svgrepo-com.svg.svg"
+import open from "../../../assets/icons/open-folder-svgrepo-com.svg"
 
 
 const ClotheCategories = () => {
 
-  const [user, setUser] = useState<UserDataInterface | null>(null);
+  // const [user, setUser] = useState<UserDataInterface | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [paginatedCategories, setPaginatedCategories] = useState<PaginatedCategoriesInterface | null>(null);
 
+  const [adding, setAdding] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number | null>(null);
 
-  const [adding, setAdding] = useState<boolean>(false);
+  const [editingCategory, setEditingCategory] = useState<CategoryDataInterface | null>(null);	
 
-  const [editingName, setEditingName] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [visibleMessage, setVisibleMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
+
+  // const [sortBy, setSortBy] = useState<keyof CategoryInterface>('id');
+  // const [sortOrder, setSortOrder] = useState<string>('asc');
+  // const [selectedSort, setSelectedSort] = useState<keyof CategoryInterface | null>(null)
   
-  const { getUser } = useUser();
+  const { getUser, user } = useUser();
   
 
   useEffect(() => {
@@ -39,22 +44,21 @@ const ClotheCategories = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const fetchedUser : UserDataInterface | null = await getUser();
-      setUser(fetchedUser);
+      await getUser();
     };
 
     fetchUser();
-  }, [ getUser ]);
+  }, [ getUser ]); // eslint-disable-line
 
   useEffect(() => {
-    fetchCategories();
+    getCategories();
   }, []);
 
   useEffect(() => {
-    fetchCategories();
+    getCategories();
   }, [editingId,adding]);
 
-  const fetchCategories = async (page: number = 1) => {
+  const getCategories = async (page: number = 1) => {
     const response = await CategoryService.getPaginatedCategories(page);
     if (response.code == 200) {
       setPaginatedCategories(response);
@@ -79,7 +83,7 @@ const ClotheCategories = () => {
       const totalPages = paginatedCategories?.data.pagination.total_pages;
 
       if (nextPage <= totalPages) {
-        await fetchCategories(nextPage);
+        await getCategories(nextPage);
         window.scrollTo(0, 0);
       }
     }
@@ -87,9 +91,9 @@ const ClotheCategories = () => {
 
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (editingId == null) return;
+    if (editingCategory == null) return;
     try {
-      const response = await CategoryService.updateCategory(editingId, editingName);
+      const response = await CategoryService.updateCategory(editingCategory);
       if (response.code === 200) {
         setMessage(response.message);
         setVisibleMessage(true);
@@ -107,8 +111,9 @@ const ClotheCategories = () => {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (editingCategory == null) return;
     try {
-      const response = await CategoryService.createCategory(editingName);
+      const response = await CategoryService.createCategory(editingCategory);
       if (response.code === 201) {
         setMessage(response.message);
         setVisibleMessage(true);
@@ -124,8 +129,23 @@ const ClotheCategories = () => {
     }
   }
 
+  // const handleDelete = async (id: number) => {
+  //   try {
+  //     const response = await CategoryService.deleteCategory(id)
+  //     if (response) {
+  //       setMessage("Categoría eliminada con exito.")
+  //       setVisibleMessage(true)
+  //       getCategories(sortBy, sortOrder)
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     setErrorMessage('No se pudo eliminar la categoría. Intentelo nuevamente')
+  //     setVisibleErrorMessage(true)
+  //   }
+  // }
+
   const handleCancelEditing = () => {
-    setEditingId(null);
+    setEditingCategory(null);
   }
 
   const handleCancelAdding = () => {
@@ -146,17 +166,32 @@ const ClotheCategories = () => {
         <li className="flex -bg--color-grey-violet -text--color-white p-3">
           <strong className="w-24">ID</strong>
           <strong className="flex-1">Name</strong>
+          <strong className="flex-1">Description</strong>
         </li>
+        {
+          adding &&
+          <li key={0} className="">
+            <Category handleSubmit={handleCreate} handleCancel={handleCancelAdding} setEditingCategory={setEditingCategory} editing />
+          </li>
+        }
         {paginatedCategories?.data.categories.map((category, index) => {
           return (
-            <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`}>
-              <Category category={category} editingId={editingId} setEditingId={setEditingId} editingName={editingName} setEditingName={setEditingName} handleSubmit={handleUpdate} handleCancel={handleCancelEditing}/>
+            <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""} border-b-2 relative`}>
+              <Category category={category} handleSubmit={handleUpdate} handleCancel={handleCancelEditing} editingCategory={editingCategory} setEditingCategory={setEditingCategory} editing={editingCategory?.id === category.id} />
+              {
+                !editingCategory &&
+                <div className="absolute top-0 right-0 flex justify-between gap-2 w-24 h-full">
+                  <button type="button" className="hover:opacity-80 -bg--color-grey-violet p-2  rounded-lg">
+                    <img src={open} alt="open icon" width={20} className="m-auto"/>
+                  </button>
+                  <button type="button" onClick={() => setEditingCategory(category)} className="hover:opacity-80 -bg--color-dark-violet p-2  rounded-lg">
+                    <img src={edit_icon} alt="edit icon" width={20} className="m-auto"/>
+                  </button>
+                </div>
+              }
             </li>
           )
         })}
-        {
-          adding && <Category category={null} editingId={editingId} setEditingId={setEditingId} editingName={editingName} setEditingName={setEditingName} handleSubmit={handleCreate} handleCancel={handleCancelAdding}/>
-        }
       </ul>
       <ReactPaginate 
         breakLabel="..."

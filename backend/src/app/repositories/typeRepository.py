@@ -7,8 +7,8 @@ class TypeRepository:
   def __init__(self):
     self.pagination = PaginationHelper()
 
-  def create_type(self, name):
-    category = Type(name=name)
+  def create_type(self, name, description):
+    category = Type(name=name, description=description)
     db.session.add(category)
     db.session.commit()
     return category
@@ -40,10 +40,11 @@ class TypeRepository:
 
     return response
 
-  def update_type(self, id_type, name):
+  def update_type(self, id_type, name, description):
     if not db.session.query(Type).filter(Type.id == id_type).first():
       return None
     category = db.session.query(Type).filter(Type.id == id_type).first()
     category.name = name
+    category.description = description
     db.session.commit()
     return category

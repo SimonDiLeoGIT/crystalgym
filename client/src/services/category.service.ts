@@ -1,4 +1,4 @@
-import { CategoryInterface, PaginatedCategoriesInterface } from '../interfaces/CategoryInterfaces';
+import { CategoryDataInterface, CategoryInterface, PaginatedCategoriesInterface } from '../interfaces/CategoryInterfaces';
 import ApiService from './api.service';
 
 export default class CategoryService {
@@ -13,13 +13,13 @@ export default class CategoryService {
     return response;
   }
 
-  static async updateCategory(id: number, name: string): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/category/admin`, 'PUT', { 'id_type':id, 'name':name });
+  static async updateCategory(category: CategoryDataInterface): Promise<PaginatedCategoriesInterface> {
+    const response = await ApiService.makeRequest(`/category/admin`, 'PUT', { 'id_type':category.id, 'name':category.name, 'description':category.description });
     return response;
   }
 
-  static async createCategory(name: string): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/category/admin`, 'POST', {'name':name });
+  static async createCategory(category: CategoryDataInterface): Promise<PaginatedCategoriesInterface> {
+    const response = await ApiService.makeRequest(`/category/admin`, 'POST', {'name': category.name, 'description': category.description });
     return response;
   }
 }
