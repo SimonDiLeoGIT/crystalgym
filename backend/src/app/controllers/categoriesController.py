@@ -42,7 +42,7 @@ def get_paginated_categories(page=1, page_size=10):
 @type_bp.route("/category/admin", methods=["PUT"])
 @jwt_required()
 def update_type():
-  data = type_service.update_type(request.json['id_type'], request.json['name'], request.json['description'] | None)
+  data = type_service.update_type(request.json['id_type'], request.json['name'], request.json['description'])
   if data[0] is None:
     return ResponseHandler().create_error_response('Error', data[1], data[2])
   return ResponseHandler().create_response('success', data[1], data[0], code=data[2])

@@ -9,9 +9,10 @@ interface Props {
   editingCategory?: CategoryDataInterface | null
   setEditingCategory: React.Dispatch<React.SetStateAction<CategoryDataInterface | null>>
   editing: boolean
+  index: number
 }
 
-const Category: React.FC<Props> = ({ category, editingCategory, setEditingCategory, editing, handleSubmit, handleCancel }) => {
+const Category: React.FC<Props> = ({ category, editingCategory, setEditingCategory, editing, handleSubmit, handleCancel, index }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,19 +23,19 @@ const Category: React.FC<Props> = ({ category, editingCategory, setEditingCatego
   };
 
   return (
-    <form onSubmit={handleSubmit} key={category?.id} className="flex">
-      <fieldset className="flex flex-1" disabled={!editing}>
-        <p className="w-24 p-3">{category?.id}</p>
-        <input className={`flex-1 p-3 ${editing ? "border-b-4 -border--color-green focus:outline-none" : ""}`} value={editing ? editingCategory?.name : category?.name} onChange={handleInputChange}/>
-        <input className={`flex-1 p-3 ${editing ? "border-b-4 -border--color-green focus:outline-none" : ""}`} value={editing ? editingCategory?.description : category?.description} onChange={handleInputChange}/>
+    <form onSubmit={handleSubmit} key={category?.id} className="">
+      <fieldset className="grid grid-cols-3 gap-2" disabled={!editing}>
+        <p className="p-2">{category?.id ? category.id : 'Id'}</p>
+        <input className={`p-2 ${editing ? "p-2 border-b-2 -border--color-green focus:outline-none b " : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.name : category?.name} name='name' onChange={handleInputChange}/>
+        <input className={`hidden md:block w-10/12 ${editing ? "p-2 border-b-2 -border--color-green focus:outline-none" : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.description : category?.description} name="description" onChange={handleInputChange}/>
       </fieldset>
-      <div className="flex justify-between gap-2 p-1">
+      <div className="absolute top-0 right-0 flex justify-center w-20 h-full">
         {editing ? (
           <>
-            <button type="submit" className="-bg--color-green p-2 w-full rounded-lg hover:opacity-80">
+            <button type="submit" className="-bg--color-green p-1 m-1 w-full rounded-lg hover:opacity-80">
               <img src={ok_icon} alt="ok icon" width={20} className="m-auto"/>
             </button>
-            <button type="button" className="-bg--color-red p-2 w-full rounded-lg hover:opacity-80" onClick={handleCancel}>
+            <button type="button" className="-bg--color-red p-1 m-1 w-full rounded-lg hover:opacity-80" onClick={handleCancel}>
               <img src={cancel_icon} alt="cancel icon" width={20} className="m-auto"/>
             </button>
           </>

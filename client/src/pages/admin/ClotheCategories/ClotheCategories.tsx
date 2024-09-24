@@ -12,6 +12,7 @@ import left_arrow from '../../../assets/icons/carousel/left-arrow.svg'
 import right_arrow from '../../../assets/icons/carousel/right-arrow.svg'
 import edit_icon from "../../../assets/icons/edit-cover-1481-svgrepo-com.svg.svg"
 import open from "../../../assets/icons/open-folder-svgrepo-com.svg"
+import { SortSelector } from "../../../components/SortSelector";
 
 
 const ClotheCategories = () => {
@@ -22,7 +23,6 @@ const ClotheCategories = () => {
   const [paginatedCategories, setPaginatedCategories] = useState<PaginatedCategoriesInterface | null>(null);
 
   const [adding, setAdding] = useState<boolean>(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
 
   const [editingCategory, setEditingCategory] = useState<CategoryDataInterface | null>(null);	
 
@@ -31,9 +31,9 @@ const ClotheCategories = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
 
-  // const [sortBy, setSortBy] = useState<keyof CategoryInterface>('id');
-  // const [sortOrder, setSortOrder] = useState<string>('asc');
-  // const [selectedSort, setSelectedSort] = useState<keyof CategoryInterface | null>(null)
+  const [sortBy, setSortBy] = useState<keyof CategoryDataInterface>('id');
+  const [sortOrder, setSortOrder] = useState<string>('asc');
+  const [selectedSort, setSelectedSort] = useState<keyof CategoryDataInterface | null>(null)
   
   const { getUser, user } = useUser();
   
@@ -54,9 +54,7 @@ const ClotheCategories = () => {
     getCategories();
   }, []);
 
-  useEffect(() => {
-    getCategories();
-  }, [editingId,adding]);
+
 
   const getCategories = async (page: number = 1) => {
     const response = await CategoryService.getPaginatedCategories(page);
@@ -97,7 +95,7 @@ const ClotheCategories = () => {
       if (response.code === 200) {
         setMessage(response.message);
         setVisibleMessage(true);
-        setEditingId(null);
+        setEditingCategory(null);
       } else {
         setErrorMessage("Error updating category");
         setVisibleErrorMessage(true);
@@ -129,6 +127,11 @@ const ClotheCategories = () => {
     }
   }
 
+  const handleSelect = (id: keyof CategoryDataInterface, op: string) => {
+    setSortBy(id)
+    setSortOrder(op === 'Up' ? 'asc' : 'desc')
+  }
+
   // const handleDelete = async (id: number) => {
   //   try {
   //     const response = await CategoryService.deleteCategory(id)
@@ -153,7 +156,7 @@ const ClotheCategories = () => {
   }
 
   return (
-    <section className=" w-11/12 lg:w-10/12 m-auto my-12">
+    <section className="w-11/12 lg:w-10/12 m-auto my-12">
       <Message message={message} visible={visibleMessage} setVisible={setVisibleMessage} />
       <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
       <header className="flex justify-between mb-2">
@@ -162,29 +165,29 @@ const ClotheCategories = () => {
           Add Category
         </button>
       </header>
-      <ul className=" rounded-xl overflow-hidden shadow-lg -shadow--color-greyest-violet">
-        <li className="flex -bg--color-grey-violet -text--color-white p-3">
-          <strong className="w-24">ID</strong>
-          <strong className="flex-1">Name</strong>
-          <strong className="flex-1">Description</strong>
+      <ul className="shadow-lg -shadow--color-greyest-violet">
+        <li className="grid grid-cols-3 font-semibold -bg--color-grey-violet -text--color-white">
+          <SortSelector text="Id" options={['Up', 'Down']} id='id' handleSelect={handleSelect} selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
+          <SortSelector text="Nombre" options={['Up', 'Down']} id='name' handleSelect={handleSelect} selectedSort={selectedSort} setSelectedSort={setSelectedSort} />
+          <div className="hidden md:block w-10/12"><SortSelector text="Descripción" options={['Up', 'Down']} id='description' handleSelect={handleSelect} selectedSort={selectedSort} setSelectedSort={setSelectedSort} /></div>
         </li>
         {
           adding &&
-          <li key={0} className="">
-            <Category handleSubmit={handleCreate} handleCancel={handleCancelAdding} setEditingCategory={setEditingCategory} editing />
+          <li key={0} className="border-b-2 relative">
+            <Category handleSubmit={handleCreate} handleCancel={handleCancelAdding} index={0} setEditingCategory={setEditingCategory} editing />
           </li>
         }
         {paginatedCategories?.data.categories.map((category, index) => {
           return (
             <li key={category.id} className={`${index % 2 === 0 ? "-bg--color-very-light-grey" : ""} border-b-2 relative`}>
-              <Category category={category} handleSubmit={handleUpdate} handleCancel={handleCancelEditing} editingCategory={editingCategory} setEditingCategory={setEditingCategory} editing={editingCategory?.id === category.id} />
+              <Category category={category} handleSubmit={handleUpdate} handleCancel={handleCancelEditing} index={index} editingCategory={editingCategory} setEditingCategory={setEditingCategory} editing={editingCategory?.id === category.id} />
               {
                 !editingCategory &&
-                <div className="absolute top-0 right-0 flex justify-between gap-2 w-24 h-full">
-                  <button type="button" className="hover:opacity-80 -bg--color-grey-violet p-2  rounded-lg">
+                <div className="absolute top-0 right-0 flex justify-center w-20 h-full">
+                  <button type="button" className="hover:opacity-80 p-1 m-1 w-full rounded-lg -bg--color-grey-violet">
                     <img src={open} alt="open icon" width={20} className="m-auto"/>
                   </button>
-                  <button type="button" onClick={() => setEditingCategory(category)} className="hover:opacity-80 -bg--color-dark-violet p-2  rounded-lg">
+                  <button type="button" onClick={() => setEditingCategory(category)} className="hover:opacity-80 p-1 m-1 w-full rounded-lg -bg--color-dark-violet">
                     <img src={edit_icon} alt="edit icon" width={20} className="m-auto"/>
                   </button>
                 </div>
