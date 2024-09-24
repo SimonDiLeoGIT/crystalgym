@@ -26,8 +26,8 @@ const Category: React.FC<Props> = ({ category, editingCategory, setEditingCatego
     <form onSubmit={handleSubmit} key={category?.id} className="">
       <fieldset className="grid grid-cols-3 gap-2" disabled={!editing}>
         <p className="p-2">{category?.id ? category.id : 'Id'}</p>
-        <input className={`p-2 ${editing ? "p-2 border-b-2 -border--color-green focus:outline-none b " : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.name : category?.name} name='name' onChange={handleInputChange}/>
-        <input className={`hidden md:block w-10/12 ${editing ? "p-2 border-b-2 -border--color-green focus:outline-none" : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.description : category?.description} name="description" onChange={handleInputChange}/>
+        <input className={`p-2 ${editing ? " border-b-2 -border--color-green focus:outline-none b " : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.name : category?.name} name='name' onChange={handleInputChange}/>
+        <input className={`hidden md:block w-9/12 ${editing ? " border-b-2 -border--color-green focus:outline-none" : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.description : category?.description || ""} name="description" onChange={handleInputChange}/>
       </fieldset>
       <div className="absolute top-0 right-0 flex justify-center w-20 h-full">
         {editing ? (

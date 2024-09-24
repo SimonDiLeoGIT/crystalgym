@@ -40,7 +40,7 @@ const ClotheCategories = () => {
 
   useEffect(() => {
     document.title = "Clothe Categories | Admin CrystalGym";
-  })
+  },[])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -53,8 +53,6 @@ const ClotheCategories = () => {
   useEffect(() => {
     getCategories();
   }, []);
-
-
 
   const getCategories = async (page: number = 1) => {
     const response = await CategoryService.getPaginatedCategories(page);
@@ -93,9 +91,7 @@ const ClotheCategories = () => {
     try {
       const response = await CategoryService.updateCategory(editingCategory);
       if (response.code === 200) {
-        setMessage(response.message);
-        setVisibleMessage(true);
-        setEditingCategory(null);
+        successfullSubmit(response.message)
       } else {
         setErrorMessage("Error updating category");
         setVisibleErrorMessage(true);
@@ -113,9 +109,7 @@ const ClotheCategories = () => {
     try {
       const response = await CategoryService.createCategory(editingCategory);
       if (response.code === 201) {
-        setMessage(response.message);
-        setVisibleMessage(true);
-        setAdding(false);
+        successfullSubmit(response.message)
       } else {
         setErrorMessage("Error creating category");
         setVisibleErrorMessage(true);
@@ -127,25 +121,17 @@ const ClotheCategories = () => {
     }
   }
 
+  const successfullSubmit = async (message: string) => {
+    setMessage(message);
+    setVisibleMessage(true);
+    setAdding(false);
+    await getCategories()
+  }
+
   const handleSelect = (id: keyof CategoryDataInterface, op: string) => {
     setSortBy(id)
     setSortOrder(op === 'Up' ? 'asc' : 'desc')
   }
-
-  // const handleDelete = async (id: number) => {
-  //   try {
-  //     const response = await CategoryService.deleteCategory(id)
-  //     if (response) {
-  //       setMessage("Categoría eliminada con exito.")
-  //       setVisibleMessage(true)
-  //       getCategories(sortBy, sortOrder)
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     setErrorMessage('No se pudo eliminar la categoría. Intentelo nuevamente')
-  //     setVisibleErrorMessage(true)
-  //   }
-  // }
 
   const handleCancelEditing = () => {
     setEditingCategory(null);
@@ -173,7 +159,7 @@ const ClotheCategories = () => {
         </li>
         {
           adding &&
-          <li key={0} className="border-b-2 relative">
+          <li key={0} className="border-b-2 relative -bg--color-very-light-grey">
             <Category handleSubmit={handleCreate} handleCancel={handleCancelAdding} index={0} setEditingCategory={setEditingCategory} editing />
           </li>
         }

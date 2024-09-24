@@ -22,8 +22,8 @@ class TypeService(metaclass=SingletonMeta):
     categories_json = [category.to_json() for category in categories]
     return [categories_json, 'Categories retrieved successfully', 200]
   
-  def get_paginated_categories(self, page=1, page_size=10):
-    categories = self.type_repository.get_paginated_types(page, page_size)
+  def get_paginated_categories(self, page=1, page_size=10, sort_by='id', sort_order='asc'):
+    categories = self.type_repository.get_paginated_types(page, page_size, sort_by, sort_order)
     if categories is None:
       return [None, 'Categories not found', 404]
     

@@ -21,21 +21,43 @@ class TypeRepository:
     category = db.session.query(Type).filter(Type.id == id_type).first()
     return category
   
-  def get_paginated_types(self, page, page_size):
+  def get_paginated_types(self, page, page_size, sort_by, sort_order):
     page = int(page)
     page_size = int(page_size)
 
     if page < 1 or page_size < 1:
       return None
+    
+    valid_sort_orders = ['asc', 'desc']
+    valid_sort_fields = ['id', 'name', 'description']
 
-    types_query = db.session.query(Type)
-    types = self.pagination.generate_pagination(page, page_size, types_query)
-    total_pages = (types_query.count() // page_size) + 1
+    if sort_by not in valid_sort_fields:
+        sort_by = 'id'
+    if sort_order not in valid_sort_orders:
+        sort_order = 'asc'
 
-    pagination_data = self.pagination.get_pagination_data(page, page_size, total_pages)
+    query = Type.query
+
+    if sort_order == 'asc':
+        query = query.order_by(getattr(Type, sort_by).asc())
+    else:
+        query = query.order_by(getattr(Type, sort_by).desc())
+
+
+    total_items = query.count()
+
+    total_pages = (total_items + page_size - 1) // page_size
+
+    if page > total_pages:
+        page = total_pages
+
+    types = self.pagination.generate_pagination(page, page_size, query)
+
+    pagination_data = self.pagination.get_pagination_data(page, page_size, total_items, total_pages)
+
     response = {
-      'categories': [type.to_json() for type in types],
-      'pagination': pagination_data
+        'categories': [type.to_json() for type in types],
+        'pagination': pagination_data
     }
 
     return response
