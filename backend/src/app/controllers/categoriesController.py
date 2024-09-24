@@ -31,9 +31,14 @@ def get_categories():
   return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
 
 
-@type_bp.route("/categories/admin/<int:page>/<int:page_size>/<string:sort_by>/<string:sort_order>", methods=["GET"])
-def get_paginated_categories(page=1, page_size=10, sort_by='id', sort_order='asc'):
-  data = type_service.get_paginated_categories(page, page_size, sort_by, sort_order)
+@type_bp.route("/categories/admin", methods=["GET"])
+def get_paginated_categories():
+  page = request.args.get('page', default=1, type=int)
+  page_size = request.args.get('page_size', default=10, type=int)
+  sort_by = request.args.get('sort_by', default='id', type=str)
+  sort_order = request.args.get('sort_order', default='asc', type=str)
+  name = request.args.get('name', default='', type=str)
+  data = type_service.get_paginated_categories(page, page_size, sort_by, sort_order, name)
   if data[0] is None:
     return ResponseHandler().create_error_response('Error', data[1], data[2])
   return ResponseHandler().create_response('success', data[1], data[0], code=data[2])

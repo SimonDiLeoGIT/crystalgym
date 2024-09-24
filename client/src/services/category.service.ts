@@ -8,8 +8,15 @@ export default class CategoryService {
   }
 
 
-  static async getPaginatedCategories(page: number, perPage: number = 10, sortBy: string = 'id', sortOrder: string = 'asc'): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/categories/admin/${page}/${perPage}/${sortBy}/${sortOrder}`);
+  static async getPaginatedCategories(page: number, perPage: number = 10, sortBy: string = 'id', sortOrder: string = 'asc', name: string = ''): Promise<PaginatedCategoriesInterface> {
+    const query = new URLSearchParams({
+      page: page.toString(),
+      page_size: perPage.toString(),
+      sort_by: sortBy,
+      sort_order: sortOrder,
+      name: name
+  }).toString();
+    const response = await ApiService.makeRequest(`/categories/admin?${query}`);
     return response;
   }
 

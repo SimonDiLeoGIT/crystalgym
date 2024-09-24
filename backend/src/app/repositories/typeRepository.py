@@ -21,32 +21,33 @@ class TypeRepository:
     category = db.session.query(Type).filter(Type.id == id_type).first()
     return category
   
-  def get_paginated_types(self, page, page_size, sort_by, sort_order):
+  def get_paginated_types(self, page, page_size, sort_by, sort_order, name):
     page = int(page)
     page_size = int(page_size)
 
-    if page < 1 or page_size < 1:
+    if page < 1:
       return None
-    
-    valid_sort_orders = ['asc', 'desc']
-    valid_sort_fields = ['id', 'name', 'description']
 
-    if sort_by not in valid_sort_fields:
-        sort_by = 'id'
-    if sort_order not in valid_sort_orders:
-        sort_order = 'asc'
+    if page_size < 1:
+      page_size = 1
 
     query = Type.query
+
 
     if sort_order == 'asc':
         query = query.order_by(getattr(Type, sort_by).asc())
     else:
         query = query.order_by(getattr(Type, sort_by).desc())
 
+    if name:
+      query = query.filter(Type.name.ilike(f'%{name}%'))
 
     total_items = query.count()
 
-    total_pages = (total_items + page_size - 1) // page_size
+    if (total_items == 0):
+      total_pages = 1
+    else:
+      total_pages = (total_items + page_size - 1) // page_size
 
     if page > total_pages:
         page = total_pages
