@@ -7,6 +7,7 @@ interface Props {
 }
 
 type UserContext = {
+  user: UserDataInterface | null
   initializeUser: (user: UserDataInterface | null) => void
   getUser: () => Promise<UserDataInterface | null>
 }
@@ -40,6 +41,7 @@ const UserProvider = ({ children }: Props) => {
     <UserContext.Provider value={{
       initializeUser,
       getUser,
+      user
     }}
     >
       {children}

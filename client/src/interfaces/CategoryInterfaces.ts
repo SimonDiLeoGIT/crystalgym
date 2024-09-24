@@ -9,6 +9,7 @@ export interface CategoryInterface {
 export interface CategoryDataInterface {
   id: number
   name: string
+  description: string
 }
 
 export interface PaginatedCategoriesInterface {
