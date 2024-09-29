@@ -8,7 +8,7 @@ class TypeRepository:
     self.pagination = PaginationHelper()
 
   def create_type(self, name, description):
-    category = Type(name=name, description=description)
+    category = Type(name, description)
     db.session.add(category)
     db.session.commit()
     return category

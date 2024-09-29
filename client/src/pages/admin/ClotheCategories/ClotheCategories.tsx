@@ -108,6 +108,7 @@ const ClotheCategories = () => {
     e.preventDefault();
     if (editingCategory == null) return;
     try {
+      console.log('llego:', editingCategory)
       const response = await CategoryService.createCategory(editingCategory);
       if (response.code === 201) {
         successfullSubmit(response.message)
@@ -126,6 +127,7 @@ const ClotheCategories = () => {
     setMessage(message);
     setVisibleMessage(true);
     setAdding(false);
+    setEditingCategory(null);
     await getCategories()
   }
 
@@ -193,7 +195,7 @@ const ClotheCategories = () => {
         {
           adding &&
           <li key={0} className="border-b-2 relative -bg--color-very-light-grey">
-            <Category handleSubmit={handleCreate} handleCancel={handleCancelAdding} index={0} setEditingCategory={setEditingCategory} editing />
+            <Category handleSubmit={handleCreate} handleCancel={handleCancelAdding} index={0} setEditingCategory={setEditingCategory} editing editingCategory={editingCategory}/>
           </li>
         }
         {paginatedCategories?.data.categories.map((category, index) => {
