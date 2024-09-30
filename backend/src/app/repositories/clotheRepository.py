@@ -4,6 +4,7 @@ from app.models.type import Type
 from app.models.clothe_color import ClotheColor
 from app.models.color import Color
 from app.models.gender import Gender
+from app.models.image import Image
 
 from app.utils.pagination import PaginationHelper
 
@@ -32,17 +33,12 @@ class ClotheRepository:
         query = db.session.query(
             Clothe,
             Type.name.label('type_name'),
+            ClotheColor.id_color,
             Gender.name.label('gender_name')
         ).join(Type, Clothe.id_type == Type.id) \
          .join(ClotheColor, Clothe.id == ClotheColor.id_clothe) \
          .join(Gender, Clothe.id_gender == Gender.id) \
          .filter(Clothe.id_type == id_type)
-        
-        color_query = db.session.query(
-            ClotheColor,
-            Color.name.label('color_name')
-        ).filter(ClotheColor.id_clothe == Clothe.id).join(Color, ClotheColor.id_color == Color.id)
-
 
         query = self.pagination.filter_and_sort(query, Type, sort_by, sort_order, 'name', name)
 
@@ -62,24 +58,29 @@ class ClotheRepository:
         pagination_data = self.pagination.get_pagination_data(page, page_size, total_items, total_pages)
 
         clothes = [{
-            **clothe.to_json(), 
-            'gender': gender_name,
-            'color': color_name
-        } for clothe, type_name, color_name, gender_name in clothes]
-        male_clothes = [clothe for clothe in clothes if clothe['gender'] == 'M']
-        female_clothes = [clothe for clothe in clothes if clothe['gender'] == 'W']
+            **clothe.to_json(),
+            'color': color_id
+        } for clothe, type_name, color_id, gender_name in clothes]
+        # male_clothes = [clothe for clothe in clothes if clothe['gender'] == 'M']
+        # female_clothes = [clothe for clothe in clothes if clothe['gender'] == 'W']
 
-        all_clothes = {
-            'men': male_clothes,
-            'women': female_clothes
-        }
+        # all_clothes = {
+        #     'men': male_clothes,
+        #     'women': female_clothes
+        # }
         response = {
             'category': id_type,
-            'clothes': all_clothes,
+            'clothes': clothes,
             'pagination': pagination_data
         }
     
         return response
+    
+    def get_clothe_colors_by_id(self, id_clothe):
+        return db.session.query(ClotheColor).filter(ClotheColor.id_clothe == id_clothe).join(Color, ClotheColor.id_color == Color.id).all()
+
+    def get_clothe_images_by_id(self, id_clothe, id_color):
+        return db.session.query(Image).filter(Image.id_clothe == id_clothe, Image.id_color == id_color).all()
 
     def get_clothes_by_category_gender(self, id_gender, id_type, page, page_size):
         page = int(page)

@@ -120,6 +120,16 @@ class ClotheService(metaclass=SingletonMeta):
         clothes_data = self.clothe_repository.get_clothes_by_category(id_category, page, page_size, sort_by, sort_order, name)
         if clothes_data is None:
             return [None, 'No clothes found for the given category and gender', 404]
+        
+        clothes = clothes_data['clothes']
+        for clothe in clothes:
+            colors = self.clothe_repository.get_clothe_colors_by_id(clothe['id'])
+            for color in colors:
+                color_data = color.to_json()
+                images = self.clothe_repository.get_clothe_images_by_id(clothe['id'], color_data['id_color'])
+                color_data['images'] = [image.to_json() for image in images]
+            clothe['colors'] = [color.to_json() for color in colors]
+
         return [clothes_data, 'Clothes retrieved successfully', 200]
 
     def get_clothes_by_category_gender(self, id_gender, id_category, page=1, page_size=10):
