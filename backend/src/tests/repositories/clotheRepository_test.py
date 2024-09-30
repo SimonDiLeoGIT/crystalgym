@@ -72,9 +72,9 @@ class TestClotheRepository:
       assert data is None
 
   # Test that get_clothes_by_category for admin works
-  def test_get_clothes_by_category_admin(self, test_client, clothe_repository):
+  def test_get_clothes_by_category(self, test_client, clothe_repository):
     with test_client.application.app_context():
-      data = clothe_repository.get_clothes_by_category_admin(1, 1, 10, 'id', 'asc', None)
+      data = clothe_repository.get_clothes_by_category(1, 1, 10, 'id', 'asc', None)
       assert data
       assert len(data) > 0
       assert data['category'] == 1

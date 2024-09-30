@@ -116,15 +116,13 @@ class ClotheService(metaclass=SingletonMeta):
             return [None, 'Clothe not found', 404]
         return [clothe.to_json(), 'Clothes retrieved successfully', 200]
     
-    def get_clothes_by_category(self, id_category, page=1, page_size=10):
-        clothes_data = self.clothe_repository.get_clothes_by_category(id_category, page, page_size)
-
-        # Agregar los datos de paginación
-        clothes_data['pagination'] = self.pagination.get_pagination_data(page, page_size, clothes_data['total_pages'])
-        
+    def get_clothes_by_category(self, id_category, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
+        clothes_data = self.clothe_repository.get_clothes_by_category(id_category, page, page_size, sort_by, sort_order, name)
+        if clothes_data is None:
+            return [None, 'No clothes found for the given category and gender', 404]
         return [clothes_data, 'Clothes retrieved successfully', 200]
 
-    def get_clothes_by_category(self, id_gender, id_category, page=1, page_size=10):
+    def get_clothes_by_category_gender(self, id_gender, id_category, page=1, page_size=10):
         clothes_data = self.clothe_repository.get_clothes_by_category(id_gender, id_category, page, page_size)
         
         # Marcar como "new" y verificar promociones
