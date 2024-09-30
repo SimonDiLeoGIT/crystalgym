@@ -1,10 +1,13 @@
 import pytest
+from datetime import datetime
 from app import create_app, db
 from app.models.user import User
 from app.models.role import Role
 from app.models.color import Color
 from app.models.type import Type
 from app.models.gender import Gender
+from app.models.clothe import Clothe
+from app.models.clothe_color import ClotheColor
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -31,8 +34,29 @@ def test_client():
         db.session.add(Color(**color))
         db.session.commit()
 
+        clothe = {
+            'name': 'test_clothe',
+            'description': 'test_description',
+            'price': 1,
+            'id_gender': 1,
+            'id_type': 1,
+            'release_date': datetime.now()
+        }
+
+        db.session.add(Clothe(**clothe))
+        db.session.commit()
+
+        clothe_color = {
+            'id_clothe': 1,
+            'id_color': 1,
+            'stock': 1
+        }
+
+        db.session.add(ClotheColor(**clothe_color))
+        db.session.commit()
+
         # Crear una categoría de prueba
-        category = {'name': 'hoodie_test'}
+        category = {'name': 'hoodie_test', 'description': 'hoodies_test'}
         db.session.add(Type(**category))
         db.session.commit()
 

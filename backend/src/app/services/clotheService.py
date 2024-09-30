@@ -115,6 +115,14 @@ class ClotheService(metaclass=SingletonMeta):
         if clothe is None:
             return [None, 'Clothe not found', 404]
         return [clothe.to_json(), 'Clothes retrieved successfully', 200]
+    
+    def get_clothes_by_category(self, id_category, page=1, page_size=10):
+        clothes_data = self.clothe_repository.get_clothes_by_category(id_category, page, page_size)
+
+        # Agregar los datos de paginación
+        clothes_data['pagination'] = self.pagination.get_pagination_data(page, page_size, clothes_data['total_pages'])
+        
+        return [clothes_data, 'Clothes retrieved successfully', 200]
 
     def get_clothes_by_category(self, id_gender, id_category, page=1, page_size=10):
         clothes_data = self.clothe_repository.get_clothes_by_category(id_gender, id_category, page, page_size)

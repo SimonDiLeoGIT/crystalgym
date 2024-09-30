@@ -70,6 +70,28 @@ def get_clothe_by_id(id_clothe):
     except Exception as e:
         return ResponseHandler().create_error_response('Error getting clothe', str(e), 500)
 
+# Get clothes by category Admin
+@clothe_bp.route('/admin/clothes/<int:id_category>/<int:page>/<int:page_size>', methods=['GET'])
+@jwt_required()
+def get_clothes_by_category_admin(id_category, page, page_size):
+    try:
+        data = clothe_service.get_clothes_by_category(id_category, page, page_size)
+        
+        if len(data[0]['clothes']) == 0:
+            return ResponseHandler().create_error_response('Clothes not found', 'No clothes found for the given category and gender', 404)
+
+        response = {
+            'id_category': id_category,
+            'category_name': data[0]['category'],
+            'clothes': data[0]['clothes'],
+            'pagination': data[0]['pagination']
+        }
+        
+        return ResponseHandler().create_response('success', 'Clothes retrieved successfully', response, code=200)
+
+    except Exception as e:
+        return ResponseHandler().create_error_response('Error getting clothes', str(e), 500)
+
 
 # Get clothes by category and gender
 @clothe_bp.route('/clothes/<int:id_gender>/<int:id_category>/<int:page>/<int:page_size>', methods=['GET'])
