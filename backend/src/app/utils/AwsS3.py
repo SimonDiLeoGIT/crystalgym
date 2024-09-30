@@ -17,3 +17,10 @@ class AwsBucket(metaclass=SingletonMeta):
       return [True, 'File uploaded successfully', 200]
     except Exception as e:
       return [None, str(e), 500]
+    
+  def presign_url(self, name):
+    try:
+      url = self.s3.generate_presigned_url('get_object', Params={'Bucket': config.AWS_BUCKET_NAME, 'Key': name}, ExpiresIn=3600)
+      return url
+    except Exception as e:
+      return [None, str(e), 500]

@@ -100,7 +100,7 @@ class ClotheService(metaclass=SingletonMeta):
                     id_color,
                     'hashcode',
                     image_url,
-                    image.filename,
+                    file_name_in_s3,
                 )
             else:
                 return [None, 'Invalid image format', 400]
@@ -136,6 +136,8 @@ class ClotheService(metaclass=SingletonMeta):
                 color_data = color.to_json()
                 images = self.clothe_repository.get_clothe_images_by_id(clothe['id'], color_data['id_color'])
                 color_data['images'] = [image.to_json() for image in images]
+                for image in color_data['images']:
+                    image['signed_image_url'] = AwsBucket().presign_url(image['name'])
                 clothe_colors.append(color_data)
             all_clothe = {
                 'id': clothe['id'],
