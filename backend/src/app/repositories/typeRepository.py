@@ -17,7 +17,7 @@ class TypeRepository:
     types = db.session.query(Type).all()
     return types
   
-  def get_types_by_id(self, id_type):
+  def get_type_by_id(self, id_type):
     category = db.session.query(Type).filter(Type.id == id_type).first()
     return category
   

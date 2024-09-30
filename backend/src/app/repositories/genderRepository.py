@@ -5,6 +5,9 @@ class GenderRepository:
 
   def get_gender_by_id(self, id_gender):
     return db.session.query(Gender).filter(Gender.id == id_gender).first()
+  
+  def get_gender_by_name(self, gender):
+    return db.session.query(Gender).filter(Gender.name == gender).first()
 
   def get_genders(self):
     return db.session.query(Gender).all()

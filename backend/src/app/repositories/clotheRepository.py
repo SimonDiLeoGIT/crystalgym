@@ -21,7 +21,7 @@ class ClotheRepository:
     def get_clothe_by_id(self, id_clothe):
         return db.session.query(Clothe).filter(Clothe.id == id_clothe).first()
     
-    def get_clothes_by_category(self, id_type, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
+    def get_clothes_by_category(self, id_type, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
         
         if page < 1:
             return None
@@ -32,13 +32,16 @@ class ClotheRepository:
 
         query = db.session.query(
             Clothe,
-            Type.name.label('type_name'),
+            Type.id,
             ClotheColor.id_color,
             Gender.name.label('gender_name')
         ).join(Type, Clothe.id_type == Type.id) \
          .join(ClotheColor, Clothe.id == ClotheColor.id_clothe) \
          .join(Gender, Clothe.id_gender == Gender.id) \
          .filter(Clothe.id_type == id_type)
+        
+        if id_gender is not None:
+            query = query.filter(Clothe.id_gender == id_gender)
 
         query = self.pagination.filter_and_sort(query, Type, sort_by, sort_order, 'name', name)
 
@@ -59,17 +62,11 @@ class ClotheRepository:
 
         clothes = [{
             **clothe.to_json(),
-            'color': color_id
-        } for clothe, type_name, color_id, gender_name in clothes]
-        # male_clothes = [clothe for clothe in clothes if clothe['gender'] == 'M']
-        # female_clothes = [clothe for clothe in clothes if clothe['gender'] == 'W']
+            'color': color_id,
+            'gender': gender_name
+        } for clothe, type_id, color_id, gender_name in clothes]
 
-        # all_clothes = {
-        #     'men': male_clothes,
-        #     'women': female_clothes
-        # }
         response = {
-            'category': id_type,
             'clothes': clothes,
             'pagination': pagination_data
         }

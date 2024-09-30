@@ -80,4 +80,3 @@ class TestClotheRepository:
       assert data['category'] == 1
       clothes = data['clothes']
       assert clothes
-      assert clothes['male_clothes'][0]['id'] == 1

@@ -3,6 +3,7 @@ from app.repositories.clotheColorRepository import ClotheColorRepository
 from app.repositories.colorRepository import ColorRepository
 from app.repositories.clothePromoRepository import ClothePromoRepository
 from app.repositories.imageRepository import ImageRepository
+from app.repositories.typeRepository import TypeRepository
 from app.utils.pagination import PaginationHelper
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -17,6 +18,7 @@ class ClotheService(metaclass=SingletonMeta):
         self.clothe_color_repository = ClotheColorRepository()
         self.color_repository = ColorRepository()
         self.clothe_promo_repository = ClothePromoRepository()
+        self.category_repository = TypeRepository()
         self.image_repository = ImageRepository()
         self.pagination = PaginationHelper()
 
@@ -116,21 +118,40 @@ class ClotheService(metaclass=SingletonMeta):
             return [None, 'Clothe not found', 404]
         return [clothe.to_json(), 'Clothes retrieved successfully', 200]
     
-    def get_clothes_by_category(self, id_category, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
-        clothes_data = self.clothe_repository.get_clothes_by_category(id_category, page, page_size, sort_by, sort_order, name)
+    def get_clothes_by_category(self, id_category, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
+        
+        category = self.category_repository.get_type_by_id(id_category)
+        if category is None:
+            return [None, 'Category not found', 404]
+
+        clothes_data = self.clothe_repository.get_clothes_by_category(id_category, id_gender, page, page_size, sort_by, sort_order, name)
         if clothes_data is None:
             return [None, 'No clothes found for the given category and gender', 404]
         
         clothes = clothes_data['clothes']
         for clothe in clothes:
             colors = self.clothe_repository.get_clothe_colors_by_id(clothe['id'])
+            clothe_colors = []
             for color in colors:
                 color_data = color.to_json()
                 images = self.clothe_repository.get_clothe_images_by_id(clothe['id'], color_data['id_color'])
                 color_data['images'] = [image.to_json() for image in images]
-            clothe['colors'] = [color.to_json() for color in colors]
+                clothe_colors.append(color_data)
+            all_clothe = {
+                'id': clothe['id'],
+                'name': clothe['name'],
+                'description': clothe['description'],
+                'price': clothe['price'],
+                'colors': clothe_colors
+            }
 
-        return [clothes_data, 'Clothes retrieved successfully', 200]
+        data = {
+            'category': category.to_json(),
+            'clothes': all_clothe,
+            'pagination': clothes_data['pagination']
+        }
+
+        return [data, 'Clothes retrieved successfully', 200]
 
     def get_clothes_by_category_gender(self, id_gender, id_category, page=1, page_size=10):
         clothes_data = self.clothe_repository.get_clothes_by_category(id_gender, id_category, page, page_size)
