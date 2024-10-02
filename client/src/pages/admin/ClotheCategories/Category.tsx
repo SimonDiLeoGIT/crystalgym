@@ -39,9 +39,9 @@ const Category: React.FC<Props> = ({ category, editingCategory, setEditingCatego
       <fieldset className="grid grid-cols-3 gap-2" disabled={!editing}>
         {!editing ?
           <>
-            <Link to={`/admin/clothe-categories/${category?.id}`} className="p-2">{category?.id}</Link>
-            <Link to={`/admin/clothe-categories/${category?.id}`} className="p-2">{category?.name}</Link>
-            <Link to={`/admin/clothe-categories/${category?.id}`} className="p-2">{category?.description}</Link>
+            <Link to={`/admin/categories/${category?.id}`} className="p-2">{category?.id}</Link>
+            <Link to={`/admin/categories/${category?.id}`} className="p-2">{category?.name}</Link>
+            <Link to={`/admin/categories/${category?.id}`} className="p-2">{category?.description}</Link>
           </>
           :
           <>

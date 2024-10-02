@@ -1,3 +1,6 @@
+import { CategoryDataInterface } from "./CategoryInterfaces";
+import { PaginationInterface } from "./Pagination";
+
 export interface ClotheInterface {
   code: number;
   data: ClotheDataInterface;
@@ -5,16 +8,39 @@ export interface ClotheInterface {
 }
 
 export interface ClotheDataInterface {
+  id: number;
   name: string;
   description: string;
   price: number;
-  id_gender: number;
-  id_category: number;
   colors: ClotheColor[];
 }
 
 export interface ClotheColor {
+  id: number;
+  id_clothe: number;
   id_color: number; 
   stock: number;
-  images: File[];
+  images: Image[];
+}
+
+export interface Image {
+  hashcode: string;
+  id: number;
+  id_clothe: number;
+  id_color: number;
+  name: string;
+  signed_image_url: string;
+  url: string;
+}
+
+export interface ClothesAdminResponse {
+  code: number
+  data: AdminClotheData
+  message: string
+}
+
+export interface AdminClotheData {
+  category: CategoryDataInterface
+  clothes: ClotheDataInterface[]
+  pagination: PaginationInterface
 }

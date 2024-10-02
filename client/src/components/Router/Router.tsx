@@ -17,6 +17,7 @@ const Register = lazy(() => import("../../pages/Register"))
 const Login = lazy(() => import("../../pages/Login"))
 const PostNewClothe = lazy(() => import("../../pages/admin/PostNewClothe/PostNewClothe"))
 const ClotheCategories = lazy(() => import("../../pages/admin/ClotheCategories/ClotheCategories"))
+const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
 
 const Router = () => {
   return (
@@ -42,6 +43,7 @@ const Router = () => {
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
           <Route path="/admin/clothe-form" element={<PostNewClothe />} />
           <Route path="/admin/categories" element={<ClotheCategories />} />
+          <Route path="/admin/categories/:categoryId" element={<AdminClothes />} />
         </Routes>
         <Footer />
       </BrowserRouter>

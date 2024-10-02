@@ -129,6 +129,8 @@ class ClotheService(metaclass=SingletonMeta):
             return [None, 'No clothes found for the given category and gender', 404]
         
         clothes = clothes_data['clothes']
+
+        all_clothe = []
         for clothe in clothes:
             colors = self.clothe_repository.get_clothe_colors_by_id(clothe['id'])
             clothe_colors = []
@@ -139,13 +141,13 @@ class ClotheService(metaclass=SingletonMeta):
                 for image in color_data['images']:
                     image['signed_image_url'] = AwsBucket().presign_url(image['name'])
                 clothe_colors.append(color_data)
-            all_clothe = {
+            all_clothe.append({
                 'id': clothe['id'],
                 'name': clothe['name'],
                 'description': clothe['description'],
                 'price': clothe['price'],
                 'colors': clothe_colors
-            }
+            })
 
         data = {
             'category': category.to_json(),

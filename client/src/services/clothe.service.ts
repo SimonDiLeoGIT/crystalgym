@@ -1,4 +1,4 @@
-import { ClotheDataInterface, ClotheInterface } from '../interfaces/ClothesInterfaces';
+import { ClotheDataInterface, ClotheInterface, ClothesAdminResponse } from '../interfaces/ClothesInterfaces';
 import { ErrorInterface } from '../interfaces/ErrorInterface';
 import ApiService from './api.service';
 import AuthService from './auth.service';
@@ -28,5 +28,22 @@ export default class ClotheService {
       }
       throw error;
     }
+  }
+
+  static async getClothesAdmin(id_category: number, id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string): Promise<ClothesAdminResponse> {
+    const params: { [key: string]: string } = {
+      id_category: id_category.toString(),
+    };
+
+    page && (params.page = page.toString())
+    perPage && (params.page_size = perPage.toString())
+    sortBy && (params.sort_by = sortBy)
+    sortOrder && (params.sort_order = sortOrder)
+    name && (params.name = name)
+    id_gender && (params.id_gender = id_gender.toString())
+
+    const query = new URLSearchParams(params).toString();
+    const response = await ApiService.makeRequest(`/admin/clothes?${query}`);
+    return response;
   }
 }

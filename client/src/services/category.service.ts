@@ -15,7 +15,7 @@ export default class CategoryService {
       sort_by: sortBy,
       sort_order: sortOrder,
       name: name
-  }).toString();
+    }).toString();
     const response = await ApiService.makeRequest(`/categories/admin?${query}`);
     return response;
   }
