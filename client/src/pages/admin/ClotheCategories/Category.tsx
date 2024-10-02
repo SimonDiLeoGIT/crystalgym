@@ -2,6 +2,7 @@ import { CategoryDataInterface } from "../../../interfaces/CategoryInterfaces"
 import ok_icon from "../../../assets/icons/ok-svgrepo-com.svg"
 import cancel_icon from "../../../assets/icons/cancel-svgrepo-com.svg"
 import { useEffect } from "react"
+import { Link } from "react-router-dom"
 
 interface Props {
   category?: CategoryDataInterface | null
@@ -37,9 +38,19 @@ const Category: React.FC<Props> = ({ category, editingCategory, setEditingCatego
   return (
     <form onSubmit={handleSubmit} key={category?.id} className="">
       <fieldset className="grid grid-cols-3 gap-2" disabled={!editing}>
-        <p className="p-2">{category?.id ? category.id : 'Id'}</p>
-        <input className={`p-2 ${editing ? " border-b-2 -border--color-green focus:outline-none b " : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.name : category?.name} name='name' onChange={handleInputChange}/>
-        <input className={`hidden md:block w-9/12 ${editing ? " border-b-2 -border--color-green focus:outline-none" : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.description : category?.description} name="description" onChange={handleInputChange}/>
+        {!editing ?
+          <>
+            <Link to={`/admin/clothe-categories/${category?.id}`} className="p-2">{category?.id}</Link>
+            <Link to={`/admin/clothe-categories/${category?.id}`} className="p-2">{category?.name}</Link>
+            <Link to={`/admin/clothe-categories/${category?.id}`} className="p-2">{category?.description}</Link>
+          </>
+          :
+          <>
+            <p className="p-2">{category?.id ? category.id : 'Id'}</p>
+            <input className={`p-2 ${editing ? " border-b-2 -border--color-green focus:outline-none b " : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.name : category?.name} name='name' onChange={handleInputChange}/>
+            <input className={`hidden md:block w-9/12 ${editing ? " border-b-2 -border--color-green focus:outline-none" : ""} ${index % 2 === 0 ? "-bg--color-very-light-grey" : ""}`} value={editing ? editingCategory?.description : category?.description} name="description" onChange={handleInputChange}/>
+          </>
+        }
       </fieldset>
       <div className="absolute top-0 right-0 flex justify-center w-20 h-full">
         {editing ? (
