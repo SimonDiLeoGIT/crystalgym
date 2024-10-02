@@ -42,3 +42,9 @@ class TypeService(metaclass=SingletonMeta):
       return [None, 'Category not found', 404]
     category = self.type_repository.update_type(id_type, name, description)
     return [category.to_json(), 'Category updated successfully', 200]
+  
+  def delete_type(self, id_type):
+    if not self.type_repository.get_type_by_id(id_type):
+      return [None, 'Category not found', 404]
+    category = self.type_repository.delete_type(id_type)
+    return [category, 'Category deleted successfully', 200]

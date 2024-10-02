@@ -29,4 +29,9 @@ export default class CategoryService {
     const response = await ApiService.makeRequest(`/category/admin`, 'POST', {'name': category.name, 'description': category.description });
     return response;
   }
+
+  static async deleteCategory(category_id: number): Promise<PaginatedCategoriesInterface> {
+    const response = await ApiService.makeRequest(`/category/admin`, 'DELETE', {'id': category_id});
+    return response;
+  }
 }

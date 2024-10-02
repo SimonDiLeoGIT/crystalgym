@@ -71,3 +71,10 @@ class TypeRepository:
     category.description = description
     db.session.commit()
     return category
+  
+  def delete_type(self, id_type):
+    if not db.session.query(Type).filter(Type.id == id_type).first():
+      return None
+    category = db.session.query(Type).filter(Type.id == id_type).delete()
+    db.session.commit()
+    return category

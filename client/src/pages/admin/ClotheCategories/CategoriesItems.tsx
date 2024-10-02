@@ -7,7 +7,7 @@ import CategoryService from "../../../services/category.service";
 import Message from "../../../components/Message";
 import ErrorMessage from "../../../components/ErrorMessage";
 import edit_icon from "../../../assets/icons/edit-cover-1481-svgrepo-com.svg.svg"
-import open from "../../../assets/icons/open-folder-svgrepo-com.svg"
+import trash from "../../../assets/icons/trash.svg"
 
 interface Props {
   adding: boolean
@@ -50,12 +50,27 @@ const CategoriesItems: React.FC<Props> = ({ adding, setAdding, setSortBy, setSor
     e.preventDefault();
     if (editingCategory == null) return;
     try {
-      console.log('llego:', editingCategory)
       const response = await CategoryService.createCategory(editingCategory);
       if (response.code === 201) {
         successfullSubmit(response.message)
       } else {
         setErrorMessage("Error creating category");
+        setVisibleErrorMessage(true);
+      }
+    } catch (error) {
+      const errorResponse: ErrorInterface = error as ErrorInterface;
+      setErrorMessage(errorResponse.message || "An error occurred");
+      setVisibleErrorMessage(true);
+    }
+  }
+
+  const handleDelete = async (category_id: number) => {
+    try {
+      const response = await CategoryService.deleteCategory(category_id);
+      if (response.code === 200) {
+        successfullSubmit(response.message)
+      } else {
+        setErrorMessage("Error deleting category");
         setVisibleErrorMessage(true);
       }
     } catch (error) {
@@ -116,8 +131,8 @@ const CategoriesItems: React.FC<Props> = ({ adding, setAdding, setSortBy, setSor
                   {
                     !editingCategory &&
                     <div className="absolute top-0 right-0 flex justify-center w-20 h-full">
-                      <button type="button" className="hover:opacity-80 p-1 m-1 w-full rounded-lg -bg--color-grey-violet">
-                        <img src={open} alt="open icon" width={20} className="m-auto"/>
+                      <button id={category.id.toString()} type="button" onClick={() => handleDelete(category.id)} className="hover:opacity-80 p-1 m-1 w-full rounded-lg -bg--color-grey-violet">
+                        <img src={trash} alt="open icon" width={20} className="m-auto"/>
                       </button>
                       <button type="button" onClick={() => setEditingCategory(category)} className="hover:opacity-80 p-1 m-1 w-full rounded-lg -bg--color-dark-violet">
                         <img src={edit_icon} alt="edit icon" width={20} className="m-auto"/>

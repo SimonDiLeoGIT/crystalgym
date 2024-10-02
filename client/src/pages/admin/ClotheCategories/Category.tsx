@@ -32,7 +32,6 @@ const Category: React.FC<Props> = ({ category, editingCategory, setEditingCatego
       ...prevCategory,
       [name]: value,
     } as CategoryDataInterface));
-    console.log(editingCategory);
   };
 
   return (
