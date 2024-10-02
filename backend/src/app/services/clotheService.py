@@ -2,8 +2,8 @@ from app.repositories.clotheRepository import ClotheRepository
 from app.repositories.clotheColorRepository import ClotheColorRepository
 from app.repositories.colorRepository import ColorRepository
 from app.repositories.clothePromoRepository import ClothePromoRepository
-from app.repositories.imageRepository import ImageRepository
 from app.repositories.typeRepository import TypeRepository
+from app.services.imageService import ImageService
 from app.utils.pagination import PaginationHelper
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -19,7 +19,7 @@ class ClotheService(metaclass=SingletonMeta):
         self.color_repository = ColorRepository()
         self.clothe_promo_repository = ClothePromoRepository()
         self.category_repository = TypeRepository()
-        self.image_repository = ImageRepository()
+        self.image_service = ImageService()
         self.pagination = PaginationHelper()
 
     def save_clothe(self, name, description, price, id_gender, id_category):
@@ -95,10 +95,9 @@ class ClotheService(metaclass=SingletonMeta):
                 image_url = f"https://{config.AWS_BUCKET_NAME}.s3.{config.AWS_BUCKET_REGION}.amazonaws.com/{file_name_in_s3}"
 
                 # Guardar la imagen en la base de datos
-                self.image_repository.save_image(
+                self.image_service.save_image(
                     id_clothe,
                     id_color,
-                    'hashcode',
                     image_url,
                     file_name_in_s3,
                 )

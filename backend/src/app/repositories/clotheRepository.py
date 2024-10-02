@@ -33,10 +33,8 @@ class ClotheRepository:
         query = db.session.query(
             Clothe,
             Type.id,
-            ClotheColor.id_color,
             Gender.name.label('gender_name')
         ).join(Type, Clothe.id_type == Type.id) \
-         .join(ClotheColor, Clothe.id == ClotheColor.id_clothe) \
          .join(Gender, Clothe.id_gender == Gender.id) \
          .filter(Clothe.id_type == id_type)
         
@@ -62,9 +60,8 @@ class ClotheRepository:
 
         clothes = [{
             **clothe.to_json(),
-            'color': color_id,
             'gender': gender_name
-        } for clothe, type_id, color_id, gender_name in clothes]
+        } for clothe, type_id, gender_name in clothes]
 
         response = {
             'clothes': clothes,

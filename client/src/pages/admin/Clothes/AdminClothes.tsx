@@ -28,21 +28,23 @@ const AdminClothes = () => {
     if (response.code == 200) {
       setClothes(response.data);
     }
+    console.log(response)
   }
 
   return (
     <main className="max-w-screen overflow-x-hidden font-roboto lg:w-11/12 lg:m-auto xl:9/12">
-      <section>
+      <section className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5">
         {
           clothes && (
             clothes.clothes.map((clothe) => 
-              clothe.colors.map((color) => {
+              clothe.colors.map((color) => (
+                  color.images.map((image) => {
                   return (
-                    <article key={color.id}>
-                      <ProductImg product={color} />
+                    <article key={image.id} className="shadow-md">
+                      <ProductImg product={image} />
                     </article>
-                )
-              })
+                  )})
+              ))
             )
           )
         }
