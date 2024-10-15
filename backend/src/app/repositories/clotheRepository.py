@@ -33,9 +33,12 @@ class ClotheRepository:
         query = db.session.query(
             Clothe,
             Type.id,
-            Gender.name.label('gender_name')
+            Gender.name.label('gender_name'),
+            Color.id
         ).join(Type, Clothe.id_type == Type.id) \
          .join(Gender, Clothe.id_gender == Gender.id) \
+         .join(ClotheColor, Clothe.id == ClotheColor.id_clothe) \
+         .join(Color, ClotheColor.id_color == Color.id) \
          .filter(Clothe.id_type == id_type)
         
         if id_gender is not None:
@@ -60,14 +63,15 @@ class ClotheRepository:
 
         clothes = [{
             **clothe.to_json(),
-            'gender': gender_name
-        } for clothe, type_id, gender_name in clothes]
+            'gender': gender_name,
+            'id_color': id_color
+        } for clothe, type_id, gender_name, id_color in clothes]
 
         response = {
             'clothes': clothes,
             'pagination': pagination_data
         }
-    
+        print(response)
         return response
     
     def get_clothe_colors_by_id(self, id_clothe):

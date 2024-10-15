@@ -41,7 +41,7 @@ class TestClotheService:
 
   def test_get_clothes_by_category(self, test_client, clothe_service):
     with test_client.application.app_context():
-      data = clothe_service.get_clothes_by_category(1, 1, 10, 'id', 'asc', None)
+      data = clothe_service.get_clothes_by_category(1, 1, 1, 10, 'id', 'asc', None)
       clothes_data = data[0]
       assert data[2] == 200
       assert len(clothes_data) > 0

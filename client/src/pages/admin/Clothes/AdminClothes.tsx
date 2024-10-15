@@ -36,16 +36,12 @@ const AdminClothes = () => {
       <section className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5">
         {
           clothes && (
-            clothes.clothes.map((clothe) => 
-              clothe.colors.map((color) => (
-                  color.images.map((image) => {
-                  return (
-                    <article key={image.id} className="shadow-md">
-                      <ProductImg product={image} />
-                    </article>
-                  )})
-              ))
-            )
+            clothes.clothes.map((clothe) => {
+              return (
+                <article key={clothe.image.id} className="shadow-md">
+                  <ProductImg product={clothe.image} />
+                </article>
+              )})
           )
         }
       </section>

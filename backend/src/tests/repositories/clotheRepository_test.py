@@ -74,9 +74,9 @@ class TestClotheRepository:
   # Test that get_clothes_by_category for admin works
   def test_get_clothes_by_category(self, test_client, clothe_repository):
     with test_client.application.app_context():
-      data = clothe_repository.get_clothes_by_category(1, 1, 10, 'id', 'asc', None)
+      # id_type, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None
+      data = clothe_repository.get_clothes_by_category(1, 1, 1, 10, 'id', 'asc', None)
       assert data
       assert len(data) > 0
-      assert data['category'] == 1
       clothes = data['clothes']
       assert clothes
