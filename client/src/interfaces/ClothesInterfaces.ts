@@ -13,6 +13,7 @@ export interface ClotheDataInterface {
   description: string;
   price: number;
   image: Image;
+  category: CategoryDataInterface;
 }
 
 export interface ClotheColor {

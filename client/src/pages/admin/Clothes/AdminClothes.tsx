@@ -39,7 +39,7 @@ const AdminClothes = () => {
             clothes.clothes.map((clothe) => {
               return (
                 <article key={clothe.image.id} className="shadow-md">
-                  <ProductImg product={clothe.image} />
+                  <ProductImg product={clothe} />
                 </article>
               )})
           )
