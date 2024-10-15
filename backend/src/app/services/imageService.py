@@ -16,4 +16,4 @@ class ImageService(metaclass=SingletonMeta):
     
     def blurhash_image(self, image):
         image_data = Image.open(BytesIO(image))
-        return encode(image_data, 5, 3)
+        return encode(image_data, 2, 1)

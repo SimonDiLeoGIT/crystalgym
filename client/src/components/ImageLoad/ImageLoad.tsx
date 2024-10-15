@@ -18,7 +18,7 @@ const ImageLoad: React.FC<props> = ({ imageUrl, imageBlurHash, imageStyles, alt,
     const img = new Image();
     img.src = imageUrl;
     img.onload = () => setImageLoaded(true);
-
+    
     // Limpiar el efecto al desmontar el componente
     return () => {
       setImageLoaded(false);
@@ -29,7 +29,6 @@ const ImageLoad: React.FC<props> = ({ imageUrl, imageBlurHash, imageStyles, alt,
     return (
         <img
           src={imageUrl}
-          onLoad={() => setImageLoaded(true)}
           className={imageStyles}
           alt={alt}
           loading={loading}

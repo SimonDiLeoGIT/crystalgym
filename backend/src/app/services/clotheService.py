@@ -88,11 +88,7 @@ class ClotheService(metaclass=SingletonMeta):
                 file_name_in_s3 = FileNameGenerator().generate_unique_filename(image.filename)
 
                 image_content = image.read()
-
-                # Subimos la imagen a S3
-                aws_bucket = AwsBucket()
-                upload_response = aws_bucket.upload_file(BytesIO(image_content), file_name_in_s3)
-
+                image.seek(0)
 
                 # Subimos la imagen a S3
                 aws_bucket = AwsBucket()
