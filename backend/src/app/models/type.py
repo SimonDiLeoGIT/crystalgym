@@ -8,7 +8,7 @@ class Type(db.Model):
 
   def __init__(self, name, description):
     self.name = name
-    self.descripcion = description
+    self.description = description
 
   def to_json(self):
     return {

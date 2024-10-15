@@ -15,7 +15,7 @@ export default class CategoryService {
       sort_by: sortBy,
       sort_order: sortOrder,
       name: name
-  }).toString();
+    }).toString();
     const response = await ApiService.makeRequest(`/categories/admin?${query}`);
     return response;
   }
@@ -27,6 +27,11 @@ export default class CategoryService {
 
   static async createCategory(category: CategoryDataInterface): Promise<PaginatedCategoriesInterface> {
     const response = await ApiService.makeRequest(`/category/admin`, 'POST', {'name': category.name, 'description': category.description });
+    return response;
+  }
+
+  static async deleteCategory(category_id: number): Promise<PaginatedCategoriesInterface> {
+    const response = await ApiService.makeRequest(`/category/admin`, 'DELETE', {'id': category_id});
     return response;
   }
 }

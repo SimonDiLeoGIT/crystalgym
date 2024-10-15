@@ -36,7 +36,7 @@ def create_app(config_class=Config):
     from app.controllers.clotheController import clothe_bp
     from app.controllers.userController import user_bp
     from app.controllers.authController import auth_bp
-    from app.controllers.categoriesController import type_bp
+    from app.controllers.categoryController import type_bp
     from app.controllers.colorController import color_bp
     from app.controllers.genderController import gender_bp
 

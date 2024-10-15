@@ -51,3 +51,11 @@ def update_type():
   if data[0] is None:
     return ResponseHandler().create_error_response('Error', data[1], data[2])
   return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
+
+@type_bp.route("/category/admin", methods=["DELETE"])
+@jwt_required()
+def delete_type():
+  data = type_service.delete_type(request.json['id'])
+  if data[0] is None:
+    return ResponseHandler().create_error_response('Error', data[1], data[2])
+  return ResponseHandler().create_response('success', data[1], data[0], code=data[2])

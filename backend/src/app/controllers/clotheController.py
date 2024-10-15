@@ -70,10 +70,32 @@ def get_clothe_by_id(id_clothe):
     except Exception as e:
         return ResponseHandler().create_error_response('Error getting clothe', str(e), 500)
 
+# Get clothes by category Admin
+@clothe_bp.route('/admin/clothes', methods=['GET'])
+@jwt_required()
+def get_clothes_by_category():
+    try:
+        id_category = request.args.get('id_category', default=None, type=int)
+        page = request.args.get('page', default=1, type=int)
+        page_size = request.args.get('page_size', default=10, type=int)
+        sort_by = request.args.get('sort_by', default='id', type=str)
+        sort_order = request.args.get('sort_order', default='asc', type=str)
+        name = request.args.get('name', default='', type=str)
+        id_gender = request.args.get('id_gender', default=None, type=int)
+        data = clothe_service.get_clothes_by_category(id_category, id_gender, page, page_size, sort_by, sort_order, name)
+        
+        if data[0] is None:
+            return ResponseHandler().create_error_response('Clothes not found', data[1], data[2])
+
+        return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
+
+    except Exception as e:
+        return ResponseHandler().create_error_response('Error getting clothes', str(e), 500)
+
 
 # Get clothes by category and gender
 @clothe_bp.route('/clothes/<int:id_gender>/<int:id_category>/<int:page>/<int:page_size>', methods=['GET'])
-def get_clothes_by_category(id_gender, id_category, page, page_size):
+def get_clothes_by_category_gender(id_gender, id_category, page, page_size):
     try:
         data = clothe_service.get_clothes_by_category(id_gender, id_category, page, page_size)
         

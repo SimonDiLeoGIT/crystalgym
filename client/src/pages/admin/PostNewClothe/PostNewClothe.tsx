@@ -2,7 +2,7 @@ import { lazy, useEffect, useState } from "react";
 import { ClotheDataInterface } from "../../../interfaces/ClothesInterfaces";
 import ClotheService from "../../../services/clothe.service";
 
-import '../styles/form.css';
+import '../../../styles/form.css';
 
 import { UserDataInterface } from "../../../interfaces/UserInterface";
 import { useUser } from "../../../hook/useUser";

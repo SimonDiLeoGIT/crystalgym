@@ -2,7 +2,8 @@ from app.repositories.clotheRepository import ClotheRepository
 from app.repositories.clotheColorRepository import ClotheColorRepository
 from app.repositories.colorRepository import ColorRepository
 from app.repositories.clothePromoRepository import ClothePromoRepository
-from app.repositories.imageRepository import ImageRepository
+from app.repositories.typeRepository import TypeRepository
+from app.services.imageService import ImageService
 from app.utils.pagination import PaginationHelper
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -11,13 +12,16 @@ from app.utils.AwsS3 import AwsBucket
 from app.utils.FileNameGenerator import FileNameGenerator
 from app import Config as config
 
+from io import BytesIO
+
 class ClotheService(metaclass=SingletonMeta):
     def __init__(self):
         self.clothe_repository = ClotheRepository()
         self.clothe_color_repository = ClotheColorRepository()
         self.color_repository = ColorRepository()
         self.clothe_promo_repository = ClothePromoRepository()
-        self.image_repository = ImageRepository()
+        self.category_repository = TypeRepository()
+        self.image_service = ImageService()
         self.pagination = PaginationHelper()
 
     def save_clothe(self, name, description, price, id_gender, id_category):
@@ -82,6 +86,10 @@ class ClotheService(metaclass=SingletonMeta):
 
             if self.allowed_file(image.filename):
                 file_name_in_s3 = FileNameGenerator().generate_unique_filename(image.filename)
+
+                image_content = image.read()
+                image.seek(0)
+
                 # Subimos la imagen a S3
                 aws_bucket = AwsBucket()
                 upload_response = aws_bucket.upload_file(image, file_name_in_s3)
@@ -93,12 +101,12 @@ class ClotheService(metaclass=SingletonMeta):
                 image_url = f"https://{config.AWS_BUCKET_NAME}.s3.{config.AWS_BUCKET_REGION}.amazonaws.com/{file_name_in_s3}"
 
                 # Guardar la imagen en la base de datos
-                self.image_repository.save_image(
+                self.image_service.save_image(
                     id_clothe,
                     id_color,
-                    'hashcode',
                     image_url,
-                    image.filename,
+                    file_name_in_s3,
+                    image_content
                 )
             else:
                 return [None, 'Invalid image format', 400]
@@ -115,8 +123,47 @@ class ClotheService(metaclass=SingletonMeta):
         if clothe is None:
             return [None, 'Clothe not found', 404]
         return [clothe.to_json(), 'Clothes retrieved successfully', 200]
+    
+    def get_clothes_by_category(self, id_category, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
+        
+        category = self.category_repository.get_type_by_id(id_category)
+        if category is None:
+            return [None, 'Category not found', 404]
 
-    def get_clothes_by_category(self, id_gender, id_category, page=1, page_size=10):
+        clothes_data = self.clothe_repository.get_clothes_by_category(id_category, id_gender, page, page_size, sort_by, sort_order, name)
+        if clothes_data is None:
+            return [None, 'No clothes found for the given category and gender', 404]
+        
+        clothes = clothes_data['clothes']
+
+        all_clothe = []
+        for clothe in clothes:
+            colors = self.clothe_repository.get_clothe_colors_by_id(clothe['id'])
+            clothe_colors = []
+            for color in colors:
+                color_data = color.to_json()
+                images = self.clothe_repository.get_clothe_images_by_id(clothe['id'], color_data['id_color'])
+                color_data['images'] = [image.to_json() for image in images]
+                for image in color_data['images']:
+                    image['signed_image_url'] = AwsBucket().presign_url(image['name'])
+                clothe_colors.append(color_data)
+            all_clothe.append({
+                'id': clothe['id'],
+                'name': clothe['name'],
+                'description': clothe['description'],
+                'price': clothe['price'],
+                'colors': clothe_colors
+            })
+
+        data = {
+            'category': category.to_json(),
+            'clothes': all_clothe,
+            'pagination': clothes_data['pagination']
+        }
+
+        return [data, 'Clothes retrieved successfully', 200]
+
+    def get_clothes_by_category_gender(self, id_gender, id_category, page=1, page_size=10):
         clothes_data = self.clothe_repository.get_clothes_by_category(id_gender, id_category, page, page_size)
         
         # Marcar como "new" y verificar promociones

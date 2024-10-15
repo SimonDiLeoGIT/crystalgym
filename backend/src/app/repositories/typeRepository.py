@@ -8,7 +8,7 @@ class TypeRepository:
     self.pagination = PaginationHelper()
 
   def create_type(self, name, description):
-    category = Type(name=name, description=description)
+    category = Type(name, description)
     db.session.add(category)
     db.session.commit()
     return category
@@ -17,7 +17,7 @@ class TypeRepository:
     types = db.session.query(Type).all()
     return types
   
-  def get_types_by_id(self, id_type):
+  def get_type_by_id(self, id_type):
     category = db.session.query(Type).filter(Type.id == id_type).first()
     return category
   
@@ -69,5 +69,12 @@ class TypeRepository:
     category = db.session.query(Type).filter(Type.id == id_type).first()
     category.name = name
     category.description = description
+    db.session.commit()
+    return category
+  
+  def delete_type(self, id_type):
+    if not db.session.query(Type).filter(Type.id == id_type).first():
+      return None
+    category = db.session.query(Type).filter(Type.id == id_type).delete()
     db.session.commit()
     return category
