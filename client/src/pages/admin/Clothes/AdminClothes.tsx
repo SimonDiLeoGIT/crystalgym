@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { AdminClotheData, ClotheDataInterface } from "../../../interfaces/ClothesInterfaces"
 import ClotheService from "../../../services/clothe.service"
-import { ProductImg } from "./ClothesList"
+import { ProductImg } from "./Clothe"
 
 const AdminClothes = () => {
 

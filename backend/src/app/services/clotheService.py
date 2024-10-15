@@ -12,6 +12,8 @@ from app.utils.AwsS3 import AwsBucket
 from app.utils.FileNameGenerator import FileNameGenerator
 from app import Config as config
 
+from io import BytesIO
+
 class ClotheService(metaclass=SingletonMeta):
     def __init__(self):
         self.clothe_repository = ClotheRepository()
@@ -84,6 +86,14 @@ class ClotheService(metaclass=SingletonMeta):
 
             if self.allowed_file(image.filename):
                 file_name_in_s3 = FileNameGenerator().generate_unique_filename(image.filename)
+
+                image_content = image.read()
+
+                # Subimos la imagen a S3
+                aws_bucket = AwsBucket()
+                upload_response = aws_bucket.upload_file(BytesIO(image_content), file_name_in_s3)
+
+
                 # Subimos la imagen a S3
                 aws_bucket = AwsBucket()
                 upload_response = aws_bucket.upload_file(image, file_name_in_s3)
@@ -100,6 +110,7 @@ class ClotheService(metaclass=SingletonMeta):
                     id_color,
                     image_url,
                     file_name_in_s3,
+                    image_content
                 )
             else:
                 return [None, 'Invalid image format', 400]
