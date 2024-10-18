@@ -1,7 +1,7 @@
 import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
 import { useEffect, useState } from "react";
 import ClotheService from "../../services/clothe.service";
-import { ClotheDataInterface, ClothesCategory } from "../../interfaces/ClothesInterfaces";
+import { ClothesCategory } from "../../interfaces/ClothesInterfaces";
 import { ErrorInterface } from "../../interfaces/ErrorInterface";
 
 interface props {
@@ -13,14 +13,14 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   const [gender, setGender] = useState<number>(3);
 
-  const [name, setName] = useState<string>('');
-  const [sortBy, setSortBy] = useState<keyof ClotheDataInterface>('id');
-  const [sortOrder, setSortOrder] = useState<string>('asc');
-  const [perPage, _setPerPage] = useState<number>(10);
+  // const [name, setName] = useState<string>('');
+  // const [sortBy, setSortBy] = useState<keyof ClotheDataInterface>('id');
+  // const [sortOrder, setSortOrder] = useState<string>('asc');
+  // const [perPage, _setPerPage] = useState<number>(10);
 
   useEffect(() => {
     getClothes(gender);
-  }, [sortBy, sortOrder, perPage, name, gender]); // eslint-disable-line
+  }, [gender]); // eslint-disable-line
 
   const getClothes = async (id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string) => {
     try {
