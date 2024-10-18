@@ -40,7 +40,7 @@ export default class ClotheService {
     sortBy && (params.sort_by = sortBy)
     sortOrder && (params.sort_order = sortOrder)
     name && (params.name = name)
-    id_gender && (params.id_gender = id_gender.toString())
+    id_gender && id_gender !== 3 && (params.id_gender = id_gender.toString())
 
     const query = new URLSearchParams(params).toString();
     const response = await ApiService.makeRequest(`/admin/clothes?${query}`);

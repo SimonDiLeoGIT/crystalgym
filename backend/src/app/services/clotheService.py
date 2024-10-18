@@ -132,7 +132,11 @@ class ClotheService(metaclass=SingletonMeta):
 
         clothes_data = self.clothe_repository.get_clothes_by_category(id_category, id_gender, page, page_size, sort_by, sort_order, name)
         if clothes_data is None:
-            return [None, 'No clothes found for the given category and gender', 404]
+            data = {
+                'category': category.to_json(),
+                'clothes': []
+            }
+            return [None, 'No clothes found for the given category and gender', data, 404]
         
         clothes = clothes_data['clothes']
 

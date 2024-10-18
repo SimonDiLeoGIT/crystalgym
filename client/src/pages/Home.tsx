@@ -31,11 +31,11 @@ const Home = () => {
           advertisement={new_this_month.advertisement} mobileImages={new_this_month.mobileImages} desktopImages={new_this_month.desktopImages}
         />
       </header>
-      <ProductsAdvertisement products={new_this_month_posts} title="New This Month" link="/new-this-month" />
+      {/* <ProductsAdvertisement products={new_this_month_posts} title="New This Month" link="/new-this-month" /> */}
       <Carousel
         advertisement={off_20.advertisement} mobileImages={off_20.mobileImages} desktopImages={off_20.desktopImages}
       />
-      <ProductsAdvertisement products={off_20_posts} title="20% Off" link="/20%-off" />
+      {/* <ProductsAdvertisement products={off_20_posts} title="20% Off" link="/20%-off" /> */}
     </main>
   )
 }
