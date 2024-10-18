@@ -71,7 +71,6 @@ class ClotheRepository:
             'clothes': clothes,
             'pagination': pagination_data
         }
-        print(response)
         return response
     
     def get_clothe_colors_by_id(self, id_clothe):

@@ -11,6 +11,11 @@ export interface ClotheDataInterface {
   id: number;
   name: string;
   description: string;
+  new: boolean,
+  off: boolean,
+  accessory: boolean,
+  gender: string,
+  id_color: number,
   price: number;
   image: Image;
   category: CategoryDataInterface;
@@ -34,14 +39,15 @@ export interface Image {
   url: string;
 }
 
-export interface ClothesAdminResponse {
+export interface ClothesResponse {
   code: number
-  data: AdminClotheData
+  data: ClothesCategory
   message: string
 }
 
-export interface AdminClotheData {
+export interface ClothesCategory {
   category: CategoryDataInterface
+  gender?: string
   clothes: ClotheDataInterface[]
   pagination: PaginationInterface
 }

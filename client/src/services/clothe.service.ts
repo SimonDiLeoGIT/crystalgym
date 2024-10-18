@@ -1,13 +1,13 @@
-import { ClotheDataInterface, ClotheInterface, ClothesAdminResponse } from '../interfaces/ClothesInterfaces';
+import { ClotheInterface, ClothesResponse } from '../interfaces/ClothesInterfaces';
 import { ErrorInterface } from '../interfaces/ErrorInterface';
 import ApiService from './api.service';
 import AuthService from './auth.service';
 
 export default class ClotheService {
-  static async getClothes(): Promise<ClotheDataInterface> {
-    const response = await ApiService.makeRequest('/clothes');
-    return response;
-  }
+  // static async getClothes(): Promise<ClotheDataInterface> {
+  //   const response = await ApiService.makeRequest('/clothes');
+  //   return response;
+  // }
 
   static async postClothe(clothe: FormData): Promise<ClotheInterface> {
     try {
@@ -30,7 +30,7 @@ export default class ClotheService {
     }
   }
 
-  static async getClothesAdmin(id_category: number, id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string): Promise<ClothesAdminResponse> {
+  static async getClothes(id_category: number, id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string): Promise<ClothesResponse> {
     const params: { [key: string]: string } = {
       id_category: id_category.toString(),
     };
