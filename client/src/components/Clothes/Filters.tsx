@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ClotheService from "../../services/clothe.service";
 import { ClothesCategory } from "../../interfaces/ClothesInterfaces";
 import { ErrorInterface } from "../../interfaces/ErrorInterface";
+import SearchInput from "../Search/SearchInput";
 
 interface props {
   id_category: string
@@ -13,7 +14,7 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   const [gender, setGender] = useState<number>(3);
 
-  // const [name, setName] = useState<string>('');
+  const [text, setText] = useState<string>('');
   // const [sortBy, setSortBy] = useState<keyof ClotheDataInterface>('id');
   // const [sortOrder, setSortOrder] = useState<string>('asc');
   // const [perPage, _setPerPage] = useState<number>(10);
@@ -22,9 +23,9 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
     getClothes(gender);
   }, [gender]); // eslint-disable-line
 
-  const getClothes = async (id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string) => {
+  const getClothes = async (id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string) => {
     try {
-      const response = await ClotheService.getClothes(Number(id_category), id_gender, page, perPage, sortBy, sortOrder, name);
+      const response = await ClotheService.getClothes(Number(id_category), id_gender, page, perPage, sortBy, sortOrder, text);
       if (response.code == 200) {
         setData(response.data);    
       }
@@ -54,6 +55,7 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
         <FormControlLabel value={2} control={<Radio />} label="Female" />
         <FormControlLabel value={1} control={<Radio />} label="Male" />
       </RadioGroup>
+      <SearchInput setText={setText} />
     </FormControl>
   )
 }
