@@ -17,7 +17,8 @@ const Register = lazy(() => import("../../pages/Register"))
 const Login = lazy(() => import("../../pages/Login"))
 const PostNewClothe = lazy(() => import("../../pages/admin/PostNewClothe/PostNewClothe"))
 const ClotheCategories = lazy(() => import("../../pages/admin/ClotheCategories/ClotheCategories"))
-const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
+const Clothes = lazy(() => import ("../../pages/Clothes"))
+// const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
 
 const Router = () => {
   return (
@@ -40,10 +41,11 @@ const Router = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/category/:id_category/clothes" element={<Clothes />} />
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
           <Route path="/admin/clothe-form" element={<PostNewClothe />} />
           <Route path="/admin/categories" element={<ClotheCategories />} />
-          <Route path="/admin/categories/:categoryId" element={<AdminClothes />} />
+          {/* <Route path="/admin/categories/:categoryId" element={<AdminClothes />} /> */}
         </Routes>
         <Footer />
       </BrowserRouter>

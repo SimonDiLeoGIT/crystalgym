@@ -30,10 +30,11 @@ class ResponseHandler(metaclass=SingletonMeta):
         )
         return response
 
-    def create_error_response(self, status, message, code):
+    def create_error_response(self, status, message, data=None, code=500):
         response_data = {
             "error": status,
             "message": message,
+            "data": data,
             "code": code
         }
         response = make_response(jsonify(response_data))

@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from "react";
-import { ProductInterface } from "../interfaces/ProductInterfaces";
+import { ClotheDataInterface } from "../interfaces/ClothesInterfaces";
 
-type product = ProductInterface
+type product = ClotheDataInterface
 
 interface CartItem {
   product: product
@@ -63,11 +63,11 @@ const CartProvider = ({ children }: Props) => {
 
   const addToCart = (product: product) => {
     setCart(currItems => {
-      if (currItems.find(item => item.product.id === product.id && item.product.colorId === product.colorId) == null) {
+      if (currItems.find(item => item.product.id === product.id && item.product.id_color === product.id_color) == null) {
         return [...cart, { product, quantity: 1 }]
       } else {
         return currItems.map(item => {
-          if (item.product.id === product.id && item.product.colorId === product.colorId) {
+          if (item.product.id === product.id && item.product.id_color === product.id_color) {
             return { ...item, quantity: item.quantity + 1 }
           } else {
             return item
@@ -80,11 +80,11 @@ const CartProvider = ({ children }: Props) => {
 
   const removeFromCart = (product: product) => {
     setCart(currItems => {
-      if (currItems.find(item => item.product.id === product.id && item.product.colorId === product.colorId)?.quantity === 1) {
-        return currItems.filter(item => item.product.id !== product.id || (item.product.id === product.id && item.product.colorId !== product.colorId))
+      if (currItems.find(item => item.product.id === product.id && item.product.id_color === product.id_color)?.quantity === 1) {
+        return currItems.filter(item => item.product.id !== product.id || (item.product.id === product.id && item.product.id_color !== product.id_color))
       } else {
         return currItems.map(item => {
-          if (item.product.id === product.id && item.product.colorId === product.colorId) {
+          if (item.product.id === product.id && item.product.id_color === product.id_color) {
             return { ...item, quantity: item.quantity - 1 }
           } else {
             return item
@@ -96,7 +96,7 @@ const CartProvider = ({ children }: Props) => {
 
   const clearFromCart = (product: product) => {
     setCart(currItems => {
-      return currItems.filter(item => item.product.id !== product.id || (item.product.id === product.id && item.product.colorId !== product.colorId))
+      return currItems.filter(item => item.product.id !== product.id || (item.product.id === product.id && item.product.id_color !== product.id_color))
     })
   }
 

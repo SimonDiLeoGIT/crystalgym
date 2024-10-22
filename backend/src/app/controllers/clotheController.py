@@ -49,7 +49,7 @@ def post_clothe():
         return ResponseHandler().create_response('success', data[1], response, refresh_token=refresh_token, code=data[2])
         
     except Exception as e:
-        return ResponseHandler().create_error_response(str(e), 'An error occurred while creating the clothe', 500)
+        return ResponseHandler().create_error_response(str(e), 'An error occurred while creating the clothe')
     
 
 
@@ -68,7 +68,7 @@ def get_clothe_by_id(id_clothe):
         return ResponseHandler().create_response('success', data[1], clothe, code=data[2])
 
     except Exception as e:
-        return ResponseHandler().create_error_response('Error getting clothe', str(e), 500)
+        return ResponseHandler().create_error_response('Error getting clothe', str(e))
 
 # Get clothes by category Admin
 @clothe_bp.route('/admin/clothes', methods=['GET'])
@@ -85,12 +85,12 @@ def get_clothes_by_category():
         data = clothe_service.get_clothes_by_category(id_category, id_gender, page, page_size, sort_by, sort_order, name)
         
         if data[0] is None:
-            return ResponseHandler().create_error_response('Clothes not found', data[1], data[2])
+            return ResponseHandler().create_error_response('Clothes not found', data[1], data=data[2], code=data[3])
 
         return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
 
     except Exception as e:
-        return ResponseHandler().create_error_response('Error getting clothes', str(e), 500)
+        return ResponseHandler().create_error_response('Error getting clothes', str(e))
 
 
 # Get clothes by category and gender
@@ -113,7 +113,7 @@ def get_clothes_by_category_gender(id_gender, id_category, page, page_size):
         return ResponseHandler().create_response('success', 'Clothes retrieved successfully', response, code=200)
 
     except Exception as e:
-        return ResponseHandler().create_error_response('Error getting clothes', str(e), 500)
+        return ResponseHandler().create_error_response('Error getting clothes', str(e))
     
 # Update clothe
 @clothe_bp.route("/clothe", methods=["PUT"])
@@ -133,7 +133,7 @@ def update_clothe():
         return ResponseHandler().create_response('success', data[1], clothe, code=data[2])
 
     except Exception as e:
-        return ResponseHandler().create_error_response('Error updating clothe', str(e), 500)
+        return ResponseHandler().create_error_response('Error updating clothe', str(e))
     
 # Delete clothe
 @clothe_bp.route("/clothe/<int:id_clothe>", methods=["DELETE"])
@@ -147,7 +147,7 @@ def delete_clothe(id_clothe):
         return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
 
     except Exception as e:
-        return ResponseHandler().create_error_response('Error deleting clothe', str(e), 500)
+        return ResponseHandler().create_error_response('Error deleting clothe', str(e))
 
 
 

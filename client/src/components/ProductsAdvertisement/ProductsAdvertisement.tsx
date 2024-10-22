@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom"
 import './ProductsAdvertisement.css'
 import { ProductImg } from "../ProductImg/ProductImg"
-import { ProductInterface } from "../../interfaces/ProductInterfaces"
+import { ClothesCategory } from "../../interfaces/ClothesInterfaces"
 
-type ProductList = ProductInterface[]
+type ProductList = ClothesCategory
 
 interface Props {
   products: ProductList
@@ -17,10 +17,10 @@ const ProductsAdvertisement: React.FC<Props> = ({ products, title, link }) => {
     <section className="p-2 mb-4 lg:w-11/12 lg:m-auto grid place-content-center">
       <h1 className="font-bold text-xl p-2">{title}</h1>
       <section className="flex overflow-x-auto whitespace-nowrap scrollable-images">
-        {products.map(product => {
+        {products.clothes.map(product => {
           return (
             <article className="min-w-72 mx-1">
-              <ProductImg product={product} />
+              <ProductImg product={product} category={products.category} />
             </article>
           )
         })}
