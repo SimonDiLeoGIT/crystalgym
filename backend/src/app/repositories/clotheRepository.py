@@ -21,7 +21,7 @@ class ClotheRepository:
     def get_clothe_by_id(self, id_clothe):
         return db.session.query(Clothe).filter(Clothe.id == id_clothe).first()
     
-    def get_clothes_by_category(self, id_type, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
+    def get_clothes_by_category(self, id_type, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=''):
         
         if page < 1:
             return None
@@ -43,9 +43,12 @@ class ClotheRepository:
         
         if id_gender is not None:
             query = query.filter(Clothe.id_gender == id_gender)
+        
+        if name != '':
+            query = query.filter(Clothe.name.ilike(f"%{name.strip()}%"))
 
-        query = self.pagination.filter_and_sort(query, Type, sort_by, sort_order, 'name', name)
-
+        query = self.pagination.filter_and_sort(query, Type, sort_by, sort_order)
+        
         total_items = query.count()
 
         if (total_items == 0):

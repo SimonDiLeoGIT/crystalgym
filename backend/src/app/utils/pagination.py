@@ -2,15 +2,12 @@ from app.utils.singletonMeta import SingletonMeta
 
 class PaginationHelper(metaclass=SingletonMeta):
 
-    def filter_and_sort(self, query, model, sort_by, sort_order, filter_field=None, filter_value=None):
+    def filter_and_sort(self, query, model, sort_by, sort_order):
         
         if sort_order == 'asc':
             query = query.order_by(getattr(model, sort_by).asc())
         else:
             query = query.order_by(getattr(model, sort_by).desc())
-
-        if filter_field and filter_value:
-            query = query.filter(getattr(model, filter_field).ilike(f'%{filter_value}%'))
 
         return query
     

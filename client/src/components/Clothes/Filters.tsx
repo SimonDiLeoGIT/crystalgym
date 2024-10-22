@@ -13,19 +13,18 @@ interface props {
 const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   const [gender, setGender] = useState<number>(3);
-
   const [text, setText] = useState<string>('');
   // const [sortBy, setSortBy] = useState<keyof ClotheDataInterface>('id');
   // const [sortOrder, setSortOrder] = useState<string>('asc');
   // const [perPage, _setPerPage] = useState<number>(10);
 
   useEffect(() => {
-    getClothes(gender);
-  }, [gender]); // eslint-disable-line
+    getClothes();
+  }, [gender, text]); // eslint-disable-line
 
-  const getClothes = async (id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string) => {
+  const getClothes = async (page?: number, perPage?: number, sortBy?: string, sortOrder?: string) => {
     try {
-      const response = await ClotheService.getClothes(Number(id_category), id_gender, page, perPage, sortBy, sortOrder, text);
+      const response = await ClotheService.getClothes(Number(id_category), gender, page, perPage, sortBy, sortOrder, text);
       if (response.code == 200) {
         setData(response.data);    
       }
@@ -43,19 +42,23 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   return (
     <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
-        value={gender}
-        onChange={handleChange}
-      >
-        <FormControlLabel value={3} control={<Radio />} label="All" />
-        <FormControlLabel value={2} control={<Radio />} label="Female" />
-        <FormControlLabel value={1} control={<Radio />} label="Male" />
-      </RadioGroup>
-      <SearchInput setText={setText} />
+      <div className="flex items-center">
+        <div>
+          <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
+          <RadioGroup
+            row
+            aria-labelledby="demo-row-radio-buttons-group-label"
+            name="row-radio-buttons-group"
+            value={gender}
+            onChange={handleChange}
+            >
+            <FormControlLabel value={3} control={<Radio />} label="All" />
+            <FormControlLabel value={2} control={<Radio />} label="Female" />
+            <FormControlLabel value={1} control={<Radio />} label="Male" />
+          </RadioGroup>
+        </div>
+        <SearchInput setText={setText} />
+      </div>
     </FormControl>
   )
 }
