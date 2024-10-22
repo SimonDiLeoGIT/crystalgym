@@ -2,7 +2,6 @@ import { lazy } from "react";
 import { Link } from "react-router-dom";
 import add_to_bag_icon from "../../assets/icons/nav icons/bag-plus-1122-svgrepo-com.svg"
 import like_icon from "../../assets/icons/like-icon.svg"
-import edit_icon from "../../assets/icons/edit-cover-1481-svgrepo-com.svg"
 import { useCart } from "../../hook/useCart";
 import { CategoryDataInterface } from "../../interfaces/CategoryInterfaces";
 import { ClotheDataInterface } from "../../interfaces/ClothesInterfaces";
@@ -41,16 +40,11 @@ export const ProductImg: React.FC<Props> = ({ product, category }) => {
           />
         </Link>
         {
-          user?.id_role !== 1 
-          ?
+          user?.id_role !== 1 &&
             <>
               <button onClick={() => addProduct(product)} className="absolute top-2 right-2 -bg--color-white rounded-full p-2 duration-150 hover:bg-opacity-60 hover:scale-105 hover:-bg--color-very-light-grey hover:shadow-md hover:-shadow--color-white"> <img src={add_to_bag_icon} alt="bag icon" className="w-4" />  </button>
               <button className="absolute bottom-2 right-2 -bg--color-white rounded-full p-2 duration-150 hover:bg-opacity-60 hover:scale-105 hover:-bg--color-very-light-grey hover:shadow-md hover:-shadow--color-white"> <img src={like_icon} alt="like icon" className="w-4" /> </button>
             </>
-          :
-          <>
-            <Link to={"/"} className="absolute top-2 right-2 -bg--color-white rounded-full p-2 duration-150 hover:bg-opacity-60 hover:scale-105 hover:-bg--color-very-light-grey hover:shadow-md hover:-shadow--color-white"> <img src={edit_icon} alt="edit icon" className="w-4" />  </Link>            
-          </>
         }
         {product.new &&
           <span className="absolute bottom-2 left-2 -bg--color-white rounded-2xl px-2 py-1 text-sm font-bold -text--color-black">

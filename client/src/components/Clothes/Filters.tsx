@@ -1,9 +1,11 @@
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
+import { FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from "@mui/material"
 import { useEffect, useState } from "react";
 import ClotheService from "../../services/clothe.service";
 import { ClothesCategory } from "../../interfaces/ClothesInterfaces";
 import { ErrorInterface } from "../../interfaces/ErrorInterface";
 import SearchInput from "../Search/SearchInput";
+import CategoryService from "../../services/category.service";
+import { CategoryInterface } from "../../interfaces/CategoryInterfaces";
 
 interface props {
   id_category: string
@@ -14,17 +16,31 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   const [gender, setGender] = useState<number>(3);
   const [text, setText] = useState<string>('');
+  const [categories, setCategories] = useState<CategoryInterface | null>(null);
+  const [category, setCategory] = useState<string>(id_category);
+
   // const [sortBy, setSortBy] = useState<keyof ClotheDataInterface>('id');
   // const [sortOrder, setSortOrder] = useState<string>('asc');
   // const [perPage, _setPerPage] = useState<number>(10);
 
   useEffect(() => {
+    getCategories();
+  }, []); // eslint-disable-line
+
+  const getCategories = async () => {
+    const response = await CategoryService.getCategories();
+    if (response.code == 200) {
+      setCategories(response);
+    }
+  }
+
+  useEffect(() => {
     getClothes();
-  }, [gender, text]); // eslint-disable-line
+  }, [gender, text, category]); // eslint-disable-line
 
   const getClothes = async (page?: number, perPage?: number, sortBy?: string, sortOrder?: string) => {
     try {
-      const response = await ClotheService.getClothes(Number(id_category), gender, page, perPage, sortBy, sortOrder, text);
+      const response = await ClotheService.getClothes(Number(category), gender, page, perPage, sortBy, sortOrder, text);
       if (response.code == 200) {
         setData(response.data);    
       }
@@ -38,6 +54,10 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setGender(Number((event.target as HTMLInputElement).value));
+  };
+
+  const handleCategoryChange = (event: SelectChangeEvent) => {
+    setCategory(event.target.value);
   };
 
   return (
@@ -58,6 +78,24 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
           </RadioGroup>
         </div>
         <SearchInput setText={setText} />
+        <div>
+          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+            <InputLabel id="demo-simple-select-standard-label">Category</InputLabel>
+            <Select
+              labelId="demo-simple-select-standard-label"
+              id="demo-simple-select-standard"
+              value={category}
+              onChange={handleCategoryChange}
+              label="Category"
+            >
+              {
+                categories?.data.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                ))
+              }
+            </Select>
+          </FormControl>
+        </div>
       </div>
     </FormControl>
   )
