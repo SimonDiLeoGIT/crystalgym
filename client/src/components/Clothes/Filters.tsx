@@ -61,8 +61,8 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
   };
 
   return (
-    <FormControl className="w-full">
-      <div className="flex flex-col gap-2 py-4">
+    <FormControl className="w-full lg:w-80">
+      <div className="flex flex-col gap-2 mb-4 md:grid grid-cols-2 lg:flex">
         <FormControl 
           variant="standard" 
           sx={{ 
@@ -95,10 +95,10 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
             onChange={handleCategoryChange}
             label="Category"
             sx={{
-              p: 1,
+              p: 0.75,
               backgroundColor: "#CBCBCB",
             }}
-          >
+            >
             {
               categories?.data.map((category) => (
                 <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
@@ -120,7 +120,9 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
             <FormControlLabel value={1} control={<Radio sx={{'&.Mui-checked':{color: '#766274'}}} />} label="Male" />
           </RadioGroup>
         </div>
-        <SearchInput setText={setText} />
+        <div className="row-start-1 col-start-2 m-auto mb-0 w-full">
+          <SearchInput setText={setText} />
+        </div>
       </div>
     </FormControl>
   )

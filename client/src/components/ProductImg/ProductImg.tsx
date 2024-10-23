@@ -28,14 +28,14 @@ export const ProductImg: React.FC<Props> = ({ product, category }) => {
   }
 
   return (
-    <figure className="">
-      <div className="relative overflow-hidden w-full h-72 lg:h-96">
+    <figure className="lg:h-full">
+      <div className="relative overflow-hidden w-full h-72 sm:h-[400px] xl:h-[450px] 2xl:h-[480px]">
         <Link to={`/product/${product.id}/${product.id_color}`} className="h-full w-full block">
           <ImageLoad
             imageUrl={product.image.signed_image_url}
             imageBlurHash={product.image.hashcode}
             alt={product.name}
-            imageStyles="h-full w-full object-cover duration-500 hover:scale-110"
+            imageStyles="h-full w-full object-cover duration-500 hover:scale-125"
             loading="lazy"
           />
         </Link>
