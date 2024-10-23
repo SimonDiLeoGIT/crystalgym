@@ -15,7 +15,7 @@ const Clothes = () => {
   }, [data])
 
   return (
-    <main className="max-w-screen overflow-x-hidden font-roboto lg:w-11/12 lg:m-auto xl:9/12">
+    <main className="max-w-screen overflow-x-hidden font-roboto w-11/12 m-auto xl:9/12">
       <header className="py-2">
         <h1 className="font-semibold text-xl md:font-bold md:text-3xl"> {data?.category?.name.toUpperCase()} <span className="-text--color-grey text-sm md:text-lg"> {data?.gender?.toUpperCase()} </span> </h1>
       </header>

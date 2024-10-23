@@ -61,8 +61,51 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
   };
 
   return (
-    <FormControl>
-      <div className="flex items-center">
+    <FormControl className="w-full">
+      <div className="flex flex-col gap-2 py-4">
+        <FormControl 
+          variant="standard" 
+          sx={{ 
+            m: 0,
+            minWidth: 120, 
+            width: '100%',
+            '& .MuiInput-underline:before': {
+              borderBottomColor: '#766274', // Borde antes de enfocar
+              borderBottomWidth: '4px',
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: '#C3ADC1', // Borde después de enfocar
+              borderBottomWidth: '4px',
+            },
+            '&:hover .MuiInput-underline:before': {
+              borderBottomColor: '#766274', // Borde al pasar el mouse
+              borderBottomWidth: '4px',
+            }
+          }}
+        >
+          <InputLabel 
+            id="demo-simple-select-standard-label"
+          >
+            Category
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-standard-label"
+            id="demo-simple-select-standard"
+            value={category}
+            onChange={handleCategoryChange}
+            label="Category"
+            sx={{
+              p: 1,
+              backgroundColor: "#CBCBCB",
+            }}
+          >
+            {
+              categories?.data.map((category) => (
+                <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+              ))
+            }
+          </Select>
+        </FormControl>
         <div>
           <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
           <RadioGroup
@@ -71,31 +114,13 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
             name="row-radio-buttons-group"
             value={gender}
             onChange={handleChange}
-            >
-            <FormControlLabel value={3} control={<Radio />} label="All" />
-            <FormControlLabel value={2} control={<Radio />} label="Female" />
-            <FormControlLabel value={1} control={<Radio />} label="Male" />
+          >
+            <FormControlLabel value={3} control={<Radio sx={{'&.Mui-checked':{color: '#766274'}}} />} label="All" />
+            <FormControlLabel value={2} control={<Radio sx={{'&.Mui-checked':{color: '#766274'}}} />} label="Female" />
+            <FormControlLabel value={1} control={<Radio sx={{'&.Mui-checked':{color: '#766274'}}} />} label="Male" />
           </RadioGroup>
         </div>
         <SearchInput setText={setText} />
-        <div>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-standard-label">Category</InputLabel>
-            <Select
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
-              value={category}
-              onChange={handleCategoryChange}
-              label="Category"
-            >
-              {
-                categories?.data.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
-                ))
-              }
-            </Select>
-          </FormControl>
-        </div>
       </div>
     </FormControl>
   )

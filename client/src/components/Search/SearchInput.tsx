@@ -24,7 +24,7 @@ const SearchInput: React.FC<Props> = ({ setText }) => {
 
   return (
     <fieldset className="flex-1 md:flex-none">
-      <input type="text" placeholder="Buscar..." className="w-full p-2 border-b-4 -border--color-greyest-violet focus:-border--color-light-grey-violet focus:outline-none -bg--color-very-light-grey" onChange={(e) => handleTextChange(e.target.value)} />
+      <input type="text" placeholder="Search..." className="w-full p-2 border-b-4 -border--color-greyest-violet focus:-border--color-light-grey-violet focus:outline-none -bg--color-very-light-grey" onChange={(e) => handleTextChange(e.target.value)} />
     </fieldset>
   )
 }
