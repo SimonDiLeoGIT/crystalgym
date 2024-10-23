@@ -62,6 +62,9 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
 
   return (
     <FormControl className="w-full lg:w-80">
+      <header>
+        <h2 className="font-medium text-lg">Filters</h2>
+      </header>
       <div className="flex flex-col gap-2 mb-4 md:grid grid-cols-2 lg:flex">
         <FormControl 
           variant="standard" 
@@ -70,15 +73,15 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
             minWidth: 120, 
             width: '100%',
             '& .MuiInput-underline:before': {
-              borderBottomColor: '#766274', // Borde antes de enfocar
+              borderBottomColor: '#766274',
               borderBottomWidth: '4px',
             },
             '& .MuiInput-underline:after': {
-              borderBottomColor: '#C3ADC1', // Borde después de enfocar
+              borderBottomColor: '#C3ADC1',
               borderBottomWidth: '4px',
             },
             '&:hover .MuiInput-underline:before': {
-              borderBottomColor: '#766274', // Borde al pasar el mouse
+              borderBottomColor: '#766274',
               borderBottomWidth: '4px',
             }
           }}

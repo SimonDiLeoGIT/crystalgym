@@ -82,7 +82,7 @@ const Product = () => {
           }
         </section>
       </section>
-      <ProductsAdvertisement products={all_clothes.all.filter(item => product?.accessory ? (item.accessory) : (item.category === product?.category && item.sex === product.sex && item.id !== product.id)).slice(0, 6)} title="Similar Products" link={`/${product?.accessory ? "accessories/all" : product?.sex + "/" + product?.category}`} />
+      {/* <ProductsAdvertisement products={all_clothes.all.filter(item => product?.accessory ? (item.accessory) : (item.category === product?.category && item.sex === product.sex && item.id !== product.id)).slice(0, 6)} title="Similar Products" link={`/${product?.accessory ? "accessories/all" : product?.sex + "/" + product?.category}`} /> */}
     </section >
   )
 }

@@ -118,11 +118,11 @@ class ClotheService(metaclass=SingletonMeta):
         
         return [True, 'Clothe created successfully', 201]
 
-    def get_clothe_by_id(self, id_clothe):
-        clothe = self.clothe_repository.get_clothe_by_id(id_clothe)
+    def get_clothe_by_id(self, id_clothe, id_color):
+        clothe = self.clothe_repository.get_clothe_by_id(id_clothe, id_color)
         if clothe is None:
             return [None, 'Clothe not found', 404]
-        return [clothe.to_json(), 'Clothes retrieved successfully', 200]
+        return [clothe, 'Clothes retrieved successfully', 200]
     
     def get_clothes_by_category(self, id_category, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
         

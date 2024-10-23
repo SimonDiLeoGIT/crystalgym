@@ -18,8 +18,29 @@ class ClotheRepository:
         db.session.commit()
         return new_clothe
     
-    def get_clothe_by_id(self, id_clothe):
-        return db.session.query(Clothe).filter(Clothe.id == id_clothe).first()
+    def get_clothe_by_id(self, id_clothe, id_color):
+        clothe_data = db.session.query(
+            Clothe,
+            ClotheColor.stock,  # Atributo de ClotheColor
+            Color.name.label('color_name')  # Atributo de Color
+        ) \
+        .join(ClotheColor, Clothe.id == ClotheColor.id_clothe) \
+        .join(Color, id_color == Color.id) \
+        .filter(Clothe.id == id_clothe) \
+        .first()
+
+        if clothe_data:
+            clothe, stock, color_name = clothe_data
+            # Aquí puedes construir tu JSON manualmente
+            result = {
+                'clothe': clothe.to_json(),
+                'stock': stock,
+                'color_name': color_name
+            }
+            print(result)
+            return result
+        return None
+
     
     def get_clothes_by_category(self, id_type, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=''):
         
