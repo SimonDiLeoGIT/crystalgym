@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { ProductImg } from "../components/ProductImg/ProductImg"
 import { ClothesCategory } from "../interfaces/ClothesInterfaces"
 import Filters from "../components/Clothes/Filters"
+import EmptyResult from "../components/Clothes/EmptyResult"
 
 const Clothes = () => {
 
@@ -21,25 +22,21 @@ const Clothes = () => {
       </header>
       <div className="lg:flex gap-4 relative">
         {id_category && <Filters id_category={id_category} setData={setData} />}
-        <section className="grid grid-cols-2 gap-2 md:grid-cols-3 2xl:grid-cols-4 lg:w-full">
-          {
-            data && (
-              data.clothes.length !== 0 ?
-                (data.clothes.map((clothe) => {
-                  return (
-                    <article key={clothe.image.id} className="shadow-md">
-                      <ProductImg product={clothe} category={data.category}/>
-                    </article>
-                )}))
-                :
-                (
-                  <>
-                    No hay nada
-                  </>
-                )
-            )
-          }
-        </section>
+        {
+          data?.clothes.length !== 0 ?
+          (<section className="grid grid-cols-2 gap-2 md:grid-cols-3 2xl:grid-cols-4 lg:w-full">
+                  {
+                    (data?.clothes.map((clothe) => {
+                      return (
+                        <article key={clothe.image.id} className="shadow-md">
+                          <ProductImg product={clothe} category={data.category}/>
+                        </article>
+                    )}))
+                  }    
+            </section>)
+          : 
+          (<EmptyResult />)
+        }
       </div>
     </main>
   )
