@@ -54,10 +54,12 @@ def post_clothe():
 
 
 # Get clothes by id
-@clothe_bp.route("/clothe/<int:id_clothe>", methods=["GET"])
-def get_clothe_by_id(id_clothe):
+@clothe_bp.route("/clothe", methods=["GET"])
+def get_clothe_by_id():
     try:
-        data = clothe_service.get_clothe_by_id(id_clothe)
+        id_clothe = request.args.get('id_clothe', default=None, type=int)
+        id_color = request.args.get('id_color', default=None, type=int)
+        data = clothe_service.get_clothe_by_id(id_clothe, id_color)
 
 
         if data[0] is None:

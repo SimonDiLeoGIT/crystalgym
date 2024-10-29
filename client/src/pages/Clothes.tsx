@@ -15,30 +15,32 @@ const Clothes = () => {
   }, [data])
 
   return (
-    <main className="max-w-screen overflow-x-hidden font-roboto lg:w-11/12 lg:m-auto xl:9/12">
+    <main className="max-w-screen overflow-x-hidden font-roboto p-4 max-w-[1900px] m-auto">
       <header className="py-2">
         <h1 className="font-semibold text-xl md:font-bold md:text-3xl"> {data?.category?.name.toUpperCase()} <span className="-text--color-grey text-sm md:text-lg"> {data?.gender?.toUpperCase()} </span> </h1>
       </header>
-      {id_category && <Filters id_category={id_category} setData={setData} />}
-      <section className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5">
-        {
-          data && (
-            data.clothes.length !== 0 ?
-              (data.clothes.map((clothe) => {
-                return (
-                  <article key={clothe.image.id} className="shadow-md">
-                    <ProductImg product={clothe} category={data.category}/>
-                  </article>
-              )}))
-              :
-              (
-                <>
-                  No hay nada
-                </>
-              )
-          )
-        }
-      </section>
+      <div className="lg:flex gap-4 relative">
+        {id_category && <Filters id_category={id_category} setData={setData} />}
+        <section className="grid grid-cols-2 gap-2 md:grid-cols-3 2xl:grid-cols-4 lg:w-full">
+          {
+            data && (
+              data.clothes.length !== 0 ?
+                (data.clothes.map((clothe) => {
+                  return (
+                    <article key={clothe.image.id} className="shadow-md">
+                      <ProductImg product={clothe} category={data.category}/>
+                    </article>
+                )}))
+                :
+                (
+                  <>
+                    No hay nada
+                  </>
+                )
+            )
+          }
+        </section>
+      </div>
     </main>
   )
 }
