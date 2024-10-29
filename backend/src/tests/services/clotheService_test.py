@@ -26,7 +26,7 @@ class TestClotheService:
   def test_get_clothe_by_id(self, test_client, clothe_service):
     with test_client.application.app_context():
       data = clothe_service.get_clothe_by_id(2)
-      clothe = data[0]
+      clothe = data[0].to_json()
       assert data[2] == 200
       assert clothe['name'] == 'name'
       assert clothe['price'] == 1
@@ -39,15 +39,25 @@ class TestClotheService:
       assert data[1] == 'Clothe not found'
       assert data[2] == 404
 
+  def test_get_clothe_by_id_with_color(self, test_client, clothe_service):
+    with test_client.application.app_context():
+      data = clothe_service.get_clothe_by_id_with_color(1,1)
+      assert data[2] == 200
+      clothe = data[0]['clothe']
+      assert clothe['name'] == 'test_clothe'
+      assert clothe['price'] == 1
+      assert clothe['id_gender'] == 1
+      assert clothe['id_type'] == 1
+
   def test_get_clothes_by_category(self, test_client, clothe_service):
     with test_client.application.app_context():
-      data = clothe_service.get_clothes_by_category(1, 1, 1, 10, 'id', 'asc', None)
+      data = clothe_service.get_clothes_by_category(1, 1, 1, 10, 'id', 'asc', '')
       clothes_data = data[0]
       assert data[2] == 200
       assert len(clothes_data) > 0
       clothes = clothes_data['clothes']
       assert len(clothes) > 0
-      assert clothes['male_clothes'][0]['id'] == 1
+      assert clothes[0]['id'] == 1
 
   def test_update_clothe(self, test_client, clothe_service):
     with test_client.application.app_context():

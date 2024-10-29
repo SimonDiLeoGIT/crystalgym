@@ -118,13 +118,19 @@ class ClotheService(metaclass=SingletonMeta):
         
         return [True, 'Clothe created successfully', 201]
 
-    def get_clothe_by_id(self, id_clothe, id_color):
-        clothe = self.clothe_repository.get_clothe_by_id(id_clothe, id_color)
+    def get_clothe_by_id(self, id_clothe):
+        clothe = self.clothe_repository.get_clothe_by_id(id_clothe)
         if clothe is None:
             return [None, 'Clothe not found', 404]
         return [clothe, 'Clothes retrieved successfully', 200]
     
-    def get_clothes_by_category(self, id_category, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None):
+    def get_clothe_by_id_with_color(self, id_clothe, id_color):
+        clothe = self.clothe_repository.get_clothe_by_id_with_color(id_clothe, id_color)
+        if clothe is None:
+            return [None, 'Clothe not found', 404]
+        return [clothe, 'Clothes retrieved successfully', 200]
+    
+    def get_clothes_by_category(self, id_category, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=''):
         
         category = self.category_repository.get_type_by_id(id_category)
         if category is None:
@@ -143,8 +149,10 @@ class ClotheService(metaclass=SingletonMeta):
         all_clothe = []
         for clothe in clothes:
             images = self.clothe_repository.get_clothe_images_by_id(clothe['id'], clothe['id_color'])
-            image = images[0].to_json()
-            image['signed_image_url'] = AwsBucket().presign_url(image['name'])
+            image = None
+            if len(images) > 0:
+                image = images[0].to_json()
+                image['signed_image_url'] = AwsBucket().presign_url(image['name'])
             
             all_clothe.append({
                 'id': clothe['id'],

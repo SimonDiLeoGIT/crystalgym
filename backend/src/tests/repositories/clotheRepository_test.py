@@ -30,6 +30,22 @@ class TestClotheRepository:
       assert clothe['id_gender'] == 1
       assert clothe['id_type'] == 1
 
+  def test_get_clothe_by_id_with_color_NotFound(self, test_client, clothe_repository):
+    with test_client.application.app_context():
+      data = clothe_repository.get_clothe_by_id_with_color(2, 1)
+      assert data==None
+
+  def test_get_clothe_by_id_with_color(self, test_client, clothe_repository):
+    with test_client.application.app_context():
+      data = clothe_repository.get_clothe_by_id_with_color(1, 1)
+      clothe = data['clothe']
+      assert clothe['name'] == 'test_clothe'
+      assert clothe['description'] == 'test_description'
+      assert clothe['price'] == 1
+      assert clothe['id_gender'] == 1
+      assert clothe['id_type'] == 1
+
+
   # Test that get clothes by non-existing id returns None
   def test_get_clothe_by_id_not_found(self, test_client, clothe_repository):
     with test_client.application.app_context():
@@ -40,6 +56,11 @@ class TestClotheRepository:
   def test_get_clothes_by_category(self, test_client, clothe_repository):
     with test_client.application.app_context():
       data = clothe_repository.get_clothes_by_category(1, 1, 1, 10)
+      assert data
+
+  def test_get_clothes_by_category_gender(self, test_client, clothe_repository):
+    with test_client.application.app_context():
+      data = clothe_repository.get_clothes_by_category_gender(1, 1, 1, 10)
       assert data
 
   # Test that update clothe works
@@ -59,24 +80,14 @@ class TestClotheRepository:
       data = clothe_repository.update_clothe(100, 'new_name', 'new_description', 1)
       assert data is None
 
-  # Test that delete clothe works
-  # def test_delete_clothe(self, test_client, clothe_repository):
-  #   with test_client.application.app_context():
-  #     data = clothe_repository.delete_clothe(1)
-  #     assert data
-
   # Test that delete non-existing clothe returns None
   def test_delete_clothe_not_found(self, test_client, clothe_repository):
     with test_client.application.app_context():
       data = clothe_repository.delete_clothe(100)
       assert data is None
 
-  # Test that get_clothes_by_category for admin works
-  def test_get_clothes_by_category(self, test_client, clothe_repository):
+  # Test that delete clothe works
+  def test_delete_clothe(self, test_client, clothe_repository):
     with test_client.application.app_context():
-      # id_type, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=None
-      data = clothe_repository.get_clothes_by_category(1, 1, 1, 10, 'id', 'asc', None)
+      data = clothe_repository.delete_clothe(1)
       assert data
-      assert len(data) > 0
-      clothes = data['clothes']
-      assert clothes
