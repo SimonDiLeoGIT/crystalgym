@@ -18,7 +18,14 @@ class ClotheRepository:
         db.session.commit()
         return new_clothe
     
-    def get_clothe_by_id(self, id_clothe, id_color):
+    def get_clothe_by_id(self, id_clothe):
+        clothe_data = db.session.query(Clothe).filter(Clothe.id == id_clothe).first()
+
+        if clothe_data:
+            return clothe_data
+        return None
+
+    def get_clothe_by_id_with_color(self, id_clothe, id_color):
         clothe_data = db.session.query(
             Clothe,
             ClotheColor.stock,  # Atributo de ClotheColor

@@ -51,3 +51,18 @@ export interface ClothesCategory {
   clothes: ClotheDataInterface[]
   pagination: PaginationInterface
 }
+
+export interface PostClotheInterface {
+  name: string
+  description: string
+  id_category: number
+  id_gender: number
+  price: number
+  colors: PostClotheColor[]
+}
+
+export interface PostClotheColor {
+  id_color: number; 
+  stock: number;
+  images: File[];
+}

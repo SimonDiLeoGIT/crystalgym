@@ -1,4 +1,4 @@
-import { ClotheDataInterface } from "../../interfaces/ClothesInterfaces";
+import { PostClotheInterface } from "../../interfaces/ClothesInterfaces";
 import { ColorDataInterface } from "../../interfaces/ColorInterfaces";
 
 import trash from "../../assets/icons/nav icons/trash-slash-alt-svgrepo-com.svg";
@@ -6,8 +6,8 @@ import trash from "../../assets/icons/nav icons/trash-slash-alt-svgrepo-com.svg"
 interface Props {
   handleDeleteColor: (index: number) => void;
   clotheColors: ColorDataInterface[] | null;
-  formData: ClotheDataInterface;
-  setFormData: React.Dispatch<React.SetStateAction<ClotheDataInterface>>
+  formData: PostClotheInterface;
+  setFormData: React.Dispatch<React.SetStateAction<PostClotheInterface>>
 }
 
 const ColorInputs: React.FC<Props> = ({handleDeleteColor, clotheColors, formData, setFormData }) => {

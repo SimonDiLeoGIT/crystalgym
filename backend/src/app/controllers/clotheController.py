@@ -34,7 +34,6 @@ def post_clothe():
         
         data = clothe_service.save_clothe(name, description, price, id_gender, id_category)
         saved_clothe = data[0]
-        
         response = clothe_service.save_colors(request, saved_clothe['id'])
         if response[0] is None:
             clothe_service.delete_clothe(saved_clothe['id'])
@@ -59,7 +58,7 @@ def get_clothe_by_id():
     try:
         id_clothe = request.args.get('id_clothe', default=None, type=int)
         id_color = request.args.get('id_color', default=None, type=int)
-        data = clothe_service.get_clothe_by_id(id_clothe, id_color)
+        data = clothe_service.get_clothe_by_id_with_color(id_clothe, id_color)
 
 
         if data[0] is None:

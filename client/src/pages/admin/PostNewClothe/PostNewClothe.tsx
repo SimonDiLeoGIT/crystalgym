@@ -1,5 +1,5 @@
 import { lazy, useEffect, useState } from "react";
-import { ClotheDataInterface } from "../../../interfaces/ClothesInterfaces";
+import { PostClotheInterface } from "../../../interfaces/ClothesInterfaces";
 import ClotheService from "../../../services/clothe.service";
 
 import '../../../styles/form.css';
@@ -31,7 +31,7 @@ const PostNewClothe = () => {
   const { getUser } = useUser();
   const { categories, clotheColors, genders } = useFetchData();
 
-  const [formData, setFormData] = useState<ClotheDataInterface>({
+  const [formData, setFormData] = useState<PostClotheInterface>({
     name: "",
     description: "",
     price: 0.0,
