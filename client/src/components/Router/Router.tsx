@@ -12,13 +12,13 @@ const Category = lazy(() => import("../../pages/Category"))
 const Profile = lazy(() => import("../../pages/Profile"))
 const TerminosCondiciones = lazy(() => import("../../pages/TerminosCondiciones"))
 const Navbar = lazy(() => import("../Navbar/Navbar"))
-const Footer = lazy(() => import("../Footer/Footer"))
 const Register = lazy(() => import("../../pages/Register"))
 const Login = lazy(() => import("../../pages/Login"))
 const PostNewClothe = lazy(() => import("../../pages/admin/PostNewClothe/PostNewClothe"))
 const ClotheCategories = lazy(() => import("../../pages/admin/ClotheCategories/ClotheCategories"))
 const Clothes = lazy(() => import ("../../pages/Clothes"))
 // const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
+const Footer = lazy(() => import("../Footer/Footer"))
 
 const Router = () => {
   return (

@@ -5,7 +5,7 @@ import git from "../../assets/icons/social_media_icons/github.svg"
 
 const Footer = () => {
   return (
-    <footer className="-bg--color-black -text--color-white px-4 mt-4 lg:grid lg:grid-cols-2 ">
+    <footer className="-bg--color-black -text--color-white px-4 mt-4 lg:grid lg:grid-cols-2 absolute w-full bottom-0">
       <nav className="text-center p-2 m-auto max-w-lg lg:text-start">
         <ul className="">
           <li className="p-2 ">
@@ -19,31 +19,7 @@ const Footer = () => {
           </li>
         </ul>
       </nav>
-      <section className="m-auto max-w-lg lg:row-span-2 lg:m- lg:p-8">
-        <header>
-          <h1 className="text-lg font-medium">Sign Up for Email</h1>
-          <p className="my-2">
-            Sign up to receive emails and get first dibs on new arrivals, sales,
-            exclusive content, events and more!
-          </p>
-        </header>
-        <form className="m-auto max-w-lg">
-          <input
-            type="text" placeholder="Name" required
-            className="w-full p-2 -bg--color-very-light-grey -text--color-black placeholder:-text--color-black"
-          />
-          <input
-            type="email" placeholder="Email" required
-            className="w-full p-2 -bg--color-very-light-grey -text--color-black placeholder:-text--color-black mt-2"
-          />
-          <input
-            type="submit"
-            value="Submit"
-            className="-text--color-black -bg--color-light-grey-violet font-bold p-2 w-24 my-4 hover:opacity-60 hover:cursor-pointer"
-          />
-        </form>
-      </section>
-      <section className="m-auto max-w-lg lg:m-auto">
+      <section className="m-auto max-w-lg lg:m-auto lg:p-8">
         <header>
           <h1>Contact Us</h1>
         </header>

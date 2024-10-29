@@ -57,6 +57,7 @@ const Filters: React.FC<props> = ({ id_category, setData }) => {
   };
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
+    setText('');
     setCategory(event.target.value);
   };
 
