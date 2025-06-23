@@ -12,6 +12,8 @@ import useWindowSize from "../../utils/useWindowSize"
 import { useUser } from "../../hook/useUser"
 import { UserDataInterface } from "../../interfaces/UserInterface"
 
+import { useAuth0 } from "@auth0/auth0-react"
+
 const MobileMenu = lazy(() => import("../MobileMenu/MobileMenu"))
 const MobileSearch = lazy(() => import("../Search/MobileSearch/MobileSearch"))
 const DesktopSearch = lazy(() => import("../Search/DesktopSearch/DesktopSearch"))
@@ -19,6 +21,8 @@ const DesktopSearch = lazy(() => import("../Search/DesktopSearch/DesktopSearch")
 const Navbar = () => {
 
   const { isOpenCart } = useCart()
+
+  const { user, loginWithRedirect, isAuthenticated } = useAuth0()
 
   const [y, setY] = useState(window.scrollY);
   const [scrollUp, setScrollUp] = useState(false);
@@ -150,12 +154,12 @@ const Navbar = () => {
 
   const { getUser, initializeUser } = useUser();
 
-  const [user, setUser] = useState<UserDataInterface | null>(null)
+  // const [user, setUser] = useState<UserDataInterface | null>(null)
 
   useEffect(() => {
     const fetchUser = async () => {
       const fetchedUser = await getUser();
-      setUser(fetchedUser);
+      // setUser(fetchedUser);
     };
 
     fetchUser();
@@ -167,6 +171,7 @@ const Navbar = () => {
     localStorage.clear()
     window.location.reload()
   }
+
 
   return (
     <nav className={`grid grid-cols-3 border-b -border--color-very-light-grey h-20 shadow-lg -shadow--color-very-light-grey z-40 -bg--color-white transition-transform duration-500 fixed w-screen px-4 top-0 ${scrollDown && !isOpenCart && " scroll-down shadow-none"} ${scrollUp && " scroll-up"}`}>
@@ -220,11 +225,20 @@ const Navbar = () => {
           {!isMobile && <DesktopSearch />}
         </li>
         <li className="invisible hidden fixed px-1 my-auto h-full lg:flex items-center lg:visible lg:relative">
-          <Link to='/profile' className="">
-            <div className="w-10 h-10 flex items-center duration-150 hover:bg-opacity-50 hover:-bg--color-very-light-grey hover:shadow-md hover:-shadow--color-very-light-grey rounded-full">
-              <img src={account_avatar} className="m-auto w-7" alt="Profile Icon"/>
-            </div>
-          </Link>
+          {
+            !isAuthenticated ?
+            <button onClick={() => loginWithRedirect()}>
+              <div className="w-10 h-10 flex items-center duration-150 hover:bg-opacity-50 hover:-bg--color-very-light-grey hover:shadow-md hover:-shadow--color-very-light-grey rounded-full">
+                <img src={account_avatar} className="m-auto w-7" alt="Profile Icon"/>
+              </div>
+            </button>
+            :
+            <Link to='/profile' className="">
+              <div className="w-10 h-10 flex items-center duration-150 hover:bg-opacity-50 hover:-bg--color-very-light-grey hover:shadow-md hover:-shadow--color-very-light-grey rounded-full">
+                <img src={account_avatar} className="m-auto w-7" alt="Profile Icon"/>
+              </div>
+            </Link>
+          }
         </li>
         <li className="my-auto px-1 h-full flex items-center lg:hidden">
           {isMobile && <MobileSearch />}
