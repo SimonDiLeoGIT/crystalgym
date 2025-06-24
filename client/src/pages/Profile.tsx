@@ -1,7 +1,5 @@
-import { lazy, useEffect, useState } from "react";
+import { lazy, useEffect } from "react";
 import { Orders } from "../components/Orders/Orders"
-import { useUser } from "../hook/useUser";
-import { UserDataInterface } from "../interfaces/UserInterface";
 
 import { useAuth0 } from "@auth0/auth0-react"
 
@@ -14,28 +12,19 @@ export const Profile = () => {
   
   // const { getUser } = useUser();
 
-  const { isAuthenticated, user, isLoading } = useAuth0();
+  const { isAuthenticated, user, isLoading, loginWithRedirect } = useAuth0();
 
   useEffect(() => {
     document.title = "Profile | CrystalGym";
   }, []);
-  
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const fetchedUser = await getUser();
-  //     // setUser(fetchedUser);
-  //     setLoading(false);
-  //   };
-
-  //   fetchUser();
-  // }, [ getUser ]);
 
   if (isLoading) {
     return <div className="h-screen">Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    return <Login />;
+    loginWithRedirect();
+    return <div className="h-screen">Loading...</div>;
   }
 
   return (
