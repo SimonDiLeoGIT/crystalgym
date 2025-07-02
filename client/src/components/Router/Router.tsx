@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { lazy, Suspense } from "react"
+import IndexPage from "../../pages/admin/PostClothe"
+import Post from "../../pages/admin/Post"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -45,6 +47,8 @@ const Router = () => {
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
           <Route path="/admin/clothe-form" element={<PostNewClothe />} />
           <Route path="/admin/categories" element={<ClotheCategories />} />
+          <Route path="/posts" element={<IndexPage />} />
+          <Route path="/posts/:slug" element={<Post />} />
           {/* <Route path="/admin/categories/:categoryId" element={<AdminClothes />} /> */}
         </Routes>
         <Footer />
