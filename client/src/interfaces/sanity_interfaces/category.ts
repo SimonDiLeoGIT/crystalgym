@@ -2,7 +2,7 @@
 export namespace Route {
   export interface ComponentProps {
     loaderData: {
-      posts: {
+      categories: { 
         _id: string;
         name: string;
         slug: { current: string };

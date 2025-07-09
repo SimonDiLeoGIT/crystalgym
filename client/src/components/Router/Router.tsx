@@ -39,7 +39,7 @@ const Router = () => {
           <Route path="/:sex/:category" element={<Category />} />
           <Route path="/:type/news/gym-clothes" element={<NewsProducts />} />
           <Route path="/:type" element={<NewsProducts />} />
-          <Route path="/product/:id/:colorId" element={<Product />} />
+          <Route path="/product/:category/:id" element={<Product />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />

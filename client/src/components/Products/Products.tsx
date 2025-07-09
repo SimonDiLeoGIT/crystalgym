@@ -4,24 +4,26 @@ import left_arrow from '../../assets/icons/carousel/left-arrow.svg'
 import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
 import { ProductImg } from "../ProductImg/ProductImg";
 import { ProductInterface } from "../../interfaces/ProductInterfaces";
+import { SanityDocument } from "@sanity/client";
 
 type productList = ProductInterface[];
 
 interface Props {
-  products: productList
+  products: SanityDocument[]
+  category: string | undefined
 }
 
-export const Products: React.FC<Props> = ({ products }) => {
+export const Products: React.FC<Props> = ({ products, category }) => {
 
   const totalArticles = 10
   const [totalPages, setTotalPages] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(0)
-  const [data, setData] = useState<productList>(products.slice(currentPage, totalArticles))
+  // const [data, setData] = useState<productList>(products.slice(currentPage, totalArticles))
 
-  useEffect(() => {
-    setData(products.slice(currentPage, (currentPage) + totalArticles))
-    setTotalPages(products?.length / totalArticles)
-  }, [products, currentPage]);
+  // useEffect(() => {
+  //   setData(products.slice(currentPage, (currentPage) + totalArticles))
+  //   setTotalPages(products?.length / totalArticles)
+  // }, [products, currentPage]);
 
   useEffect(() => {
     setCurrentPage(0)
@@ -31,21 +33,21 @@ export const Products: React.FC<Props> = ({ products }) => {
     selected: number;
   }
 
-  const handlePageClick = (event: PageChangeEvent) => {
-    const next = (event.selected * totalArticles) % products.length;
-    setCurrentPage(next)
-    setData(products.slice(next, (next) + totalArticles))
-    window.scrollTo(0, 0);
-  }
+  // const handlePageClick = (event: PageChangeEvent) => {
+  //   const next = (event.selected * totalArticles) % products.length;
+  //   setCurrentPage(next)
+  //   setData(products.slice(next, (next) + totalArticles))
+  //   window.scrollTo(0, 0);
+  // }
 
   return (
     <section className=" m-auto">
       <section className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5">
         {
-          data?.map((product) => {
+          products?.map((product) => {
             return (
               <article className="shadow-md">
-                <ProductImg product={product} />
+                <ProductImg product={product} category={category}/>
               </article>
             )
           }
@@ -58,7 +60,7 @@ export const Products: React.FC<Props> = ({ products }) => {
           nextLabel={
             <img src={right_arrow} className="w-4" alt="Next Page"/>
           }
-          onPageChange={handlePageClick}
+          // onPageChange={handlePageClick}
           pageRangeDisplayed={1}
           pageCount={totalPages}
           marginPagesDisplayed={2}

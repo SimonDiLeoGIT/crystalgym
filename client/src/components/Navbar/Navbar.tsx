@@ -69,19 +69,19 @@ const Navbar = () => {
             },
             {
               "label": "Top",
-              "link": "/women/Top"
+              "link": "/women/tops"
             },
             {
               "label": "T-Shirt",
-              "link": "/women/T-Shirt"
+              "link": "/women/t-shirts"
             },
             {
               "label": "Hoodie",
-              "link": "/women/Hoodie"
+              "link": "/women/hoodies"
             },
             {
               "label": "Jogger",
-              "link": "/women/Jogger"
+              "link": "/women/joggers"
             }
           ]
         }
@@ -100,19 +100,19 @@ const Navbar = () => {
             },
             {
               "label": "T-Shirt",
-              "link": "/men/T-Shirt"
+              "link": "/men/t-shirts"
             },
             {
               "label": "Hoodie",
-              "link": "/men/Hoodie"
+              "link": "/men/hoodies"
             },
             {
               "label": "Jogger",
-              "link": "/men/Jogger"
+              "link": "/men/joggers"
             },
             {
               "label": "Short",
-              "link": "/men/Short"
+              "link": "/men/shorts"
             }
           ]
         }

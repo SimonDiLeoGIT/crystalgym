@@ -23,7 +23,7 @@ const Home = () => {
     preloadImage('/images/home/advertisement/new-this-month/desktop/the-rock-compress.webp');
     preloadImage('/images/home/advertisement/new-this-month/new-this-month-1-compress.webp');
   })
-
+console.log(new_this_month_posts)
   return (
     <main className="max-w-screen overflow-x-hidden font-roboto lg:w-11/12 lg:m-auto xl:9/12">
       <header>
