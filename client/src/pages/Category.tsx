@@ -1,24 +1,16 @@
 import { useEffect, useState } from "react";
-import clothe_data from '../assets/json/shop/clothes.json'
 import { Products } from "../components/Products/Products";
 import { useParams } from "react-router-dom";
-import { ProductInterface } from "../interfaces/ProductInterfaces";
 import { SanityDocument } from "@sanity/client";
-import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "../services/sanity.service";
 
 
-type product = ProductInterface;
-
-const categories_QUERY = `*[_type == "clothe" && category->slug.current == $category]`;
+const categories_QUERY = `*[_type == "clothe_color" && clothe->category->slug.current == $category]`;
 
 const Category = () => {
 
-  // const clothes = clothe_data.all
-
   const [clothes, setClothes] = useState<SanityDocument[]>([]);
   const [loading, setLoading] = useState(true);
-  const [categoriesImageUrl, setCategoriesImageUrl] = useState<string | null>(null);
 
   const { sex } = useParams()
   const { category } = useParams()
@@ -28,31 +20,10 @@ const Category = () => {
   
       client.fetch<SanityDocument[]>(categories_QUERY, { category }).then((data) => {
         setClothes(data);
-        // setCategoriesImageUrl(data.image ? urlFor(data.image)?.width(550)?.height(310)?.url() : null);
         setLoading(false);
       });
     }, [category]);
   
-    // useEffect(() => {
-    //   client.fetch<SanityDocument>(categories_QUERY).then((data) => {
-    //     setClothes(data);
-    //     setCategoriesImageUrl(data.image ? urlFor(data.image)?.width(550)?.height(310)?.url() : null)
-    //     setLoading(false);
-    //   });
-    // }, []);
-
-
-  // function getClotheList(): product[] {
-  //   const clotheList: product[] = [];
-  //   clothes.map((clothe) => {
-  //     if ((category === clothe.category) && (sex === clothe.sex)) {
-  //       const c: product = clothe
-  //       clotheList.push(c)
-  //     }
-  //   })
-  //   return clotheList
-  // }
-
   useEffect(() => {
     document.title = "CrystalGym | Category";
   })
@@ -61,6 +32,10 @@ const Category = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+console.log(clothes)
   return (
     <section className="w-11/12 lg:w-10/12 m-auto">
       <header className="py-2">

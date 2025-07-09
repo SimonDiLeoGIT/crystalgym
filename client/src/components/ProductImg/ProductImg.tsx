@@ -1,10 +1,7 @@
 import { lazy } from "react";
 import { Link } from "react-router-dom";
-import add_to_bag_icon from "../../assets/icons/nav icons/bag-plus-1122-svgrepo-com.svg"
 import like_icon from "../../assets/icons/like-icon.svg"
 import { useCart } from "../../hook/useCart";
-import { CategoryDataInterface } from "../../interfaces/CategoryInterfaces";
-import { ClotheDataInterface } from "../../interfaces/ClothesInterfaces";
 import { useUser } from "../../hook/useUser";
 import { SanityDocument } from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
@@ -12,8 +9,6 @@ import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "../../services/sanity.service";
 
 const ImageLoad = lazy(() => import("../ImageLoad/ImageLoad"))
-
-type productType = ClotheDataInterface
 
 interface Props {
   product: SanityDocument
@@ -25,7 +20,6 @@ export const ProductImg: React.FC<Props> = ({ product, category }) => {
   const { addToCart } = useCart()
 
   const { user } = useUser()
-
 
   // function addProduct(product: productType) {
   //   addToCart(product)

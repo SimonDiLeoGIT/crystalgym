@@ -3,10 +3,8 @@ import ReactPaginate from "react-paginate";
 import left_arrow from '../../assets/icons/carousel/left-arrow.svg'
 import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
 import { ProductImg } from "../ProductImg/ProductImg";
-import { ProductInterface } from "../../interfaces/ProductInterfaces";
 import { SanityDocument } from "@sanity/client";
 
-type productList = ProductInterface[];
 
 interface Props {
   products: SanityDocument[]
@@ -18,27 +16,11 @@ export const Products: React.FC<Props> = ({ products, category }) => {
   const totalArticles = 10
   const [totalPages, setTotalPages] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(0)
-  // const [data, setData] = useState<productList>(products.slice(currentPage, totalArticles))
-
-  // useEffect(() => {
-  //   setData(products.slice(currentPage, (currentPage) + totalArticles))
-  //   setTotalPages(products?.length / totalArticles)
-  // }, [products, currentPage]);
 
   useEffect(() => {
     setCurrentPage(0)
   }, [products]);
 
-  interface PageChangeEvent {
-    selected: number;
-  }
-
-  // const handlePageClick = (event: PageChangeEvent) => {
-  //   const next = (event.selected * totalArticles) % products.length;
-  //   setCurrentPage(next)
-  //   setData(products.slice(next, (next) + totalArticles))
-  //   window.scrollTo(0, 0);
-  // }
 
   return (
     <section className=" m-auto">

@@ -1,30 +1,43 @@
 import { Link, useParams } from "react-router-dom"
-import all_clothes from "../../assets/json/shop/clothes.json"
 import { lazy } from "react"
-
+import { SanityDocument } from "@sanity/client"
+import { SanityImageSource } from "@sanity/image-url/lib/types/types"
+import imageUrlBuilder from "@sanity/image-url"
+import { client } from "../../services/sanity.service";
 
 const ImageLoad = lazy(() => import("../ImageLoad/ImageLoad"))
 
-export const ProductColors = () => {
+export const ProductColors = ({ clotheColors: clotheColors }: { clotheColors: SanityDocument[] }) => {
 
+  const { category } = useParams()
   const { id } = useParams()
-  const { colorId } = useParams()
 
+  function getImageUrl(source: SanityImageSource) {
+    const urlFor = imageUrlBuilder(client).image(source);
+    return urlFor;
+  }
+  
   return (
     <section className="text-center">
       {
-        all_clothes.all?.map(clothe => {
-          if (clothe.id.toString() === id) {
+        clotheColors?.map(clothe => {
             return (
-              <Link to={`/product/${id}/${clothe.colorId}`}>
+              <Link to={`/product/${category}/${clothe._id}`} >
                 <article className="w-24 mx-4 inline-block">
-                  <ImageLoad
+                  <img
+                    src={getImageUrl(clothe.images[0]).url()}
+                    // imageBlurHash={clothe.hashcode}
+                    alt={clothe.name}
+                    className={`border-2 ${clothe._id === id ? "-border--color-black" : "-border--color-very-light-grey"}`}
+                    loading="lazy"
+                  />
+                  {/* <ImageLoad
                     imageUrl={clothe.images[0]}
                     imageBlurHash={clothe.hashcode}
                     alt={clothe.name}
-                    imageStyles={`border-2 ${clothe.colorId.toString() === colorId ? "-border--color-black" : "-border--color-very-light-grey"}`}
+                    imageStyles={`border-2 ${clothe._id === id ? "-border--color-black" : "-border--color-very-light-grey"}`}
                     loading="lazy"
-                  />
+                  /> */}
                   <p className="-text--color-black font-semibold text-sm">
                     {clothe.colorName}
                   </p>
@@ -32,7 +45,7 @@ export const ProductColors = () => {
               </Link>
             )
           }
-        })
+        )
       }
     </section>
   )

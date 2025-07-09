@@ -1,45 +1,43 @@
 import { useParams } from "react-router-dom"
 import { lazy, useEffect, useState } from "react"
-import { useCart } from "../hook/useCart"
-import ProductsAdvertisement from "../components/ProductsAdvertisement/ProductsAdvertisement"
-import all_clothes from "../assets/json/shop/clothes.json"
 import { ProductColors } from "../components/ProductColors/ProductColors"
-import { ProductInterface } from "../interfaces/ProductInterfaces"
 import { client } from "../services/sanity.service"
 import { SanityDocument } from "@sanity/client"
 import { SanityImageSource } from "@sanity/image-url/lib/types/types"
 import imageUrlBuilder from "@sanity/image-url"
 
-const ImageLoad = lazy(() => import("../components/ImageLoad/ImageLoad"))
 const ArrowButtons = lazy(() => import("../components/ArrowButtons/ArrowButtons"))
 
-type product = ProductInterface
 
-const categories_QUERY = `*[_type == "clothe" && _id == $id][0]`;
+const CLOTHE_COLOR_QUERY = `*[_type == "clothe_color" && _id == $id][0]`;
+
+const ALL_CLOTHE_COLORS_QUERY = `*[_type == "clothe_color" && clothe._ref == $clotheId]`
 
 const Product = () => {
-
-  // const { id } = useParams()
-  // const { colorId } = useParams()
-  // const { addToCart } = useCart()
 
   const { id } = useParams()
   const { category } = useParams()
   
   const [clothe, setClothe] = useState<SanityDocument>();
+  const [clotheColors, setClotheColors] = useState<SanityDocument[]>();
   const [loading, setLoading] = useState(true);
-  // const [categoriesImageUrl, setCategoriesImageUrl] = useState<string | null>(null);
   
   useEffect(() => {
-      if (!id) return;
-      client.fetch<SanityDocument>(categories_QUERY, { id }).then((data) => {
-        setClothe(data);
-        // setCategoriesImageUrl(data.image ? urlFor(data.image)?.width(550)?.height(310)?.url() : null);
-        setLoading(false);
-      });
-    }, [id]);
+    if (!id) return;
+    client.fetch<SanityDocument>(CLOTHE_COLOR_QUERY, { id }).then((data) => {
+      setClothe(data);
+      setLoading(false);
+    });
+  }, [id]);
 
-  const [product, setProduct] = useState<product | null>()
+  useEffect(() => {
+    if (!clothe) return;
+    const clotheId = clothe.clothe._ref;
+    client.fetch<SanityDocument[]>(ALL_CLOTHE_COLORS_QUERY, { id, clotheId }).then((data) => {
+      setClotheColors(data);
+    });
+  }, [clothe]);
+
   const [currentImage, changeCurrentImage] = useState(0);
   const [translateValue, setTranslateValue] = useState(0);
 
@@ -47,13 +45,11 @@ const Product = () => {
     document.title = "Product | CrystalGym";
   })
 
-  // useEffect(() => {
-  //   const productAssigned = all_clothes.all.find(clothe => clothe.id.toString() === id && clothe.colorId.toString() === colorId)
-  //   setProduct(productAssigned)
-  //   changeCurrentImage(0)
-  //   setTranslateValue(0)
-  //   window.scrollTo(0, 0)
-  // }, [id, colorId])
+  useEffect(() => {
+    changeCurrentImage(0)
+    setTranslateValue(0)
+    window.scrollTo(0, 0)
+  }, [id])
 
   function getImageUrl(source: SanityImageSource) {
       const urlFor = imageUrlBuilder(client).image(source);
@@ -61,11 +57,7 @@ const Product = () => {
     }
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-      </div>
-    )
+    return <div>Loading...</div>
   }
 
   return (
@@ -107,7 +99,10 @@ const Product = () => {
               ${clothe?.price}
             </p>
           </div>
-          <ProductColors />
+          {
+            clotheColors &&
+            <ProductColors clotheColors={clotheColors} />
+          }
           {/* {
             product &&
             <button
