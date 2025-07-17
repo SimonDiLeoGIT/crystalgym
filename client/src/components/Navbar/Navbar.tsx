@@ -58,30 +58,30 @@ const Navbar = () => {
   const nav_links = [
     {
       "name": "WOMEN",
-      "link": "/women/",
+      "link": "/female/",
       "sections": [
         {
           "title": "Products",
           "links": [
             {
               "label": "All Women",
-              "link": "/women/"
+              "link": "/female/"
             },
             {
               "label": "Top",
-              "link": "/women/tops"
+              "link": "/female/tops"
             },
             {
               "label": "T-Shirt",
-              "link": "/women/t-shirts"
+              "link": "/female/t-shirts"
             },
             {
               "label": "Hoodie",
-              "link": "/women/hoodies"
+              "link": "/female/hoodies"
             },
             {
               "label": "Jogger",
-              "link": "/women/joggers"
+              "link": "/female/joggers"
             }
           ]
         }
@@ -89,30 +89,30 @@ const Navbar = () => {
     },
     {
       "name": "MEN",
-      "link": "/men/",
+      "link": "/male/",
       "sections": [
         {
           "title": "Products",
           "links": [
             {
               "label": "All Men",
-              "link": "/men/"
+              "link": "/male/"
             },
             {
               "label": "T-Shirt",
-              "link": "/men/t-shirts"
+              "link": "/male/t-shirts"
             },
             {
               "label": "Hoodie",
-              "link": "/men/hoodies"
+              "link": "/male/hoodies"
             },
             {
               "label": "Jogger",
-              "link": "/men/joggers"
+              "link": "/male/joggers"
             },
             {
               "label": "Short",
-              "link": "/men/shorts"
+              "link": "/male/shorts"
             }
           ]
         }

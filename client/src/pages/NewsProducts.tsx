@@ -32,12 +32,12 @@ const NewsProducts: React.FC<Props> = () => {
           setProducts(accessories)
         }
 
-        if (type === 'men') {
+        if (type === 'male') {
           const { default: menGym } = await import("../assets/json/men/advertisement/gym-clothes-products.json");
           setProducts(menGym)
         } 
         
-        if (type === 'women') {
+        if (type === 'female') {
           const { default: womenGym } = await import("../assets/json/women/advertisement/gym-clothes-products.json");
           setProducts(womenGym)
         } 

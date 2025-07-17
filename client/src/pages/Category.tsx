@@ -5,7 +5,7 @@ import { SanityDocument } from "@sanity/client";
 import { client } from "../services/sanity.service";
 
 
-const categories_QUERY = `*[_type == "clothe_color" && clothe->category->slug.current == $category]`;
+const categories_QUERY = `*[_type == "clothe_color" && clothe->category->slug.current == $category && clothe->gender->slug.current == $sex]`;
 
 const Category = () => {
 
@@ -18,7 +18,7 @@ const Category = () => {
   useEffect(() => {
       if (!category) return;
   
-      client.fetch<SanityDocument[]>(categories_QUERY, { category }).then((data) => {
+      client.fetch<SanityDocument[]>(categories_QUERY, { category, sex }).then((data) => {
         setClothes(data);
         setLoading(false);
       });

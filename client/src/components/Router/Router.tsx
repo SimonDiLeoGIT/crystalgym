@@ -31,8 +31,8 @@ const Router = () => {
         </header>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/men" element={<Men />} />
-          <Route path="/women" element={<Women />} />
+          <Route path="/male" element={<Men />} />
+          <Route path="/female" element={<Women />} />
           <Route path="/accessories" element={<Accessories />} />
           <Route path="/:type/all" element={<NewsProducts />} />
           <Route path="/accessories/:category" element={<Accessory />} />

@@ -1,17 +1,49 @@
 import ProductsAdvertisement from "../components/ProductsAdvertisement/ProductsAdvertisement"
 import gym_clothes from "../assets/json/women/advertisement/gym-clothes.json"
-import gym_clothes_post from "../assets/json/women/post/gym-clothes.json"
 import tops from "../assets/json/women/advertisement/tops.json"
-import tops_post from "../assets/json/women/post/tops.json"
 
 import Carousel from "../components/Carousel/Carousel"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { SanityDocument } from "@sanity/client"
+import { client } from "../services/sanity.service"
+
+const gym_clothes_QUERY = `*[_type == "advertisement" && slug.current == "female-hoodies"][0]`;
+const training_tops_QUERY = `*[_type == "advertisement" && slug.current == "tops"][0]`;
+
 
 const Women = () => {
 
   useEffect(() => {
     document.title = "Women | CrystalGym";
   })
+
+    const [gymClothes, setGymClothes] = useState<SanityDocument | null>(null);
+    const [trainingTops, setTrainingTops] = useState<SanityDocument | null>(null);
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+  
+      client.fetch<SanityDocument>(gym_clothes_QUERY).then((data) => {
+        setGymClothes(data);
+      });
+
+      client.fetch<SanityDocument>(training_tops_QUERY).then((data) => {
+        setTrainingTops(data);
+      });
+  
+    }, []);
+    
+    useEffect(() => {
+  
+      if (!gymClothes || !trainingTops) return;
+  
+      setLoading(false);
+  
+    }, [gymClothes, trainingTops]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <main className="max-w-screen overflow-x-hidden font-roboto lg:w-11/12 lg:m-auto xl:9/12">
@@ -20,11 +52,19 @@ const Women = () => {
           advertisement={gym_clothes.advertisement} mobileImages={gym_clothes.mobileImages} desktopImages={gym_clothes.desktopImages}
         />
       </header>
-      <ProductsAdvertisement products={gym_clothes_post} title="Gym Clothes" link="/women/news/gym-clothes" />
+      {
+        gymClothes && (
+          <ProductsAdvertisement products={gymClothes?.clothes} title={gymClothes?.title} link="/female/hoodies" />
+        )
+      }
       <Carousel
         advertisement={tops.advertisement} mobileImages={tops.mobileImages} desktopImages={tops.desktopImages}
       />
-      <ProductsAdvertisement products={tops_post} title="Training Tops" link="/women/Top" />
+      {
+        trainingTops && (
+          <ProductsAdvertisement products={trainingTops?.clothes} title={trainingTops?.title} link="/female/tops" />
+        )
+      }
     </main>
   )
 }
