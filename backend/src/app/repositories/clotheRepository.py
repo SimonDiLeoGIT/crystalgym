@@ -18,7 +18,57 @@ class ClotheRepository:
         db.session.commit()
         return new_clothe
     
+    def get_clothes(self, id_type=None, id_gender=None, page=1, page_size=10, sort_by='id', sort_order=None, name=''):
+        
+        if page < 1:
+            return None
+
+        if page_size < 1:
+            page_size = 1
+
+        query = db.session.query(Clothe)
+
+        if id_type is not None:
+            query = query.filter(Clothe.id_type == id_type)
+
+        if id_gender is not None:
+            query = query.filter(Clothe.id_gender == id_gender)
+
+        if name != '':
+            query = query.filter(Clothe.name.ilike(f"%{name.strip()}%"))
+
+        query = self.pagination.filter_and_sort(query, Clothe, sort_by, sort_order)
+        
+        total_items = query.count()
+
+        if (total_items == 0):
+            return None
+        else:
+            total_pages = (total_items + page_size - 1) // page_size
+
+        if page > total_pages:
+            page = total_pages
+
+        clothes = self.pagination.generate_pagination(page, page_size, query)
+
+        pagination_data = self.pagination.get_pagination_data(page, page_size, total_items, total_pages)
+
+        clothes = [{
+            **clothe.to_json(),
+            # 'gender': gender_name,
+            # 'id_color': id_color,
+            # # 'id_type': id_type
+        } for clothe in clothes]
+
+        response = {
+            'clothes': clothes,
+            'pagination': pagination_data
+        }
+
+        return response
+    
     def get_clothe_by_id(self, id_clothe, id_color):
+        
         clothe_data = db.session.query(
             Clothe,
             ClotheColor.stock,  # Atributo de ClotheColor
@@ -89,7 +139,7 @@ class ClotheRepository:
             **clothe.to_json(),
             'gender': gender_name,
             'id_color': id_color
-        } for clothe, type_id, gender_name, id_color in clothes]
+        } for clothe, id_type, gender_name, id_color in clothes]
 
         response = {
             'clothes': clothes,

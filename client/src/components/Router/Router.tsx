@@ -1,5 +1,8 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom"
 import { lazy, Suspense } from "react"
+import AdminHome from "../../pages/admin/AdminHome"
+import AdminNavbar from "../../pages/admin/Components/AdminNavbar"
+import Products from "../../pages/admin/Products/Products"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -15,18 +18,25 @@ const Navbar = lazy(() => import("../Navbar/Navbar"))
 const Footer = lazy(() => import("../Footer/Footer"))
 const Register = lazy(() => import("../../pages/Register"))
 const Login = lazy(() => import("../../pages/Login"))
-const PostNewClothe = lazy(() => import("../../pages/admin/PostNewClothe/PostNewClothe"))
 const ClotheCategories = lazy(() => import("../../pages/admin/ClotheCategories/ClotheCategories"))
 const Clothes = lazy(() => import ("../../pages/Clothes"))
 // const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
 
 const Router = () => {
+
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin")
+
   return (
+    // <BrowserRouter>
     <Suspense fallback={<h3>Loading...</h3>}>
-      <BrowserRouter>
+        {!isAdminRoute && (
         <header className="h-20">
           <Navbar />
         </header>
+      )}
+
+      {isAdminRoute && <AdminNavbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/men" element={<Men />} />
@@ -43,13 +53,17 @@ const Router = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/category/:id_category/clothes" element={<Clothes />} />
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
-          <Route path="/admin/clothe-form" element={<PostNewClothe />} />
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/products" element={<Products />} />
           <Route path="/admin/categories" element={<ClotheCategories />} />
           {/* <Route path="/admin/categories/:categoryId" element={<AdminClothes />} /> */}
         </Routes>
-        <Footer />
-      </BrowserRouter>
+        {
+          !isAdminRoute &&
+          <Footer />
+        }
     </Suspense>
+      // </BrowserRouter>
   )
 }
 

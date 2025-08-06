@@ -53,6 +53,27 @@ def post_clothe():
     
 
 
+# Get clothes
+@clothe_bp.route("/clothe/all", methods=["GET"])
+def get_clothes():
+    try:
+        id_category = request.args.get('id_category', default=None, type=int)
+        page = request.args.get('page', default=1, type=int)
+        page_size = request.args.get('page_size', default=10, type=int)
+        sort_by = request.args.get('sort_by', default='id', type=str)
+        sort_order = request.args.get('sort_order', default='asc', type=str)
+        name = request.args.get('name', default='', type=str)
+        id_gender = request.args.get('id_gender', default=None, type=int)
+        data = clothe_service.get_clothes(id_category, id_gender, page, page_size, sort_by, sort_order, name)
+        
+        if data[0] is None:
+            return ResponseHandler().create_error_response('Clothes not found', data[1], data=data[2], code=data[3])
+
+        return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
+
+    except Exception as e:
+        return ResponseHandler().create_error_response('Error getting clothes', str(e))
+    
 # Get clothes by id
 @clothe_bp.route("/clothe", methods=["GET"])
 def get_clothe_by_id():

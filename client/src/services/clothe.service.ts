@@ -30,10 +30,11 @@ export default class ClotheService {
     }
   }
 
-  static async getClothes(id_category: number, id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string): Promise<ClothesResponse> {
-    const params: { [key: string]: string } = {
-      id_category: id_category.toString(),
-    };
+  static async getClothes(id_category?: number, id_gender?: number, page?: number, perPage?: number, sortBy?: string, sortOrder?: string, name?: string): Promise<ClothesResponse> {
+  
+    const params: { [key: string]: string } = {};
+
+    if (id_category !== undefined) params.id_category = id_category.toString();
 
     page && (params.page = page.toString())
     perPage && (params.page_size = perPage.toString())
@@ -44,6 +45,7 @@ export default class ClotheService {
 
     const query = new URLSearchParams(params).toString();
     const response = await ApiService.makeRequest(`/admin/clothes?${query}`);
+
     return response;
   }
 }

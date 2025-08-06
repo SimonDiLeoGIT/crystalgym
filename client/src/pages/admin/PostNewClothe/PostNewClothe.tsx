@@ -1,16 +1,15 @@
 import { lazy, useEffect, useState } from "react";
-import { ClotheDataInterface } from "../../../interfaces/ClothesInterfaces";
 import ClotheService from "../../../services/clothe.service";
 
 import '../../../styles/form.css';
 
-import { UserDataInterface } from "../../../interfaces/UserInterface";
-import { useUser } from "../../../hook/useUser";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { ErrorInterface } from "../../../interfaces/ErrorInterface";
 import Message from "../../../components/Message";
 import { BounceLoader } from "react-spinners";
 import useFetchData from "../../../hook/useFetchClotheData";
+import { useAuth0 } from "@auth0/auth0-react";
+import { ClotheFormDataInterface } from "./interfaces/ClotheFormData";
 
 const Login = lazy(() => import("../../Login"))
 const ColorInputs = lazy(() => import("../../../components/PostClotheForm/ColorInputs"))
@@ -22,16 +21,15 @@ const PostNewClothe = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
 
-  const [user, setUser] = useState<UserDataInterface | null>(null);
+  const [submiting, setSubmiting] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [submiting, setSubmiting] = useState(false);
 
-
-  const { getUser } = useUser();
+  // const { getUser } = useUser();
   const { categories, clotheColors, genders } = useFetchData();
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
-  const [formData, setFormData] = useState<ClotheDataInterface>({
+  const [formData, setFormData] = useState<ClotheFormDataInterface>({
     name: "",
     description: "",
     price: 0.0,
@@ -44,27 +42,27 @@ const PostNewClothe = () => {
     document.title = "Post New Clothe | CrystalGym";
   })
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const fetchedUser : UserDataInterface | null = await getUser();
-      setUser(fetchedUser);
-    };
 
-    fetchUser();
-  }, [ getUser ]);
 
+  
+  
   useEffect(() => {
     if (categories && clotheColors && genders) setLoading(false);
   }, [categories, clotheColors, genders]);
-
-  if (loading) {
-    return <div className="h-screen">Loading...</div>;
-  }
-
-  if (!user || user.id_role != 1) {
-    return <Login />;
-  }
-
+  
+  // if (!user || user.id_role != 1) {
+    //   return <Login />;
+    // }
+    
+    if (isLoading || loading) {
+      return <div className="h-screen">Loading...</div>;
+    }
+    
+    if (!isAuthenticated) {
+      // loginWithRedirect();
+      return <Login />;
+    }
+    
   const resetFormData = () => {
     setFormData({
       name: "",

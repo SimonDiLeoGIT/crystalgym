@@ -150,26 +150,6 @@ const Navbar = () => {
   const { width } = useWindowSize();
   const isMobile = width !== undefined && width < 1024;
 
-  // const { getUser, initializeUser } = useUser();
-
-  // const [user, setUser] = useState<UserDataInterface | null>(null)
-
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const fetchedUser = await getUser();
-  //     // setUser(fetchedUser);
-  //   };
-
-  //   fetchUser();
-  // }, [ getUser ]);
-
-
-  // const logout = () => {
-  //   initializeUser(null)
-  //   localStorage.clear()
-  //   window.location.reload()
-  // }
-
 
   return (
     <nav className={`grid grid-cols-3 border-b -border--color-very-light-grey h-20 shadow-lg -shadow--color-very-light-grey z-40 -bg--color-white transition-transform duration-500 fixed w-screen px-4 top-0 ${scrollDown && !isOpenCart && " scroll-down shadow-none"} ${scrollUp && " scroll-up"}`}>

@@ -8,7 +8,14 @@ class TestClotheRepository:
   def clothe_repository(self):
     return ClotheRepository()
   
-  # Test that save clothe works
+  # Test that get clothes return None if there are no clothes
+  def test_get_clothes_empty(self, test_client, clothe_repository):
+    with test_client.application.app_context():
+      # Delete all clothes before testing
+      data = clothe_repository.get_clothes()
+      assert data is None
+  
+  # Test that save clothe return the clothe
   def test_save_clothe(self, test_client, clothe_repository):
     with test_client.application.app_context():
       clothe = clothe_repository.save_clothe('name', 'description', 1, datetime.now(), 1, 1)
@@ -19,10 +26,35 @@ class TestClotheRepository:
       assert clothe['id_gender'] == 1
       assert clothe['id_type'] == 1
 
+  # Test that get clothes return all clothes if non are specified
+  def test_get_clothes(self, test_client, clothe_repository):
+    with test_client.application.app_context():
+      data = clothe_repository.get_clothes()
+      assert data
+      assert len(data) > 0
+  
+  # Test that get clothes with params return clothes with this params
+  def test_get_clothes_with_params(self, test_client, clothe_repository):
+    with test_client.application.app_context():
+      data = clothe_repository.get_clothes(id_type=1, id_gender=1, sort_by='id', sort_order='asc')
+      assert data
+      assert len(data) > 0
+      assert data['clothes']
+      assert len(data['clothes']) > 0
+      assert data['clothes'][0]['name'] == 'name'
+      assert data['clothes'][0]['description'] == 'description'
+      assert data['clothes'][0]['price'] == 1
+      assert data['clothes'][0]['id_gender'] == 1
+      assert data['clothes'][0]['id_type'] == 1
+      assert data['pagination']
+      assert data['pagination']['current_page'] == 1
+      assert data['pagination']['page_size'] == 10
+      
+
   # Test that get clothe by id works
   def test_get_clothe_by_id(self, test_client, clothe_repository):
     with test_client.application.app_context():
-      data = clothe_repository.get_clothe_by_id(2)
+      data = clothe_repository.get_clothe_by_id(1)
       clothe = data.to_json()
       assert clothe['name'] == 'name'
       assert clothe['description'] == 'description'
