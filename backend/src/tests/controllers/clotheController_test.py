@@ -8,6 +8,13 @@ class TestClotheController:
   @pytest.fixture(scope='module')
   def clothe_controller(self):
     return clothe_bp.controller
+  
+  # Test that get clothes return None if there are no clothes
+  def test_get_clothes_empty(self, test_client):
+    with test_client.application.app_context():
+      url = '/api/clothe/all'
+      response = test_client.get(url)
+      assert response.status_code == 404
 
   def test_post_clothe(self, test_client):
       with test_client.application.app_context():
@@ -26,6 +33,14 @@ class TestClotheController:
           assert response.status_code == 201
           assert response.json['data']['id'] == 1
           assert response.json['data']['name'] == data['name']
+
+  # Test that get clothes return all clothes if non parameters are passed
+  def test_get_clothes_without_params(self, test_client):
+    with test_client.application.app_context():
+      url = '/api/clothe/all'
+      response = test_client.get(url)
+      assert response.status_code == 200
+
 
   def test_get_clothe_by_id(self, test_client):
     with test_client.application.app_context():

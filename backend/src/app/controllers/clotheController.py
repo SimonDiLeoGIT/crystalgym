@@ -1,6 +1,8 @@
 from flask import Blueprint, request
 # import services
 from app.services.clotheService import ClotheService
+# import repositories
+from app.repositories.clotheRepository import ClotheRepository
 # import utils
 from app.utils.responseHandler import ResponseHandler
 
@@ -11,17 +13,18 @@ from app import Config as config
 
 
 clothe_service = ClotheService()
+clothe_repository = ClotheRepository()
 
 clothe_bp = Blueprint("clothe_bp", __name__)
 
 # Post new clothe
-@clothe_bp.route("/clothe", methods=["POST"])
-@jwt_required()
+@clothe_bp.route("/admin/clothes", methods=["POST"])
+# @jwt_required()
 def post_clothe():
     try:
-        user_identity = AuthService().get_user_jwt_identity()
-        if not AuthService().is_admin(user_identity):
-            return ResponseHandler().create_error_response('Error', 'Only admins can perform this action', 403)
+        # user_identity = AuthService().get_user_jwt_identity()
+        # if not AuthService().is_admin(user_identity):
+        #     return ResponseHandler().create_error_response('Error', 'Only admins can perform this action', 403)
 
         name = request.form.get('name')
         description = request.form.get('description')
@@ -40,13 +43,14 @@ def post_clothe():
             clothe_service.delete_clothe(saved_clothe['id'])
             return ResponseHandler().create_error_response('Error', response[1], response[2])
         
-        access_token = AuthService().create_access_token(user_identity)
-        refresh_token = AuthService().create_refresh_token(user_identity)
+        # access_token = AuthService().create_access_token(user_identity)
+        # refresh_token = AuthService().create_refresh_token(user_identity)
         response = {
-            'access_token': access_token,
+            # 'access_token': access_token,
             'clothe': data[0]
         }
-        return ResponseHandler().create_response('success', data[1], response, refresh_token=refresh_token, code=data[2])
+        # return ResponseHandler().create_response('success', data[1], response, refresh_token=refresh_token, code=data[2])
+        return ResponseHandler().create_response('success', data[1], response, code=data[2])
         
     except Exception as e:
         return ResponseHandler().create_error_response(str(e), 'An error occurred while creating the clothe')
@@ -54,7 +58,7 @@ def post_clothe():
 
 
 # Get clothes
-@clothe_bp.route("/clothe/all", methods=["GET"])
+@clothe_bp.route("/admin/clothes", methods=["GET"])
 def get_clothes():
     try:
         id_category = request.args.get('id_category', default=None, type=int)
@@ -64,12 +68,12 @@ def get_clothes():
         sort_order = request.args.get('sort_order', default='asc', type=str)
         name = request.args.get('name', default='', type=str)
         id_gender = request.args.get('id_gender', default=None, type=int)
-        data = clothe_service.get_clothes(id_category, id_gender, page, page_size, sort_by, sort_order, name)
+        clothes = clothe_repository.get_clothes(id_category, id_gender, page, page_size, sort_by, sort_order, name)
         
-        if data[0] is None:
-            return ResponseHandler().create_error_response('Clothes not found', data[1], data=data[2], code=data[3])
-
-        return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
+        if clothes is None:
+            return ResponseHandler().create_error_response('Clothes not found', 'Clothes not found', data=None, code=404)
+        
+        return ResponseHandler().create_response('success', 'Clothes retrieved successfully', data=clothes, code=200)
 
     except Exception as e:
         return ResponseHandler().create_error_response('Error getting clothes', str(e))
