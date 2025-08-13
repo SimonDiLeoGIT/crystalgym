@@ -4,10 +4,8 @@ from app import create_app, db
 from app.models.user import User
 from app.models.role import Role
 from app.models.color import Color
-from app.models.type import Type
+from app.models.category import Category
 from app.models.gender import Gender
-from app.models.clothe import Clothe
-from app.models.clothe_color import ClotheColor
 
 @pytest.fixture(scope='module')
 def test_client():

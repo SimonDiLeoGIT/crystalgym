@@ -1,15 +1,6 @@
 from app.utils.singletonMeta import SingletonMeta
 
 class PaginationHelper(metaclass=SingletonMeta):
-
-    def filter_and_sort(self, query, model, sort_by, sort_order):
-        
-        if sort_order == 'asc':
-            query = query.order_by(getattr(model, sort_by).asc())
-        else:
-            query = query.order_by(getattr(model, sort_by).desc())
-
-        return query
     
     def generate_pagination(self, page, page_size, query):
         offset = (page - 1) * page_size
