@@ -37,16 +37,16 @@ def create_app(config_class=Config):
 
     # Registrar blueprints
     from app.controllers.clotheController import clothe_bp
-    from app.controllers.userController import user_bp
+    from app.controllers.UserController import user_bp
     from app.controllers.authController import auth_bp
-    from app.controllers.categoryController import type_bp
+    from app.controllers.CategoryController import category_bp
     from app.controllers.colorController import color_bp
     from app.controllers.genderController import gender_bp
 
     app.register_blueprint(clothe_bp, url_prefix="/api")
     app.register_blueprint(user_bp, url_prefix="/api")
     app.register_blueprint(auth_bp, url_prefix="/api")
-    app.register_blueprint(type_bp, url_prefix="/api")
+    app.register_blueprint(category_bp, url_prefix="/api")
     app.register_blueprint(color_bp, url_prefix="/api")
     app.register_blueprint(gender_bp, url_prefix="/api")
 

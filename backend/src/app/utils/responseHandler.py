@@ -4,13 +4,13 @@ from app.services.authService import AuthService
 
 class ResponseHandler(metaclass=SingletonMeta):
 
-    def create_response(self, status, message, data, refresh_token=None, code=200):
+    def create_response(self, data, message, refresh_token=None, code=200):
         # Crear la respuesta con un JSON
         response_data = {
-            "status": status,
+            "success": True,
             "message": message,
             "data": data,
-            "code": code
+            "status_code": code
         }
         response = make_response(jsonify(response_data))
         response.status_code = code
@@ -30,12 +30,11 @@ class ResponseHandler(metaclass=SingletonMeta):
         )
         return response
 
-    def create_error_response(self, status, message, data=None, code=500):
+    def create_error_response(self, message, code=500):
         response_data = {
-            "error": status,
+            "success": False,
             "message": message,
-            "data": data,
-            "code": code
+            "status_code": code
         }
         response = make_response(jsonify(response_data))
         response.status_code = code

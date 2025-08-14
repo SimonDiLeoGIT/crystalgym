@@ -1,6 +1,6 @@
 import pytest
 
-from app.controllers.userController import user_bp
+from app.controllers.UserController import user_bp
 
 class TestUserController:
 
