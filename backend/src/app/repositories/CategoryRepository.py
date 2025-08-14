@@ -25,12 +25,24 @@ class CategoryRepository:
         query = query.order_by(getattr(Category, sort_by).asc())
     else:
         query = query.order_by(getattr(Category, sort_by).desc())
-
-    offset = (page - 1) * per_page
     
-    categories = query.offset(offset).limit(per_page).all()
+    # Total items before pagination
+    total_items = query.count()
+    total_pages = (total_items + per_page - 1) // per_page  # Ceiling division
 
-    return categories, "Categories retrieved successfully", 200
+    # Pagination
+    pagination_helper = PaginationHelper()
+    categories = pagination_helper.generate_pagination(page, per_page, query)
+
+    # Metadata
+    pagination_data = pagination_helper.get_pagination_data(page, per_page, total_items, total_pages)
+
+    data = {
+      "categories": [category.to_json() for category in categories],
+      "pagination_data": pagination_data
+    }
+
+    return data, "Categories retrieved successfully", 200
   
   def get_category_by_id(self, category_id):
     category = db.session.query(Category).filter(Category.id == category_id).first()

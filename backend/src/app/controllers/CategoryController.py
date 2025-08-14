@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required
 # import utils
 from app.utils.responseHandler import ResponseHandler
 from app.repositories.CategoryRepository import CategoryRepository
+from app.utils.pagination import PaginationHelper
 
 from app import Config as config
 
@@ -10,22 +11,31 @@ from app import Config as config
 category_bp = Blueprint("category_bp", __name__)
 
 category_repository = CategoryRepository()
+pagination_helper = PaginationHelper()
 
 @category_bp.route("/categories", methods=["POST"])
 # @jwt_required()
 def create_category():
+  if 'name' not in request.json or not request.json['name']:
+    return ResponseHandler().create_error_response('Name param is required', 400)
   data = category_repository.create_category(request.json['name'], request.json['description'])
   if data[0] is None:
     return ResponseHandler().create_error_response(data[1], data[2])
   return ResponseHandler().create_response(data[0].to_json(), message=data[1], code=data[2])
 
 
-# @category_bp.route("/categories", methods=["GET"])
-# def get_categories():
-#   data = type_service.get_categories()
-#   if data[0] is None:
-#     return ResponseHandler().create_error_response('Error', data[1], data[2])
-#   return ResponseHandler().create_response('success', data[1], data[0], code=data[2])
+@category_bp.route("/categories", methods=["GET"])
+def get_categories():
+  # @jwt_required()
+  page = request.args.get("page", default=1, type=int)
+  per_page = request.args.get("per_page", default=10, type=int)
+  sort_by = request.args.get("sort_by", default="id", type=str)
+  sort_order = request.args.get("sort_order", default="asc", type=str)
+  search = request.args.get("search", default="", type=str)
+  data, message, code = category_repository.get_categories(page, per_page, sort_by, sort_order, search)
+  if data is None:
+    return ResponseHandler().create_error_response(message=message, code=code)
+  return ResponseHandler().create_response(data=data, message=message, code=code)
 
 
 # @category_bp.route("/categories/admin", methods=["GET"])

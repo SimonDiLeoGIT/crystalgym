@@ -29,16 +29,16 @@ class TestCategoryRepository:
     with test_client.application.app_context():
       # Delete all categories
       db.session.query(Category).delete()
-      categories = category_repository.get_categories()
-      assert len(categories[0]) == 0
+      data, message, code = category_repository.get_categories()
+      assert len(data['categories']) == 0
 
   # Test the get_categories method return a list of categories if non parameters are passed
   def test_get_categories_return_a_list_of_categories_if_non_parameters_are_passed(self, test_client, category_repository):
     with test_client.application.app_context():
       category_repository.create_category('test', 'test')
       category_repository.create_category('test_2', 'test_2')
-      categories = category_repository.get_categories()
-      assert len(categories[0]) == 2
+      data, message, code = category_repository.get_categories()
+      assert len(data['categories']) == 2
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of per_page or less categories if per_page are passed
@@ -48,8 +48,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(per_page=5)
-      assert len(categories[0]) <= 5
+      data, message, code = category_repository.get_categories(per_page=5)
+      assert len(data['categories']) <= 5
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories from page
@@ -59,8 +59,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(page=2, per_page=2)
-      assert len(categories[0]) == 2
+      data, message, code = category_repository.get_categories(page=2, per_page=2)
+      assert len(data['categories']) == 2
       db.session.query(Category).delete()
   
   # Test the get_categories method return an empty list of categories from page if offset is greater than the number of categories
@@ -70,8 +70,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(page=2)
-      assert len(categories[0]) == 0
+      data, message, code = category_repository.get_categories(page=2)
+      assert len(data['categories']) == 0
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories sorted by id
