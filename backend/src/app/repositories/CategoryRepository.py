@@ -13,7 +13,7 @@ class CategoryRepository:
     category = Category(name, description)
     db.session.add(category)
     db.session.commit()
-    return category, "Category created successfully", 201
+    return category.to_json(), "Category created successfully", 201
 
 
   def get_categories(self, page=1, per_page=10, sort_by='id', sort_order='asc', search=''):
@@ -47,13 +47,13 @@ class CategoryRepository:
   def get_category_by_id(self, category_id):
     category = db.session.query(Category).filter(Category.id == category_id).first()
     if not category:
-      return None, "Category with id {category_id} not found"
-    return category
+      return None, "Category with id {category_id} not found", 404
+    return category.to_json(), "Category retrieved successfully", 200
 
   def update_category(self, category_id, name, description):
     category = db.session.query(Category).filter_by(id=category_id).first()
     if not category:
-        return None, "Category not found"
+        return None, "Category not found", 404
 
     # Check duplicate name, but ignore current category
     if (
@@ -61,17 +61,17 @@ class CategoryRepository:
         .filter(Category.name == name, Category.id != category_id)
         .first()
     ):
-        return None, "Category name already exists"
+        return None, "Category name already exists", 409
 
     category.name = name
     category.description = description
     db.session.commit()
-    return category
+    return category.to_json(), "Category updated successfully", 200
 
   def delete_category(self, category_id):
     category = db.session.query(Category).filter(Category.id == category_id).first()
     if not category:
-      return None, "Category not found"
+      return None, "Category not found", 404
     db.session.query(Category).filter(Category.id == category_id).delete()
     db.session.commit()
-    return category
+    return category.to_json(), "Category deleted successfully", 200

@@ -1,22 +1,12 @@
 import { PaginationInterface } from "./Pagination"
 
-export interface CategoryInterface {
-  code: number
-  data: CategoryDataInterface[]
-  message: string
+export interface CategoryHttpResponse {
+  categories: Category[]
+  pagination_data: PaginationInterface
 }
 
-export interface CategoryDataInterface {
+export interface Category {
   id: number
   name: string
   description: string
-}
-
-export interface PaginatedCategoriesInterface {
-  code: number
-  data: {
-    categories: CategoryDataInterface[]
-    pagination: PaginationInterface
-  }
-  message: string
 }

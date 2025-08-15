@@ -12,16 +12,16 @@ class TestCategoryRepository:
   # Test the create_category method return the created category
   def test_create_category_return_the_created_category(self, test_client, category_repository):
     with test_client.application.app_context():
-      category = category_repository.create_category('test', 'test')
-      assert category[0].name == 'test'
-      assert category[0].description == 'test'
+      data, message, code = category_repository.create_category('test', 'test')
+      assert data['name'] == 'test'
+      assert data['description'] == 'test'
   
   # Test the create_category method return None if the category already exists
   def test_create_category_return_none_if_the_category_already_exists(self, test_client, category_repository):
     with test_client.application.app_context():
       category_repository.create_category('test_2', 'test_2')
-      category_already_exists = category_repository.create_category('test_2', 'test_2')
-      assert category_already_exists[0] == None
+      data, message, code = category_repository.create_category('test_2', 'test_2')
+      assert data == None
       db.session.query(Category).delete()
 
   # Test the get_categories method return an empty list if there are no categories
@@ -81,8 +81,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(sort_by='id')
-      assert categories[0][0].name == 'test'
+      data, message, code = category_repository.get_categories(sort_by='id')
+      assert data['categories'][0]['name'] == 'test'
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories sorted by name
@@ -92,8 +92,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(sort_by='name')
-      assert categories[0][0].name == 'test'
+      data, message, code = category_repository.get_categories(sort_by='name')
+      assert data['categories'][0]['name'] == 'test'
       db.session.query(Category).delete()
   
   # Test the get_categories method return a list of categories sorted by description
@@ -103,8 +103,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(sort_by='description')
-      assert categories[0][0].name == 'test'
+      data, message, code = category_repository.get_categories(sort_by='description')
+      assert data['categories'][0]['name'] == 'test'
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories sorted by id in descending order
@@ -114,8 +114,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(sort_by='id', sort_order='desc')
-      assert categories[0][0].name == 'test_4'
+      data, message, code = category_repository.get_categories(sort_by='id', sort_order='desc')
+      assert data['categories'][0]['name'] == 'test_4'
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories sorted by name in descending order
@@ -125,8 +125,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(sort_by='name', sort_order='desc')
-      assert categories[0][0].name == 'test_4'
+      data, message, code = category_repository.get_categories(sort_by='name', sort_order='desc')
+      assert data['categories'][0]['name'] == 'test_4'
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories sorted by description in descending order
@@ -136,8 +136,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(sort_by='description', sort_order='desc')
-      assert categories[0][0].name == 'test_4'
+      data, message, code = category_repository.get_categories(sort_by='description', sort_order='desc')
+      assert data['categories'][0]['name'] == 'test_4'
       db.session.query(Category).delete()
 
   # Test the get_categories method return a list of categories where search is passed
@@ -147,17 +147,17 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(search='test')
-      assert len(categories[0]) == 4
-      assert categories[0][0].name == 'test'
+      data, message, code = category_repository.get_categories(search='test')
+      assert len(data['categories']) == 4
+      assert data['categories'][0]['name'] == 'test'
       db.session.query(Category).delete()
       
       category_repository.create_category('test', 'test')
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      categories = category_repository.get_categories(search='test_2')
-      assert categories[0][0].name == 'test_2'
+      data, message, code = category_repository.get_categories(search='test_2')
+      assert data['categories'][0]['name'] == 'test_2'
       db.session.query(Category).delete()
 
   # Test get_category_by_id method return a category by id
@@ -167,8 +167,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      category = category_repository.get_category_by_id(1)
-      assert category.name == 'test'
+      data, message, code = category_repository.get_category_by_id(1)
+      assert data['name'] == 'test'
       db.session.query(Category).delete()
 
   # Test get_category_by_id method return None if category is not found by id
@@ -178,8 +178,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      category = category_repository.get_category_by_id(5)
-      assert category[0] == None
+      data, message, code = category_repository.get_category_by_id(5)
+      assert data == None
       db.session.query(Category).delete()
 
   # Test update_category method return updated category
@@ -189,8 +189,8 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      category = category_repository.update_category(1, 'test_5', 'test_5')
-      assert category.name == 'test_5'
+      data, message, code = category_repository.update_category(1, 'test_5', 'test_5')
+      assert data['name'] == 'test_5'
       db.session.query(Category).delete()
 
   # Test update_category return None if category is not found by id
@@ -200,19 +200,20 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      category = category_repository.update_category(5, 'test_5', 'test_5')
-      assert category[0] == None
+      data, message, code = category_repository.update_category(5, 'test_5', 'test_5')
+      assert data == None
       db.session.query(Category).delete()
 
   # Test delete_category method return deleted category
   def test_delete_category_return_deleted_category(self, test_client, category_repository):
     with test_client.application.app_context():
-      category = category_repository.create_category('test_6', 'test_6')
+      data_to_delete, message, code = category_repository.create_category('test_6', 'test_6')
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      deleted_category = category_repository.delete_category(category[0].id)
-      assert deleted_category.name == 'test_6'
+      data, message, code = category_repository.delete_category(data_to_delete['id'])
+      assert data['name'] == 'test_6'
+      assert code == 200
       db.session.query(Category).delete()
 
   # Test delete_category return None if category is not found by id
@@ -222,6 +223,6 @@ class TestCategoryRepository:
       category_repository.create_category('test_2', 'test_2')
       category_repository.create_category('test_3', 'test_3')
       category_repository.create_category('test_4', 'test_4')
-      category = category_repository.delete_category(6)
-      assert category[0] == None
+      data, message, code = category_repository.delete_category(6)
+      assert data == None
       db.session.query(Category).delete()

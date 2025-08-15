@@ -1,37 +1,24 @@
-import { CategoryDataInterface, CategoryInterface, PaginatedCategoriesInterface } from '../interfaces/CategoryInterfaces';
+import { Category, CategoryHttpResponse } from '../interfaces/CategoryInterfaces';
+import { HttpResponse } from '../interfaces/HttpResponseInterface';
 import ApiService from './api.service';
 
 export default class CategoryService {
-  static async getCategories(): Promise<CategoryInterface> {
-    const response = await ApiService.makeRequest('/categories');
-    return response;
-  }
-
-
-  static async getPaginatedCategories(page: number, perPage: number = 10, sortBy: string = 'id', sortOrder: string = 'asc', name: string = ''): Promise<PaginatedCategoriesInterface> {
+  
+  static async getCategories(page: number = 1, perPage: number = 10, sortBy: string = 'id', sortOrder: string = 'asc', search: string = '') {
     const query = new URLSearchParams({
       page: page.toString(),
       page_size: perPage.toString(),
       sort_by: sortBy,
       sort_order: sortOrder,
-      name: name
+      search: search
     }).toString();
-    const response = await ApiService.makeRequest(`/categories/admin?${query}`);
+    const response = await ApiService.makeRequest<HttpResponse<CategoryHttpResponse>>(`/categories?${query}`);
     return response;
   }
 
-  static async updateCategory(category: CategoryDataInterface): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/category/admin`, 'PUT', { 'id_type':category.id, 'name':category.name, 'description':category.description });
+  static async postCategory(category: Category) {
+    const response = await ApiService.makeRequest('/categories', 'POST', category);
     return response;
   }
 
-  static async createCategory(category: CategoryDataInterface): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/category/admin`, 'POST', {'name': category.name, 'description': category.description });
-    return response;
-  }
-
-  static async deleteCategory(category_id: number): Promise<PaginatedCategoriesInterface> {
-    const response = await ApiService.makeRequest(`/category/admin`, 'DELETE', {'id': category_id});
-    return response;
-  }
 }

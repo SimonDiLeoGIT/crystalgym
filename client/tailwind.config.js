@@ -30,6 +30,8 @@ export default {
       "--color-black": "#1E1E1E",
       /* Very Light Grey */
       "--color-very-light-grey": "#CBCBCB",
+      /* Lightest Grey */
+      "--color-lightest-grey": "#EFF2F3",
       /* Red */
       "--color-red": "#940505",
       /* Light Red */

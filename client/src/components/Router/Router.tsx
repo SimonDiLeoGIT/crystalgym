@@ -3,6 +3,8 @@ import { lazy, Suspense } from "react"
 import AdminHome from "../../pages/admin/AdminHome"
 import AdminNavbar from "../../pages/admin/Components/AdminNavbar"
 import Products from "../../pages/admin/Products/Products"
+import AdminCategories from "../../pages/admin/Category/AdminCategories"
+import AdminCategoryCreate from "../../pages/admin/Category/AdminCategoryCreate"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -55,7 +57,8 @@ const Router = () => {
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/products" element={<Products />} />
-          <Route path="/admin/categories" element={<ClotheCategories />} />
+          <Route path="/admin/categories" element={<AdminCategories />} />
+          <Route path="/admin/category/create" element={<AdminCategoryCreate />} />
           {/* <Route path="/admin/categories/:categoryId" element={<AdminClothes />} /> */}
         </Routes>
         {
