@@ -16,8 +16,18 @@ export default class CategoryService {
     return response;
   }
 
+  static async getCategoryById(id: number) {
+    const response = await ApiService.makeRequest(`/categories/${id}`);
+    return response;
+  }
+
   static async postCategory(category: Category) {
     const response = await ApiService.makeRequest('/categories', 'POST', category);
+    return response;
+  }
+
+  static async updateCategory(category: Category) {
+    const response = await ApiService.makeRequest('/categories', 'PUT', category);
     return response;
   }
 

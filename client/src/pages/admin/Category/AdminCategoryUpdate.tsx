@@ -1,17 +1,35 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 import CategoryService from "../../../services/category.service";
-import ErrorMessage from "../../../components/ErrorMessage";
+import { Link, useParams } from "react-router-dom"
 
-const AdminCategoryCreate = () => {
+const AdminCategoryUpdate = () => {
+
+  const {categoryId} = useParams();
 
   const [data, setData] = useState({
+    id: categoryId,
     name: '',
     description: ''
   });
-  
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
+
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        if (categoryId == null) return;
+        const response = await CategoryService.getCategoryById(Number(categoryId));
+        if (response.success) {
+          setData(response.data);
+        } else {
+          console.error(response.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (categoryId == null) return;
+    getCategory();
+  }, [categoryId])
 
 
   useEffect(() => {
@@ -21,27 +39,22 @@ const AdminCategoryCreate = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await CategoryService.postCategory(data);
+      const response = await CategoryService.updateCategory(data);
       if (response.success) {
         console.log(response.message);
         window.location.href = "/admin/categories";
       } else {
         console.error(response.message);
-        setErrorMessage(response.message);
-        setVisibleErrorMessage(true);
       }
     } catch (error) {
       console.log(error);
-      setErrorMessage(error.message);
-      setVisibleErrorMessage(true);
     }
   }
 
   return (
     <AdminLayout>
-      <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
       <section className="w-4/6 m-auto my-12">
-        <h1 className="font-semibold text-2xl">Categories</h1>
+        <h1 className="font-semibold text-2xl">Edit Category</h1>
         <form onSubmit={handleSubmit} className="my-4 space-y-4">
           <div>
             <label htmlFor="name">Name</label>
@@ -65,12 +78,18 @@ const AdminCategoryCreate = () => {
               onChange={(e) => setData({ ...data, description: e.target.value })}
             />
           </div>
-          <div className="w-full text-center">
+          <div className="flex justify-center gap-4">
+            <Link
+              to="/admin/categories" 
+              className="text-center rounded-lg p-2 w-48 -bg--color-red  -text--color-white"
+            >
+              Cancel
+            </Link>
             <button
               type="submit" 
-              className="rounded-lg m-auto p-2 w-48 -bg--color-black -text--color-white"
+              className="rounded-lg p-2 w-48 -bg--color-black -text--color-white"
             >
-              Create category
+              Save Changes
             </button>
           </div>
         </form>
@@ -79,4 +98,4 @@ const AdminCategoryCreate = () => {
   );
 }
 
-export default AdminCategoryCreate
+export default AdminCategoryUpdate

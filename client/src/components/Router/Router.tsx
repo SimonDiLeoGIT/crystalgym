@@ -5,6 +5,7 @@ import AdminNavbar from "../../pages/admin/Components/AdminNavbar"
 import Products from "../../pages/admin/Products/Products"
 import AdminCategories from "../../pages/admin/Category/AdminCategories"
 import AdminCategoryCreate from "../../pages/admin/Category/AdminCategoryCreate"
+import AdminCategoryUpdate from "../../pages/admin/Category/AdminCategoryUpdate"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -53,12 +54,13 @@ const Router = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/category/:id_category/clothes" element={<Clothes />} />
+          <Route path="/category/:catogoryId/clothes" element={<Clothes />} />
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/admin/products" element={<Products />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/category/create" element={<AdminCategoryCreate />} />
+          <Route path="/admin/categories/create" element={<AdminCategoryCreate />} />
+          <Route path="/admin/categories/edit/:categoryId" element={<AdminCategoryUpdate />} />
           {/* <Route path="/admin/categories/:categoryId" element={<AdminClothes />} /> */}
         </Routes>
         {
