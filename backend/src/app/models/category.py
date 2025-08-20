@@ -5,14 +5,17 @@ class Category(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(255), nullable=False)
   description = db.Column(db.String(255), nullable=True)
+  status = db.Column(db.Integer, nullable=False)
 
   def __init__(self, name, description):
     self.name = name
     self.description = description
+    self.status = 0
 
   def to_json(self):
     return {
       "id": self.id,
       "name": self.name,
-      "description": self.description
+      "description": self.description,
+      "status": self.status   
     }

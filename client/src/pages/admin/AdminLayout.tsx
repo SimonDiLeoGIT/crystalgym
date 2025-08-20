@@ -3,9 +3,8 @@ import Login from "../Login";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
-import ErrorMessage from "../../components/ErrorMessage";
 
-const AdminLayout = ({children}: {children: ReactNode}) => {
+const AdminLayout = ({children, head}: {children: ReactNode, head: ReactNode}) => {
 
   const { user, isLoading, isAuthenticated, logout } = useAuth0()
 
@@ -21,7 +20,7 @@ const AdminLayout = ({children}: {children: ReactNode}) => {
 
   return (
     <main className="max-w-screen ml-[18%]">
-      <header className="w-5/6 m-auto">
+      <header className="w-4/6 m-auto">
         <nav className="py-6">
           <ul className="flex justify-end gap-6">
             <li className="flex items-center">
@@ -50,16 +49,10 @@ const AdminLayout = ({children}: {children: ReactNode}) => {
           </ul>
         </nav>
         <section className="my-4">
-          <p>{
-            parts.map((part, index) => (
-              <span key={index}>
-                <Link to={`/${parts.slice(0, index + 1).join("/")}`} className="font-roboto opacity-80 hover:opacity-60">
-                  {part.charAt(0).toUpperCase() + part.slice(1)}
-                </Link>
-                <span className="font-bold text-lg -text--color-grey">{index < parts.length - 1 && " · "}</span>
-              </span>
-            ))
-          }</p>
+          <p className="text-slate-600 font-semibold">
+            <Link to="/admin">Dashboard</Link> · 
+            {head}
+          </p>
         </section>
       </header>
       {children}

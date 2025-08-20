@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 import CategoryService from "../../../services/category.service";
 import { Link, useParams } from "react-router-dom"
+import ErrorMessage from "../../../components/ErrorMessage";
 
 const AdminCategoryUpdate = () => {
 
@@ -10,8 +11,12 @@ const AdminCategoryUpdate = () => {
   const [data, setData] = useState({
     id: categoryId,
     name: '',
-    description: ''
+    description: '',
+    status: 0
   });
+
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [visibleErrorMessage, setVisibleErrorMessage] = useState<boolean>(false);
 
   useEffect(() => {
     const getCategory = async () => {
@@ -51,10 +56,28 @@ const AdminCategoryUpdate = () => {
     }
   }
 
+  const handleDelete = async (category_id: number) => {
+    try {
+      const response = await CategoryService.deleteCategory(category_id);
+      if (response.success) {
+        window.location.href = "/admin/categories";
+      } else {
+        setErrorMessage("Error deleting category");
+        setVisibleErrorMessage(true);
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setVisibleErrorMessage(true);
+    }
+  }
+
   return (
-    <AdminLayout>
+    <AdminLayout
+      head={<> <Link to="/admin/categories">Categories</Link> · <span className="opacity-70">Edit</span></>}
+    >
+      <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
       <section className="w-4/6 m-auto my-12">
-        <h1 className="font-semibold text-2xl">Edit Category</h1>
+        <h1 className="font-semibold text-2xl">Details</h1>
         <form onSubmit={handleSubmit} className="my-4 space-y-4">
           <div>
             <label htmlFor="name">Name</label>
@@ -78,21 +101,45 @@ const AdminCategoryUpdate = () => {
               onChange={(e) => setData({ ...data, description: e.target.value })}
             />
           </div>
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-2">
             <Link
               to="/admin/categories" 
-              className="text-center rounded-lg p-2 w-48 -bg--color-red  -text--color-white"
+              className="py-2 w-32 text-center bg-slate-300 font-semibold shadow-md text-slate-500 rounded-lg hover:opacity-90"
             >
               Cancel
             </Link>
             <button
               type="submit" 
-              className="rounded-lg p-2 w-48 -bg--color-black -text--color-white"
+              className="py-2 w-32 text-center bg-violet-600 font-semibold shadow-md text-white rounded-lg hover:opacity-90"
             >
               Save Changes
             </button>
           </div>
         </form>
+        <div className="flex justify-end">
+        {
+          data.status === 0 ?
+            <button className="py-2 w-32 text-center bg-emerald-200/60 font-semibold shadow-md text-emerald-800 rounded-lg hover:opacity-90">
+              Publish
+            </button>
+          :
+            <p className="text-slate-400 italic p-2">
+              Published
+            </p>
+        }
+        </div>
+        {
+          data && data.id &&
+          <section className="flex items-center justify-between my-8 p-4 border-2 border-rose-600 rounded-lg">
+            <p className="font-semibold">Danger Zone</p>
+            <button 
+              onClick={() => handleDelete(Number(data?.id))}
+              className="py-2 w-32 text-center bg-rose-600 font-semibold shadow-md text-white rounded-lg hover:opacity-90"
+              >
+              Delete
+            </button>
+          </section>
+          }
       </section>
     </AdminLayout>
   );

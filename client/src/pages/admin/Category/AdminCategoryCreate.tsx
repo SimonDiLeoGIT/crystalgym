@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 import CategoryService from "../../../services/category.service";
 import ErrorMessage from "../../../components/ErrorMessage";
+import { Link } from "react-router-dom";
 
 const AdminCategoryCreate = () => {
 
@@ -38,7 +39,9 @@ const AdminCategoryCreate = () => {
   }
 
   return (
-    <AdminLayout>
+    <AdminLayout
+      head={<> <Link to="/admin/categories">Categories</Link> · <span className="opacity-70">Create</span></>}
+    >
       <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
       <section className="w-4/6 m-auto my-12">
         <h1 className="font-semibold text-2xl">Categories</h1>
@@ -68,9 +71,9 @@ const AdminCategoryCreate = () => {
           <div className="w-full text-center">
             <button
               type="submit" 
-              className="rounded-lg m-auto p-2 w-48 -bg--color-black -text--color-white"
+              className="p-2 px-12 bg-violet-600 font-semibold shadow-md text-white rounded-lg hover:opacity-90"
             >
-              Create category
+              Create
             </button>
           </div>
         </form>

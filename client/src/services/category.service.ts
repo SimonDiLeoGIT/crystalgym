@@ -31,4 +31,9 @@ export default class CategoryService {
     return response;
   }
 
+  static async deleteCategory(id: number) {
+    const response = await ApiService.makeRequest(`/categories/${id}`, 'DELETE');
+    return response;
+  }
+
 }
