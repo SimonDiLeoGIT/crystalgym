@@ -1,5 +1,6 @@
 from app import db
 from app.models.product import Product
+from app.models.category import Category
 from app.utils.pagination import PaginationHelper
 
 class ProductRepository:
@@ -7,9 +8,11 @@ class ProductRepository:
   def __init__(self):
     self.pagination = PaginationHelper()
 
-  def create_product(self, name, description, code, release_date, gender_id, category_id):
+  def create_product(self, name, code, description, release_date, gender_id, category_id):
     if db.session.query(Product).filter(Product.code == code).first():
       return None, f"Product with code {code} already exists", 409
+    if db.session.query(Category).filter(Category.id == category_id).first() is None:
+      return None, f"Category with id {category_id} not found", 404
     product = Product(name=name, code=code, description=description, release_date=release_date, gender_id=gender_id, category_id=category_id)
     db.session.add(product)
     db.session.commit()
@@ -53,7 +56,7 @@ class ProductRepository:
       return None, "Product with id {product_id} not found", 404
     return product.to_json(), "Product retrieved successfully", 200
   
-  def update_product(self, product_id, name, description, code, release_date, gender_id, category_id):
+  def update_product(self, product_id, name, code, description, release_date, gender_id, category_id):
     product = db.session.query(Product).filter(Product.id == product_id).first()
     if not product:
       return None, "Product with id {product_id} not found", 404
