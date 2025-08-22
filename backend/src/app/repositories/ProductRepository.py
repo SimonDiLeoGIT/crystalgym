@@ -60,6 +60,16 @@ class ProductRepository:
     product = db.session.query(Product).filter(Product.id == product_id).first()
     if not product:
       return None, "Product with id {product_id} not found", 404
+    
+    if db.session.query(Product).filter(Product.code == code, Product.id != product_id).first():
+      return None, f"Product with code {code} already exists", 409
+    
+    if db.session.query(Product).filter(Product.name == name, Product.id != product_id).first():
+      return None, f"Product with code {code} already exists", 409
+    
+    if db.session.query(Category).filter(Category.id == category_id).first() is None:
+      return None, f"Category with id {category_id} not found", 404
+    
     product.name = name
     product.description = description
     product.code = code

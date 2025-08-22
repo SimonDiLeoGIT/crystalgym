@@ -118,5 +118,74 @@ class TestProductController:
 
   # test that get product by id returns 404 if the product does not exist
   def test_that_get_product_by_id_returns_404_if_the_product_does_not_exist(self, test_client):
-    response = test_client.get("/api/prducts/1000")
+    response = test_client.get("/api/products/100")
+    assert response.json['status_code'] == 404
+
+  # test that update product returns 200 and the product if exists
+  def test_that_update_product_returns_200_and_the_product_if_exists(self, test_client):
+    data = {
+      "id": 1,
+      "name": "Test product",
+      "code": "THM",
+      "description": "Test Description",
+      "release_date": "2025-08-22",
+      "gender_id": 1,
+      "category_id": 1
+    }
+    response = test_client.put("/api/products", json=data)
+    assert response.json['status_code'] == 200
+    assert response.json['data']['id'] == 1
+    assert response.json['data']['name'] == data['name']
+
+  # test that update product returns 404 if the product does not exist
+  def test_that_update_product_returns_404_if_the_product_does_not_exist(self, test_client):
+    data = {
+      "id": 100,
+      "name": "Test product",
+      "code": "THM",
+      "description": "Test Description",
+      "release_date": "2025-08-22",
+      "gender_id": 1,
+      "category_id": 1
+    }
+    response = test_client.put("/api/products", json=data)
+    assert response.json['status_code'] == 404
+
+  # test that update product returns 400 if the product name is empty
+  def test_that_update_product_returns_400_if_the_product_name_is_empty(self, test_client):
+    data = {
+      "id": 1,
+      "name": "",
+      "code": "THM",
+      "description": "Test Description",
+      "release_date": "2025-08-22",
+      "gender_id": 1,
+      "category_id": 1
+    }
+    response = test_client.put("/api/products", json=data)
+    assert response.json['status_code'] == 400
+
+  # test that update product returns 400 if the product code is empty
+  def test_that_update_product_returns_400_if_the_product_code_is_empty(self, test_client):
+    data = {
+      "id": 1,
+      "name": "Test product",
+      "code": "",
+      "description": "Test Description",
+      "release_date": "2025-08-22",
+      "gender_id": 1,
+      "category_id": 1
+    }
+    response = test_client.put("/api/products", json=data)
+    assert response.json['status_code'] == 400
+
+  # test that delete product returns 200 and the product if exists
+  def test_that_delete_product_returns_200_and_the_product_if_exists(self, test_client):
+    response = test_client.delete("/api/products/1")
+    assert response.json['status_code'] == 200
+    assert response.json['data']['id'] == 1
+
+  # test that delete product returns 404 if the product does not exist
+  def test_that_delete_product_returns_404_if_the_product_does_not_exist(self, test_client):
+    response = test_client.delete("/api/products/100")
     assert response.json['status_code'] == 404

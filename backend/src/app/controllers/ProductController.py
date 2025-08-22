@@ -17,6 +17,20 @@ pagination_helper = PaginationHelper()
 @product_bp.route("/products", methods=["POST"])
 # @jwt_required()
 def create_product():
+  missing_data = validate_request_data(request)
+  if missing_data:
+    return missing_data
+  
+  release_date = get_release_date(request)
+
+  data, message, code = product_repository.create_product(request.json['name'], request.json['code'], request.json['description'], release_date, request.json['gender_id'], request.json['category_id'])
+  
+  if data is None:
+    return ResponseHandler().create_error_response(message=message, code=code)
+  return ResponseHandler().create_response(data, message=message, code=code)
+
+def validate_request_data(request):
+
   if 'name' not in request.json or not request.json['name']:
     return ResponseHandler().create_error_response('Name param is required', 400)
   if 'code' not in request.json or not request.json['code']:
@@ -25,16 +39,16 @@ def create_product():
     return ResponseHandler().create_error_response('Category param is required', 400)
   if 'gender_id' not in request.json or not request.json['gender_id']:
     return ResponseHandler().create_error_response('Gender param is required', 400)
+  
+  return None
+
+def get_release_date(request):
   if 'release_date' not in request.json or not request.json['release_date']:
     release_date = datetime.today().date()
   else:
     release_date = datetime.strptime(request.json['release_date'], "%Y-%m-%d").date()
-
-  data, message, code = product_repository.create_product(request.json['name'], request.json['code'], request.json['description'], release_date, request.json['gender_id'], request.json['category_id'])
+  return release_date
   
-  if data is None:
-    return ResponseHandler().create_error_response(message=message, code=code)
-  return ResponseHandler().create_response(data, message=message, code=code)
 
 @product_bp.route("/products", methods=["GET"])
 def get_products():
@@ -59,18 +73,33 @@ def get_product_by_id(product_id):
 
 @product_bp.route("/products", methods=["PUT"])
 # @jwt_required()
-def update_category():
-  if ('name' not in request.json or not request.json['name']):
-    return ResponseHandler().create_error_response('Name param is required', 400)
-  data, message, code = product_repository.update_category(request.json['id'], request.json['name'], request.json['description'])
+def update_product():
+  
+  missing_data = validate_request_data(request)
+  
+  if missing_data:
+    return missing_data
+  
+  release_date = get_release_date(request)
+
+  data, message, code = product_repository.update_product(
+    request.json['id'], 
+    request.json['name'], 
+    request.json['code'],
+    request.json['description'],
+    release_date,
+    request.json['gender_id'],
+    request.json['category_id']
+  )
+
   if data is None:
     return ResponseHandler().create_error_response(message=message, code=code)
   return ResponseHandler().create_response(data=data, message=message, code=code)
 
-@product_bp.route("/products/<int:category_id>", methods=["DELETE"])
+@product_bp.route("/products/<int:product_id>", methods=["DELETE"])
 # @jwt_required()
-def delete_category(category_id):
-  data, message, code = product_repository.delete_category(category_id)
+def delete_product(product_id):
+  data, message, code = product_repository.delete_product(product_id)
   if data is None:
     return ResponseHandler().create_error_response(message=message, code=code)
   return ResponseHandler().create_response(data=data, message=message, code=code)
