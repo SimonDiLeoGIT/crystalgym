@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 import CategoryService from "../../../services/category.service";
 import { Category} from "../../../interfaces/CategoryInterfaces";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Pagination from "../../../components/Pagination/Pagination";
 import { PaginationInterface } from "../../../interfaces/Pagination";
 import show_icon from "../../../assets/icons/eye-svgrepo-com.svg"
@@ -10,6 +10,15 @@ import time_icon from "../../../assets/icons/time-svgrepo-com.svg"
 import { MoonLoader } from "react-spinners";
 
 const AdminCategories = () => {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // read params
+  const page = Number(searchParams.get("page")) || 1;
+  const perPage = Number(searchParams.get("perPage")) || 10;
+  const sortBy = searchParams.get("sortBy") || "id";
+  const sortOrder = searchParams.get("sortOrder") || "asc";
+  const search = searchParams.get("search") || "";
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [paginationData, setPaginationData] = useState<PaginationInterface>();
@@ -23,9 +32,10 @@ const AdminCategories = () => {
     getCategories()
   }, [])
   
-  const getCategories = async () => {
+  const getCategories = async (page: number = 1, perPage: number = 10, sortBy: string = 'id', sortOrder: string = 'asc', search: string = '') => {
+    setLoading(true);
     try {
-      const response = await CategoryService.getCategories();
+      const response = await CategoryService.getCategories(page, perPage, sortBy, sortOrder, search);
       if (response.success) {
         setCategories(response.data.categories);
         setPaginationData(response.data.pagination_data);
@@ -38,6 +48,19 @@ const AdminCategories = () => {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    getCategories(page, perPage, sortBy, sortOrder, search);
+  }, [page, perPage, sortBy, sortOrder, search]);
+
+   const handleChangeOrder = (newSortBy: string) => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    setSearchParams({ page: String(page), perPage: String(perPage), sortBy: newSortBy, sortOrder: newOrder });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ page: String(newPage), perPage: String(perPage), sortBy, sortOrder });
+  };
 
   return (
     <AdminLayout
@@ -52,8 +75,20 @@ const AdminCategories = () => {
         </header>
         <ul className="my-4 rounded-lg overflow-hidden border border-slate-300/50 border-b-0 shadow-md shadow-slate-300/50">
           <li className="grid grid-cols-4 p-4 bg-slate-200/60 text-slate-600 border-b">
-            <p>Name</p>
-            <p>Description</p>
+            <p>
+              <button 
+                onClick={() => handleChangeOrder("name")}
+              >
+                Name
+              </button>
+            </p>
+            <p>
+              <button 
+                onClick={() => handleChangeOrder("description")}
+              >
+                Description
+              </button>
+            </p>
             <p>Status</p>
           </li>
           {
@@ -95,7 +130,7 @@ const AdminCategories = () => {
           paginationData && paginationData?.total_pages > 0 &&
           <Pagination 
             totalPages={paginationData?.total_pages}
-            getData={getCategories}
+            onPageChange={handlePageChange}
           />
         }
       </section>

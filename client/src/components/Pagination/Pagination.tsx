@@ -4,16 +4,16 @@ import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
 
 interface Props {
   totalPages: number
-  getData: (page: number) => Promise<void>
+  onPageChange: (page: number) => void
 }
 
-const Pagination: React.FC<Props> = ({ totalPages, getData}) => {
+const Pagination: React.FC<Props> = ({ totalPages, onPageChange}) => {
 
   const handlePageClick = async (event: { selected: number }) => {
     const nextPage = event.selected + 1;
-
+    
     if (nextPage <= totalPages) {
-      await getData(nextPage);
+      await onPageChange(nextPage);
       window.scrollTo(0, 0);
     }
   };
@@ -22,22 +22,26 @@ const Pagination: React.FC<Props> = ({ totalPages, getData}) => {
     <ReactPaginate
       breakLabel="..."
       nextLabel={
-        <img src={right_arrow} className="w-4" alt="Next Page"/>
+        <div className="p-3">
+          <img src={right_arrow} className="w-4" alt="Next Page"/>
+        </div>
       }
       onPageChange={handlePageClick}
       pageRangeDisplayed={1}
       pageCount={totalPages || 0}
       marginPagesDisplayed={2}
       previousLabel={
-        <img src={left_arrow} className="w-4" alt="Prev Page"/>
+        <div className="p-3">
+          <img src={left_arrow} className="w-4" alt="Prev Page"/>
+        </div>
       }
       renderOnZeroPageCount={null}
       containerClassName=" flex justify-center hover:cursor-pointer m-auto my-8"
       pageLinkClassName="p-1 md:p-2"
-      pageClassName="p-2 md:p-2 rounded-lg font-semibold -text--color-black hover:-bg--color-very-light-grey hover:opacity-60"
-      activeClassName="-bg--color-light-grey-violet -text--color-white hover:-bg--color-light-grey-violet"
-      previousClassName="h-8 w-4 md:w-8 flex items-center justify-center -bg--color-light-grey-violet rounded-lg m-auto mr-1 hover:opacity-60"
-      nextClassName="h-8 w-4 md:w-8 flex items-center justify-center -bg--color-light-grey-violet rounded-lg m-auto ml-1 hover:opacity-60"
+      pageClassName="p-2 md:p-2 rounded-md font-semibold text-black hover:opacity-90"
+      activeClassName="bg-violet-300 text-slate-100 hover:opacity-90"
+      previousClassName="flex items-center justify-center bg-violet-300 rounded-md m-auto mr-1 hover:opacity-90"
+      nextClassName="flex items-center justify-center bg-violet-300 rounded-md m-auto ml-1 hover:opacity-90"
     />
   )
 }

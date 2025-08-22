@@ -7,7 +7,7 @@ export default class CategoryService {
   static async getCategories(page: number = 1, perPage: number = 10, sortBy: string = 'id', sortOrder: string = 'asc', search: string = '') {
     const query = new URLSearchParams({
       page: page.toString(),
-      page_size: perPage.toString(),
+      per_page: perPage.toString(),
       sort_by: sortBy,
       sort_order: sortOrder,
       search: search
