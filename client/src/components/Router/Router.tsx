@@ -1,11 +1,11 @@
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom"
+import { Route, Routes, useLocation } from "react-router-dom"
 import { lazy, Suspense } from "react"
 import AdminHome from "../../pages/admin/AdminHome"
 import AdminNavbar from "../../pages/admin/Components/AdminNavbar"
-import Products from "../../pages/admin/Products/Products"
 import AdminCategories from "../../pages/admin/Category/AdminCategories"
 import AdminCategoryCreate from "../../pages/admin/Category/AdminCategoryCreate"
 import AdminCategoryUpdate from "../../pages/admin/Category/AdminCategoryUpdate"
+import DashboardProducts from "../../pages/admin/Products/DashboardProducts"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -21,7 +21,6 @@ const Navbar = lazy(() => import("../Navbar/Navbar"))
 const Footer = lazy(() => import("../Footer/Footer"))
 const Register = lazy(() => import("../../pages/Register"))
 const Login = lazy(() => import("../../pages/Login"))
-const ClotheCategories = lazy(() => import("../../pages/admin/ClotheCategories/ClotheCategories"))
 const Clothes = lazy(() => import ("../../pages/Clothes"))
 // const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
 
@@ -57,11 +56,10 @@ const Router = () => {
           <Route path="/category/:catogoryId/clothes" element={<Clothes />} />
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
           <Route path="/admin" element={<AdminHome />} />
-          <Route path="/admin/products" element={<Products />} />
           <Route path="/admin/categories" element={<AdminCategories />} />
           <Route path="/admin/categories/create" element={<AdminCategoryCreate />} />
           <Route path="/admin/categories/edit/:categoryId" element={<AdminCategoryUpdate />} />
-          {/* <Route path="/admin/categories/:categoryId" element={<AdminClothes />} /> */}
+          <Route path="/admin/products" element={<DashboardProducts />} />
         </Routes>
         {
           !isAdminRoute &&

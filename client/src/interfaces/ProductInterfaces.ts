@@ -1,17 +1,18 @@
+import { PaginationInterface } from "./Pagination"
 
-type images = string[]
+export interface ProductHttpResponse {
+  product: Product[]
+  pagination_data: PaginationInterface
+}
 
-export interface ProductInterface {
+export interface Product {
   id: number,
   name: string,
+  code: string,
+  description: string,
+  release_date: string,
+  gender: string,
   category: string,
-  sex: string,
-  new: boolean,
-  off: boolean,
-  accessory: boolean,
-  colorId: number,
-  colorName: string,
-  images: images,
-  hashcode: string
-  price: number
 }
+
+
