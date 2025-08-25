@@ -125,3 +125,14 @@ class TestCategoryController:
   def test_that_delete_category_returns_404_if_the_category_does_not_exist(self, test_client):
     response = test_client.delete("/api/categories/1000")
     assert response.json['status_code'] == 404
+
+  # Test get_all returns 200 and the categories if they are found
+  def test_get_all_returns_200_and_the_categories_if_they_are_found(self, test_client):
+    response = test_client.get("/api/categories/all")
+    assert response.json['status_code'] == 200
+
+  # Test get_all returns 404 if no categories are found
+  def test_get_all_returns_404_if_no_categories_are_found(self, test_client):
+    response = test_client.delete("/api/categories/2")
+    response = test_client.get("/api/categories/all")
+    assert response.json['status_code'] == 404

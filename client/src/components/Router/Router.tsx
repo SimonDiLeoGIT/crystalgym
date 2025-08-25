@@ -1,11 +1,12 @@
 import { Route, Routes, useLocation } from "react-router-dom"
 import { lazy, Suspense } from "react"
-import AdminHome from "../../pages/admin/AdminHome"
-import AdminNavbar from "../../pages/admin/Components/AdminNavbar"
-import AdminCategories from "../../pages/admin/Category/AdminCategories"
-import AdminCategoryCreate from "../../pages/admin/Category/AdminCategoryCreate"
-import AdminCategoryUpdate from "../../pages/admin/Category/AdminCategoryUpdate"
-import DashboardProducts from "../../pages/admin/Products/DashboardProducts"
+import Dashboard from "../../pages/admin/Dashboard"
+import Categories from "../../pages/admin/Category/Categories"
+import CategoryCreate from "../../pages/admin/Category/CategoryCreate"
+import CategoryUpdate from "../../pages/admin/Category/CategoryUpdate"
+import Products from "../../pages/admin/Products/Products"
+import {Navbar as AdminNavbar} from "../../pages/admin/Components/Navbar"
+import {Create as ProductsCreate} from "../../pages/admin/Products/Create"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -27,7 +28,7 @@ const Clothes = lazy(() => import ("../../pages/Clothes"))
 const Router = () => {
 
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith("/admin")
+  const isAdminRoute = location.pathname.startsWith("/dashboard")
 
   return (
     // <BrowserRouter>
@@ -55,11 +56,12 @@ const Router = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/category/:catogoryId/clothes" element={<Clothes />} />
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/admin/categories" element={<AdminCategories />} />
-          <Route path="/admin/categories/create" element={<AdminCategoryCreate />} />
-          <Route path="/admin/categories/edit/:categoryId" element={<AdminCategoryUpdate />} />
-          <Route path="/admin/products" element={<DashboardProducts />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/categories" element={<Categories />} />
+          <Route path="/dashboard/categories/create" element={<CategoryCreate />} />
+          <Route path="/dashboard/categories/edit/:categoryId" element={<CategoryUpdate />} />
+          <Route path="/dashboard/products" element={<Products />} />
+          <Route path="/dashboard/products/create" element={<ProductsCreate />} />
         </Routes>
         {
           !isAdminRoute &&

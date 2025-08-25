@@ -14,6 +14,12 @@ class CategoryRepository:
     db.session.add(category)
     db.session.commit()
     return category.to_json(), "Category created successfully", 201
+  
+  def get_all(self):
+    categories = db.session.query(Category.id, Category.name).all()
+    if not categories:
+      return None, "No categories found", 404
+    return [dict(id=category.id, name=category.name) for category in categories], "Categories retrieved successfully", 200
 
 
   def get_categories(self, page=1, per_page=10, sort_by='id', sort_order='asc', search=''):

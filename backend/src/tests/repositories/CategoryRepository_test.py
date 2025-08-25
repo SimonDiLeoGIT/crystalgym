@@ -226,3 +226,21 @@ class TestCategoryRepository:
       data, message, code = category_repository.delete_category(6)
       assert data == None
       db.session.query(Category).delete()
+
+  # Test get_all returns 404 if no categories are found
+  def test_get_all_returns_404_if_no_categories_are_found(self, test_client, category_repository):
+    with test_client.application.app_context():
+      db.session.query(Category).delete()
+      data, message, code = category_repository.get_all()
+      assert code == 404
+  
+  # Test get_all returns 200 if categories are found
+  def test_get_all_returns_200_if_categories_are_found(self, test_client, category_repository):
+    with test_client.application.app_context():
+      category_repository.create_category('test', 'test')
+      category_repository.create_category('test_2', 'test_2')
+      category_repository.create_category('test_3', 'test_3')
+      category_repository.create_category('test_4', 'test_4')
+      data, message, code = category_repository.get_all()
+      assert code == 200
+      db.session.query(Category).delete()

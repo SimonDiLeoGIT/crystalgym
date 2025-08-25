@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../AdminLayout";
+import AdminLayout from "../Components/AdminLayout";
 import CategoryService from "../../../services/category.service";
 import { Link, useParams } from "react-router-dom"
 import ErrorMessage from "../../../components/ErrorMessage";
 
-const AdminCategoryUpdate = () => {
+const CategoryUpdate = () => {
 
   const {categoryId} = useParams();
 
@@ -73,7 +73,7 @@ const AdminCategoryUpdate = () => {
 
   return (
     <AdminLayout
-      head={<> <Link to="/admin/categories">Categories</Link> · <span className="opacity-70">Edit</span></>}
+      head={<> <Link to="/dashboard/categories">Categories</Link> · <span className="opacity-70">Edit</span></>}
     >
       <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
       <section className="w-4/6 m-auto my-12">
@@ -145,4 +145,4 @@ const AdminCategoryUpdate = () => {
   );
 }
 
-export default AdminCategoryUpdate
+export default CategoryUpdate

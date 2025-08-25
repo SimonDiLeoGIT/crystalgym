@@ -6,13 +6,12 @@ export interface ProductHttpResponse {
 }
 
 export interface Product {
-  id: number,
   name: string,
   code: string,
   description: string,
   release_date: string,
-  gender: string,
-  category: string,
+  gender_id: number,
+  category_id: number,
 }
 
 

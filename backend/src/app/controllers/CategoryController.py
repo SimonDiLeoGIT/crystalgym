@@ -23,6 +23,14 @@ def create_category():
     return ResponseHandler().create_error_response(message=message, code=code)
   return ResponseHandler().create_response(data, message=message, code=code)
 
+@category_bp.route("/categories/all", methods=["GET"])
+def get_all():
+  # @jwt_required()
+  data, message, code = category_repository.get_all()
+  if data is None:
+    return ResponseHandler().create_error_response(message=message, code=code)
+  return ResponseHandler().create_response(data=data, message=message, code=code)
+
 @category_bp.route("/categories", methods=["GET"])
 def get_categories():
   # @jwt_required()
@@ -61,3 +69,4 @@ def delete_category(category_id):
   if data is None:
     return ResponseHandler().create_error_response(message=message, code=code)
   return ResponseHandler().create_response(data=data, message=message, code=code)
+

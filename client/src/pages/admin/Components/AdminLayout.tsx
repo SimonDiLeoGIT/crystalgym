@@ -1,17 +1,14 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import Login from "../Login";
+import Login from "../../Login";
 import { ReactNode } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
 
 const AdminLayout = ({children, head}: {children: ReactNode, head: ReactNode}) => {
 
   const { user, isLoading, isAuthenticated, logout } = useAuth0()
 
-  const location = useLocation();
 
-  // get pathname parts (filter removes empty strings)
-  const parts = location.pathname.split("/").filter(Boolean);
 
   
   if (!isLoading && !isAuthenticated) {
@@ -50,7 +47,7 @@ const AdminLayout = ({children, head}: {children: ReactNode, head: ReactNode}) =
         </nav>
         <section className="my-4">
           <p className="text-slate-600 font-semibold">
-            <Link to="/admin">Dashboard</Link> · 
+            <Link to="/dashboard">Dashboard</Link> · 
             {head}
           </p>
         </section>

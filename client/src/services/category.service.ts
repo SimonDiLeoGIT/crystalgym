@@ -16,6 +16,11 @@ export default class CategoryService {
     return response;
   }
 
+  static async getAll() {
+    const response = await ApiService.makeRequest<HttpResponse<Category[]>>('/categories/all');
+    return response;
+  }
+
   static async getCategoryById(id: number) {
     const response = await ApiService.makeRequest(`/categories/${id}`);
     return response;

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-const AdminNavbar = () => {
+export const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 h-screen z-10 border-r -border--color-very-light-grey shadow-md -shadow--color-greyest-violet w-[18%]">
       <section>
@@ -17,12 +17,12 @@ const AdminNavbar = () => {
                 </header>
                 <ul className="p-2 px-8 bg-slate-50 shadow-inner shadow-slate-200">
                   <li className="p-1">
-                    <Link to="/admin/categories" className="font-semibold text-slate-500 hover:opacity-80">
+                    <Link to="/dashboard/categories" className="font-semibold text-slate-500 hover:opacity-80">
                       List
                     </Link>
                   </li>
                   <li className="p-1">
-                    <Link to="/admin/categories/create" className="font-semibold text-slate-500 hover:opacity-80">
+                    <Link to="/dashboard/categories/create" className="font-semibold text-slate-500 hover:opacity-80">
                       Create
                     </Link>
                   </li>
@@ -36,12 +36,12 @@ const AdminNavbar = () => {
                 </header>
                 <ul className="p-2 px-8 bg-slate-50 shadow-inner shadow-slate-200">
                   <li className="p-1">
-                    <Link to="/admin/products" className="font-semibold text-slate-500 hover:opacity-80">
+                    <Link to="/dashboard/products" className="font-semibold text-slate-500 hover:opacity-80">
                       List
                     </Link>
                   </li>
                   <li className="p-1">
-                    <Link to="/admin/products/create" className="font-semibold text-slate-500 hover:opacity-80">
+                    <Link to="/dashboard/products/create" className="font-semibold text-slate-500 hover:opacity-80">
                       Create
                     </Link>
                   </li>
@@ -53,5 +53,3 @@ const AdminNavbar = () => {
     </nav>
   )
 }
-
-export default AdminNavbar

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import AdminLayout from "../AdminLayout";
+import AdminLayout from "../Components/AdminLayout";
 import CategoryService from "../../../services/category.service";
 import ErrorMessage from "../../../components/ErrorMessage";
 import { Link } from "react-router-dom";
 
-const AdminCategoryCreate = () => {
+const CategoryCreate = () => {
 
   const [data, setData] = useState({
     name: '',
@@ -25,7 +25,7 @@ const AdminCategoryCreate = () => {
       const response = await CategoryService.postCategory(data);
       if (response.success) {
         console.log(response.message);
-        window.location.href = "/admin/categories";
+        window.location.href = "/dashboard/categories";
       } else {
         console.error(response.message);
         setErrorMessage(response.message);
@@ -40,7 +40,7 @@ const AdminCategoryCreate = () => {
 
   return (
     <AdminLayout
-      head={<> <Link to="/admin/categories">Categories</Link> · <span className="opacity-70">Create</span></>}
+      head={<> <Link to="/dashboard/categories">Categories</Link> · <span className="opacity-70">Create</span></>}
     >
       <ErrorMessage message={errorMessage} visible={visibleErrorMessage} setVisible={setVisibleErrorMessage} />
       <section className="w-4/6 m-auto my-12">
@@ -82,4 +82,4 @@ const AdminCategoryCreate = () => {
   );
 }
 
-export default AdminCategoryCreate
+export default CategoryCreate

@@ -1,6 +1,6 @@
 import { Category } from '../interfaces/CategoryInterfaces';
 import { HttpResponse } from '../interfaces/HttpResponseInterface';
-import { ProductHttpResponse } from '../interfaces/ProductInterfaces';
+import { Product, ProductHttpResponse } from '../interfaces/ProductInterfaces';
 import ApiService from './api.service';
 
 export default class ProductService {
@@ -22,8 +22,8 @@ export default class ProductService {
     return response;
   }
 
-  static async postCategory(category: Category) {
-    const response = await ApiService.makeRequest('/categories', 'POST', category);
+  static async postProduct(product: Product) {
+    const response = await ApiService.makeRequest('/products', 'POST', product);
     return response;
   }
 

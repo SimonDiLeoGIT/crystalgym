@@ -1,10 +1,6 @@
-export interface GenderInterface {
-  code: number
-  data: GenderDataInterface[]
-  message: string
-}
 
-export interface GenderDataInterface {
+
+export interface Gender {
   id: number
   name: string
   description: string
