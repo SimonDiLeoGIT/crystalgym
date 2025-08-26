@@ -74,8 +74,8 @@ const Products = () => {
           </Link>
         </header>
         <ul className="my-4 rounded-lg overflow-hidden border border-slate-300/50 border-b-0 shadow-md shadow-slate-300/50">
-          <li className="grid grid-cols-7 p-4 bg-slate-200/60 text-slate-600 border-b">
-            <p>
+          <li className="grid grid-cols-8 p-4 bg-slate-200/60 text-slate-600 border-b">
+            <p className="col-span-4">
               <button 
                 onClick={() => handleChangeOrder("name")}
               >
@@ -91,33 +91,12 @@ const Products = () => {
             </p>
             <p>
               <button 
-                onClick={() => handleChangeOrder("description")}
-              >
-                Description
-              </button>
-            </p>
-            <p>
-              <button 
                 onClick={() => handleChangeOrder("release_date")}
               >
                 Release Date
               </button>
             </p>
-            <p>
-              <button 
-                onClick={() => handleChangeOrder("gender")}
-              >
-                Gender
-              </button>
-            </p>
-            <p>
-              <button 
-                onClick={() => handleChangeOrder("category")}
-              >
-                Category
-              </button>
-            </p>
-            <p>Status</p>
+            <p className="text-center">Status</p>
           </li>
           {
             loading ?
@@ -129,26 +108,23 @@ const Products = () => {
             products?.length === 0 ?
             <li className="h-96 flex items-center justify-center flex-col gap-4 border-b border-slate-300/50 rounded-b-lg">
               <p className="text-slate-600">There are no products.</p>
-              <Link to="/admin/products/create" className="p-2 bg-violet-600 text-white font-semibold rounded-lg hover:opacity-90">
+              <Link to="/dashboard/products/create" className="p-2 bg-violet-600 text-white font-semibold rounded-lg hover:opacity-90">
                 Create Product +
               </Link>
             </li>
             :
             products?.map((product) => {
               return (
-                <li key={product.id} className="grid grid-cols-7 p-4 text-slate-800 border-b border-slate-300/50">
-                  <p>{product.name}</p>
+                <li key={product.id} className="grid grid-cols-8 p-4 text-slate-800 border-b border-slate-300/50">
+                  <p className="col-span-4">{product.name}</p>
                   <p>{product.code}</p>
-                  <p>{product.description || "No description"}</p>
-                  <p>{product.release_date}</p>
-                  <p>{product.gender}</p>
-                  <p>{product.category}</p>
-                  <span className="text-xs border border-slate-300/70 shadow-sm w-fit px-2 rounded-full flex items-center gap-1 justify-center}">
+                  <p>{new Date(product.release_date).toISOString().split('T')[0]}</p>
+                  <span className="text-xs place-self-center border border-slate-300/70 shadow-sm w-fit px-2 py-1 rounded-full flex items-center gap-1 justify-center}">
                     <img src={time_icon} alt="Time icon" className="w-3" />
                     {/* <p>{product.status === 0 ? "Draft" : "Published"}</p> */}
                   </span>
                   <p className='flex items-end justify-end px-4'>  
-                    <Link to={`/admin/products/edit/${product.id}`} className="">
+                    <Link to={`/dashboard/products/edit/${product.id}`} className="">
                       <img src={show_icon} alt="Show icon" className="w-5" />
                     </Link>
                   </p>

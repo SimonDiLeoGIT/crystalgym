@@ -15,11 +15,11 @@ class GenderRepository:
       return None, "Gender not found", 404
     return [gender.to_json() for gender in genders], "Genders retrieved successfully", 200
 
-  def create_gender(self, name, description=''):
+  def create_gender(self, name):
     gender = db.session.query(Gender).filter(Gender.name == name).first()
     if gender:
       return None, f"Gender with name {name} already exists", 409
-    gender = Gender(name, description)
+    gender = Gender(name)
     db.session.add(gender)
     db.session.commit()
     return gender.to_json(), "Gender created successfully", 201

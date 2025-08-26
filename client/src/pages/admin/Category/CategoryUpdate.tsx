@@ -47,7 +47,7 @@ const CategoryUpdate = () => {
       const response = await CategoryService.updateCategory(data);
       if (response.success) {
         console.log(response.message);
-        window.location.href = "/admin/categories";
+        window.location.href = "/dashboard/categories";
       } else {
         console.error(response.message);
       }
@@ -60,7 +60,7 @@ const CategoryUpdate = () => {
     try {
       const response = await CategoryService.deleteCategory(category_id);
       if (response.success) {
-        window.location.href = "/admin/categories";
+        window.location.href = "/dashboard/categories";
       } else {
         setErrorMessage("Error deleting category");
         setVisibleErrorMessage(true);
@@ -103,7 +103,7 @@ const CategoryUpdate = () => {
           </div>
           <div className="flex justify-center gap-2">
             <Link
-              to="/admin/categories" 
+              to="/dashboard/categories" 
               className="py-2 w-32 text-center bg-slate-300 font-semibold shadow-md text-slate-500 rounded-lg hover:opacity-90"
             >
               Cancel

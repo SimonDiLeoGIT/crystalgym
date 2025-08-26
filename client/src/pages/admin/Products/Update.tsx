@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "../Components/AdminLayout";
 import ErrorMessage from "../../../components/ErrorMessage";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductService from "../../../services/product.service";
 import CategoryService from "../../../services/category.service";
 import GenderService from "../../../services/gender.service";
 
-export const Create = () => {
+export const Update = () => {
+
+  const {productId} = useParams();
 
   const [data, setData] = useState({
     name: '',
@@ -31,7 +33,7 @@ export const Create = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await ProductService.postProduct(data);
+      const response = await ProductService.updateProduct(data);
       if (response.success) {
         window.location.href = "/dashboard/products";
       } else {
@@ -47,9 +49,22 @@ export const Create = () => {
   }
 
   useEffect(() => {
-    const today = new Date();
-    setData({ ...data, release_date: today.toISOString().split('T')[0] })
-  }, [])
+    const getProduct = async () => {
+      try {
+        if (productId == null) return;
+        const response = await ProductService.getProductById(Number(productId));
+        if (response.success) {
+          setData(response.data);
+        } else {
+          console.error(response.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (productId == null) return;
+    getProduct();
+  }, [productId])
 
   useEffect(() => {
     const getCategories = async () => {
@@ -78,6 +93,21 @@ export const Create = () => {
     }
     getGenders();
   }, [])
+
+  const handleDelete = async (product_id: number) => {
+      try {
+        const response = await ProductService.deleteProduct(product_id);
+        if (response.success) {
+          window.location.href = "/dashboard/products";
+        } else {
+          setErrorMessage("Error deleting product");
+          setVisibleErrorMessage(true);
+        }
+      } catch (error) {
+        setErrorMessage(error.message);
+        setVisibleErrorMessage(true);
+      }
+    }
 
   return (
     <AdminLayout
@@ -164,15 +194,45 @@ export const Create = () => {
               ))
             }
           </div>
-          <div className="w-full text-center">
+          <div className="flex justify-center gap-2">
+            <Link
+              to="/dashboard/products" 
+              className="py-2 w-32 text-center bg-slate-300 font-semibold shadow-md text-slate-500 rounded-lg hover:opacity-90"
+            >
+              Cancel
+            </Link>
             <button
               type="submit" 
-              className="p-2 px-12 bg-violet-600 font-semibold shadow-md text-white rounded-lg hover:opacity-90"
+              className="py-2 w-32 text-center bg-violet-600 font-semibold shadow-md text-white rounded-lg hover:opacity-90"
             >
-              Create
+              Save Changes
             </button>
           </div>
         </form>
+        <div className="flex justify-end">
+        {/* {
+          data.status === 0 ?
+            <button className="py-2 w-32 text-center bg-emerald-200/60 font-semibold shadow-md text-emerald-800 rounded-lg hover:opacity-90">
+              Publish
+            </button>
+          :
+            <p className="text-slate-400 italic p-2">
+              Published
+            </p>
+        } */}
+        </div>
+        {
+          data && data.id &&
+          <section className="flex items-center justify-between my-8 p-4 border-2 border-rose-600 rounded-lg">
+            <p className="font-semibold">Danger Zone</p>
+            <button 
+              onClick={() => handleDelete(Number(data?.id))}
+              className="py-2 w-32 text-center bg-rose-600 font-semibold shadow-md text-white rounded-lg hover:opacity-90"
+              >
+              Delete
+            </button>
+          </section>
+          }
       </section>
     </AdminLayout>
   );

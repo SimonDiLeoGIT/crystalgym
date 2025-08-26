@@ -7,6 +7,7 @@ import CategoryUpdate from "../../pages/admin/Category/CategoryUpdate"
 import Products from "../../pages/admin/Products/Products"
 import {Navbar as AdminNavbar} from "../../pages/admin/Components/Navbar"
 import {Create as ProductsCreate} from "../../pages/admin/Products/Create"
+import {Update as ProductsUpdate} from "../../pages/admin/Products/Update"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -62,6 +63,7 @@ const Router = () => {
           <Route path="/dashboard/categories/edit/:categoryId" element={<CategoryUpdate />} />
           <Route path="/dashboard/products" element={<Products />} />
           <Route path="/dashboard/products/create" element={<ProductsCreate />} />
+          <Route path="/dashboard/products/edit/:productId" element={<ProductsUpdate />} />
         </Routes>
         {
           !isAdminRoute &&

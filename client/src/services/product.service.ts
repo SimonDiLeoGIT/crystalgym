@@ -1,4 +1,3 @@
-import { Category } from '../interfaces/CategoryInterfaces';
 import { HttpResponse } from '../interfaces/HttpResponseInterface';
 import { Product, ProductHttpResponse } from '../interfaces/ProductInterfaces';
 import ApiService from './api.service';
@@ -13,12 +12,12 @@ export default class ProductService {
       sort_order: sortOrder,
       search: search
     }).toString();
-    const response = await ApiService.makeRequest<HttpResponse<ProductHttpResponse>>(`/roducts?${query}`);
+    const response = await ApiService.makeRequest<HttpResponse<ProductHttpResponse>>(`/products?${query}`);
     return response;
   }
 
-  static async getCategoryById(id: number) {
-    const response = await ApiService.makeRequest(`/categories/${id}`);
+  static async getProductById(id: number) {
+    const response = await ApiService.makeRequest(`/products/${id}`);
     return response;
   }
 
@@ -27,13 +26,13 @@ export default class ProductService {
     return response;
   }
 
-  static async updateCategory(category: Category) {
-    const response = await ApiService.makeRequest('/categories', 'PUT', category);
+  static async updateProduct(product: Product) {
+    const response = await ApiService.makeRequest('/products', 'PUT', product);
     return response;
   }
 
-  static async deleteCategory(id: number) {
-    const response = await ApiService.makeRequest(`/categories/${id}`, 'DELETE');
+  static async deleteProduct(id: number) {
+    const response = await ApiService.makeRequest(`/products/${id}`, 'DELETE');
     return response;
   }
 
