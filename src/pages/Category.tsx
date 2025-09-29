@@ -1,0 +1,33 @@
+import { useEffect } from "react";
+import clothe_data from '../assets/json/shop/clothes.json'
+import { Products } from "../components/Products/Products";
+import { useParams } from "react-router-dom";
+import { Product } from "../interfaces/ProductInterfaces";
+
+
+type product = Product;
+
+const Category = () => {
+
+  const { sex } = useParams()
+  const { category } = useParams()
+
+  useEffect(() => {
+    document.title = "CrystalGym | Category";
+  })
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <section className="w-11/12 lg:w-10/12 m-auto">
+      <header className="py-2">
+        <h1 className="font-semibold text-xl md:font-bold md:text-3xl"> {category?.toUpperCase()} <span className="-text--color-grey text-sm md:text-lg"> {sex?.toUpperCase()} </span> </h1>
+      </header>
+      <Products />
+    </section>
+  )
+}
+
+export default Category;

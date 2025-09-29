@@ -1,0 +1,44 @@
+{
+  "advertisement": {
+    "title_front": "GYM",
+    "title_middle": "CLOTHES",
+    "title_end": "",
+    "info": "Urban and gym clothing.",
+    "button_title": "SHOP GYM CLOTHES",
+    "button_link": "/men/news/gym-clothes"
+  },
+  "mobileImages": [
+    {
+      "id": "0",
+      "image": "/images/men/advertisement/gym-clothing/gym-clothes-1-compress.webp",
+      "hashcode": "LdH.HH-;%NM{~qt7x]Rj%MRjRjWB"
+    },
+    {
+      "id": "1",
+      "image": "/images/men/advertisement/gym-clothing/gym-clothes-2-compress.webp",
+      "hashcode": "LDLh0n?c~qWB00ofRi%MjXD%D%ay"
+    },
+    {
+      "id": "2",
+      "image": "/images/men/advertisement/gym-clothing/gym-clothes-3-compress.webp",
+      "hashcode": "LQMHGe?v_N?bs+?bt7of-;j[RiIU"
+    }
+  ],
+  "desktopImages": [
+    {
+      "id": "0",
+      "image": "/images/men/advertisement/gym-clothing/desktop/resting-man-compress.webp",
+      "hashcode": "L15X#_}?w[DN~qNyE44.9tyYEONH"
+    },
+    {
+      "id": "1",
+      "image": "/images/men/advertisement/gym-clothing/desktop/lifting-man-compress.webp",
+      "hashcode": "LKE{2;RkbZ-p~VkBNbRkn$xaW=NG"
+    },
+    {
+      "id": "2",
+      "image": "/images/men/advertisement/gym-clothing/desktop/running-men-compress.webp",
+      "hashcode": "LEKx9w00?b%M00~q-;Rj004n9Fjs"
+    }
+  ]
+}
