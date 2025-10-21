@@ -8,3 +8,10 @@ export interface PaginationInterface {
   total_items: number,
   total_pages: number
 }
+
+export interface Pagination<T> {
+  count: number
+  next: string | null
+  previous: string | null
+  results: T[]
+}

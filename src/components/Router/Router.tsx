@@ -1,13 +1,5 @@
 import { Route, Routes, useLocation } from "react-router-dom"
 import { lazy, Suspense } from "react"
-import Dashboard from "../../pages/admin/Dashboard"
-import Categories from "../../pages/admin/Category/Categories"
-import CategoryCreate from "../../pages/admin/Category/CategoryCreate"
-import CategoryUpdate from "../../pages/admin/Category/CategoryUpdate"
-import Products from "../../pages/admin/Products/Products"
-import {Navbar as AdminNavbar} from "../../pages/admin/Components/Navbar"
-import {Create as ProductsCreate} from "../../pages/admin/Products/Create"
-import {Update as ProductsUpdate} from "../../pages/admin/Products/Update"
 
 const Home = lazy(() => import("../../pages/Home"))
 const Women = lazy(() => import("../../pages/Women"))
@@ -23,7 +15,6 @@ const Navbar = lazy(() => import("../Navbar/Navbar"))
 const Footer = lazy(() => import("../Footer/Footer"))
 const Register = lazy(() => import("../../pages/Register"))
 const Login = lazy(() => import("../../pages/Login"))
-const Clothes = lazy(() => import ("../../pages/Clothes"))
 // const AdminClothes = lazy(() => import("../../pages/admin/Clothes/AdminClothes"))
 
 const Router = () => {
@@ -40,7 +31,6 @@ const Router = () => {
         </header>
       )}
 
-      {isAdminRoute && <AdminNavbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/men" element={<Men />} />
@@ -55,15 +45,7 @@ const Router = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/category/:catogoryId/clothes" element={<Clothes />} />
           <Route path="/terms&conditions" element={<TerminosCondiciones />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/categories" element={<Categories />} />
-          <Route path="/dashboard/categories/create" element={<CategoryCreate />} />
-          <Route path="/dashboard/categories/edit/:categoryId" element={<CategoryUpdate />} />
-          <Route path="/dashboard/products" element={<Products />} />
-          <Route path="/dashboard/products/create" element={<ProductsCreate />} />
-          <Route path="/dashboard/products/edit/:productId" element={<ProductsUpdate />} />
         </Routes>
         {
           !isAdminRoute &&

@@ -22,23 +22,6 @@ export interface ClotheDataInterface {
   // category: CategoryDataInterface;
 }
 
-export interface ClotheColor {
-  id: number;
-  id_clothe: number;
-  id_color: number; 
-  stock: number;
-  images: Image[];
-}
-
-export interface Image {
-  hashcode: string;
-  id: number;
-  id_clothe: number;
-  id_color: number;
-  name: string;
-  signed_image_url: string;
-  url: string;
-}
 
 export interface ClothesResponse {
   code: number

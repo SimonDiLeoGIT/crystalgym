@@ -1,80 +1,91 @@
 import { useEffect, useState } from "react";
-// import ReactPaginate from "react-paginate";
-// import left_arrow from '../../assets/icons/carousel/left-arrow.svg'
-// import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
+import ReactPaginate from "react-paginate";
+import left_arrow from '../../assets/icons/carousel/left-arrow.svg'
+import right_arrow from '../../assets/icons/carousel/right-arrow.svg'
 import { ProductImg } from "../ProductImg/ProductImg";
-import { Product } from "../../interfaces/ProductInterfaces";
-// import { useParams } from "react-router-dom";
 import ProductService from "../../services/product.service";
+import { Pagination } from "../../interfaces/Pagination";
+import { Link, useParams } from "react-router-dom";
+import { Variants } from "../../interfaces/VariantInterfaces";
 
 
 export const Products = () => {
 
-  // const { sex } = useParams()
-  // const { category } = useParams()
+  const {sex, category} = useParams();
 
-  // const totalArticles = 10
-  // const [totalPages, setTotalPages] = useState<number>(0)
-  // const [currentPage, setCurrentPage] = useState<number>(0)
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<Pagination<Variants>>({ count: 0, next: null, previous: null, results: [] })
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const totalArticles = 10;
+  const [totalPages, setTotalPages] = useState<number>(0);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const data = await ProductService.getAll()
+  const getProducts = async (page:number = 0) => {
+    if (!sex) {
+      return [false, 'Sex param does not exist']
+    }
+    if (!category) {
+      return [false, 'Category param does not exist']
+    }
+    try {
+      const data = await ProductService.getVariantsByCategoryAndGender(page, sex, category)
       if (data) {
-        setProducts(data)
+        setProducts(prev => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
+        const pages = Math.ceil(data.count / totalArticles);
+        setTotalPages(prev => (prev === pages ? prev : pages));
+        
+        return [true, 'Products fetched succesfully']
       }
+    } catch (e) {
+      return [false, 'Error requesting products: ' + e]
     }
 
-    getProducts()
-  }, []);
+  }
 
-  // useEffect(() => {
-  //   setProducts(products.slice(currentPage, (currentPage) + totalArticles))
-  //   setTotalPages(products?.length / totalArticles)
-  // }, [products, currentPage]);
+  useEffect(() => {
+    getProducts(currentPage)
+  }, [currentPage, sex, category]);
 
-  // useEffect(() => {
-  //   setCurrentPage(0)
-  // }, [products]);
 
-  // interface PageChangeEvent {
-  //   selected: number;
-  // }
+  const handlePageClick = async (event: { selected: number }) => {
+    const nextPage = event.selected + 1;
+    
+    if (nextPage <= totalPages) {
+      setCurrentPage(nextPage);
+      window.scrollTo(0, 0);
+    }
+  };
 
-  // const handlePageClick = (event: PageChangeEvent) => {
-  //   const next = (event.selected * totalArticles) % products.length;
-  //   setCurrentPage(next)
-  //   // setProducts(products.slice(next, (next) + totalArticles))
-  //   window.scrollTo(0, 0);
-  // }
 
   return (
     <section className=" m-auto">
       <section className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-4 xl:grid-cols-5">
         {
-          products?.map((product) => {
+          products?.results && products.results.length > 0 &&
+          products.results?.map((product) => {
             return (
               <article className="shadow-md">
-                <ProductImg product={product}  category={product.category} image={''}/>
+                <ProductImg product={product}/>
               </article>
             )
           }
           )
         }
       </section>
-      {/* <footer className='w-full mt-6'>
+      <footer className='w-full mt-6'>
         <ReactPaginate
           breakLabel="..."
           nextLabel={
-            <img src={right_arrow} className="w-4" alt="Next Page"/>
+            <Link to={products.next ? products.next : '#'} >
+              <img src={right_arrow} className="w-4" alt="Next Page"/>
+            </Link>
           }
           onPageChange={handlePageClick}
           pageRangeDisplayed={1}
           pageCount={totalPages}
           marginPagesDisplayed={2}
           previousLabel={
-            <img src={left_arrow} className="w-4" alt="Prev Page"/>
+            <Link to={products.previous ? products.previous : '#'} >
+              <img src={left_arrow} className="w-4" alt="Prev Page"/>
+            </Link>
           }
           renderOnZeroPageCount={null}
           containerClassName=" flex justify-center hover:cursor-pointer  m-auto"
@@ -84,7 +95,7 @@ export const Products = () => {
           previousClassName="h-8 w-4 md:w-8 flex items-center justify-center -bg--color-light-grey-violet rounded-lg m-auto mr-1 hover:opacity-60"
           nextClassName="h-8 w-4 md:w-8 flex items-center justify-center -bg--color-light-grey-violet rounded-lg m-auto ml-1 hover:opacity-60"
         />
-      </footer> */}
+      </footer>
     </section>
   )
 }
