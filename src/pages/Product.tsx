@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom"
 import { lazy, useEffect, useState } from "react"
 import { useCart } from "../hook/useCart"
-import ProductsAdvertisement from "../components/ProductsAdvertisement/ProductsAdvertisement"
+// import ProductsAdvertisement from "../components/ProductsAdvertisement/ProductsAdvertisement"
 import all_clothes from "../assets/json/shop/clothes.json"
 import { ProductColors } from "../components/ProductColors/ProductColors"
 import { ProductInterface } from "../interfaces/ProductInterfaces"
+import ProductService from "../services/product.service"
 
 const ImageLoad = lazy(() => import("../components/ImageLoad/ImageLoad"))
 const ArrowButtons = lazy(() => import("../components/ArrowButtons/ArrowButtons"))
@@ -13,8 +14,7 @@ type product = ProductInterface
 
 const Product = () => {
 
-  const { id } = useParams()
-  const { colorId } = useParams()
+  const { sku } = useParams()
   const { addToCart } = useCart()
 
   const [product, setProduct] = useState<product | null>()
@@ -26,12 +26,29 @@ const Product = () => {
   })
 
   useEffect(() => {
-    const productAssigned = all_clothes.all.find(clothe => clothe.id.toString() === id && clothe.colorId.toString() === colorId)
+    const getProduct = async () => {
+      if (!sku) {
+        return [false, 'SKU param does not exist']
+      }
+      try {
+        const data = await ProductService.getVariantBySku(sku)
+        if (data) {
+          setProduct(data);
+          console.log(data);
+          return [true, 'Product fetched succesfully']
+        }
+      } catch (e) {
+        return [false, 'Error requesting product: ' + e]
+      }
+    }
+    
+    const productAssigned = getProduct()
+    
     setProduct(productAssigned)
     changeCurrentImage(0)
     setTranslateValue(0)
     window.scrollTo(0, 0)
-  }, [id, colorId])
+  }, [sku]);
 
   return (
     <section className="max-w-screen lg:w-11/12 lg:m-auto">

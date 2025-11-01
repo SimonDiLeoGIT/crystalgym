@@ -26,7 +26,7 @@ export const Products = () => {
       return [false, 'Category param does not exist']
     }
     try {
-      const data = await ProductService.getVariantsByCategoryAndGender(page, sex, category)
+      const data = await ProductService.getProductsByCategoryAndGender(page, sex, category)
       if (data) {
         setProducts(prev => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
         const pages = Math.ceil(data.count / totalArticles);

@@ -15,8 +15,8 @@ export default class ProductService {
   //   return response;
   // }
   
-  static async getVariantsByCategoryAndGender(page:number = 0, genderId:string, categoryId:string,) {
-    const response = await ApiService.makeRequest<HttpResponse<Variants>>(`/variants/${genderId}/${categoryId}${page ? `?page=${page}` : ''}`);
+  static async getProductsByCategoryAndGender(page:number = 0, genderId:string, categoryId:string,) {
+    const response = await ApiService.makeRequest<HttpResponse<Variants>>(`/products/${genderId}/${categoryId}${page ? `?page=${page}` : ''}`);
     return response;
   }
   
@@ -34,6 +34,11 @@ export default class ProductService {
 
   static async getProductById(id: number) {
     const response = await ApiService.makeRequest(`/products/${id}`);
+    return response;
+  }
+  
+  static async getVariantBySku(sku: string) {
+    const response = await ApiService.makeRequest(`/variants/sku/${sku}`);
     return response;
   }
 

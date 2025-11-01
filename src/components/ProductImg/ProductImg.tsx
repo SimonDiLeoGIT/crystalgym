@@ -20,7 +20,7 @@ export const ProductImg: React.FC<Props> = ({ product }) => {
   return (
     <figure className="lg:h-full">
       <div className="relative overflow-hidden w-full h-72 sm:h-[400px] xl:h-[450px] 2xl:h-[480px] group">
-        <Link to={`/product/${product.id}`} className="h-full w-full block">
+        <Link to={`/product/${product.sku}`} className="h-full w-full block">
           {/* <ImageLoad
             imageUrl={image}
             imageBlurHash={product.image.hashcode}
