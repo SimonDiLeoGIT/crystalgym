@@ -1,7 +1,7 @@
 import { Category } from "./CategoryInterfaces"
 import { Gender } from "./GenderInterfaces"
 
-export interface Product {
+export interface ProductInterface {
   id: number,
   name: string,
   code: string,
@@ -9,4 +9,5 @@ export interface Product {
   release_date: string,
   gender: Gender,
   category: Category,
+  price: number,
 }

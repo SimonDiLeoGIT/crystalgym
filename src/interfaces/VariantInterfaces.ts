@@ -1,4 +1,5 @@
-import { Color } from "@mui/material"
+import { ColorInterface } from "./ColorInterfaces"
+import { ProductInterface } from "./ProductInterfaces"
 
 export interface Variants {
   id: number,
@@ -8,8 +9,9 @@ export interface Variants {
   price: string,
   stock: string,
   sizes: Size[],
-  color: Color,
+  color: ColorInterface,
   image: Image
+  category: string
 }
 
 export interface Size {
@@ -22,4 +24,16 @@ export interface Image {
   image: string
   alt_text: string | null
   variant: number
+}
+
+export interface VariantWithProductInterface {
+  id: number,
+  product: ProductInterface,
+  name: string,
+  sku: string,
+  color: ColorInterface,
+  images: Image[],
+  code: string,
+  description: string,
+  release_date: string,
 }

@@ -2,22 +2,21 @@ import { useParams } from "react-router-dom"
 import { lazy, useEffect, useState } from "react"
 import { useCart } from "../hook/useCart"
 // import ProductsAdvertisement from "../components/ProductsAdvertisement/ProductsAdvertisement"
-import all_clothes from "../assets/json/shop/clothes.json"
-import { ProductColors } from "../components/ProductColors/ProductColors"
-import { ProductInterface } from "../interfaces/ProductInterfaces"
 import ProductService from "../services/product.service"
+import { VariantWithProductInterface } from "../interfaces/VariantInterfaces"
+import { ProductVariants } from "../components/ProductVariants/ProductVariants"
 
 const ImageLoad = lazy(() => import("../components/ImageLoad/ImageLoad"))
 const ArrowButtons = lazy(() => import("../components/ArrowButtons/ArrowButtons"))
 
-type product = ProductInterface
+// type product = Product
 
 const Product = () => {
 
   const { sku } = useParams()
   const { addToCart } = useCart()
 
-  const [product, setProduct] = useState<product | null>()
+  const [product, setProduct] = useState<VariantWithProductInterface | null>()
   const [currentImage, changeCurrentImage] = useState(0);
   const [translateValue, setTranslateValue] = useState(0);
 
@@ -34,7 +33,6 @@ const Product = () => {
         const data = await ProductService.getVariantBySku(sku)
         if (data) {
           setProduct(data);
-          console.log(data);
           return [true, 'Product fetched succesfully']
         }
       } catch (e) {
@@ -42,9 +40,7 @@ const Product = () => {
       }
     }
     
-    const productAssigned = getProduct()
-    
-    setProduct(productAssigned)
+    getProduct()
     changeCurrentImage(0)
     setTranslateValue(0)
     window.scrollTo(0, 0)
@@ -57,14 +53,20 @@ const Product = () => {
           <div className="relative">
             <section className="max-h-screen flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(${translateValue}%)` }}>
               {
-                product?.images.map((image: string) => {
+                product?.images?.map((image) => {
                   return (
-                    <ImageLoad
-                      imageUrl={image}
-                      imageBlurHash={product?.hashcode}
-                      alt={product?.name}
-                      imageStyles="w-full object-cover"
-                      loading="eager"
+                    // <ImageLoad
+                    //   imageUrl={image}
+                    //   imageBlurHash={product?.hashcode}
+                    //   alt={product?.name}
+                    //   imageStyles="w-full object-cover"
+                    //   loading="eager"
+                    // />
+                    <img 
+                      key={image.image}
+                      src={import.meta.env.VITE_BACKEND_URL+image.image} 
+                      alt={product?.name} 
+                      className="w-full object-cover"
                     />
                   )
                 })
@@ -79,20 +81,23 @@ const Product = () => {
               <strong>
                 {product?.name}
               </strong>
-              {product?.new && <span className="ml-4 -bg--color-very-light-grey rounded-2xl px-2 py-1 text-xs font-extrabold -text--color-black"> NEW </span>}
+              {/* {product?.new && <span className="ml-4 -bg--color-very-light-grey rounded-2xl px-2 py-1 text-xs font-extrabold -text--color-black"> NEW </span>} */}
             </h1>
             <p className="my-1">
-              {product?.category}
+              {product?.product?.category?.name}
             </p>
             <p className="font-bold">
-              ${product?.price}
+              ${product?.product?.price}
             </p>
           </div>
-          <ProductColors />
+          {
+            product && sku &&
+            <ProductVariants productId={product?.product?.id} currentSku={sku} />
+          }
           {
             product &&
             <button
-              onClick={() => addToCart(product)}
+              // onClick={() => addToCart(product)}
               className="block m-auto -bg--color-black -text--color-light-grey-violet font-bold p-4 my-4 rounded-full w-11/12 max-w-md max-h-20 duration-150 hover:opacity-85">
               ADD TO BAG
             </button>

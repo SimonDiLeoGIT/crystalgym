@@ -1,12 +1,12 @@
 import { HttpResponse } from '../interfaces/HttpResponseInterface';
-import { Product } from '../interfaces/ProductInterfaces';
+import { ProductInterface } from '../interfaces/ProductInterfaces';
 import { Variants } from '../interfaces/VariantInterfaces';
 import ApiService from './api.service';
 
 export default class ProductService {
   
   static async getAll(page:number = 0) {
-    const response = await ApiService.makeRequest<HttpResponse<Product[]>>(`/products/${page ? `?page=${page}` : ''}`);
+    const response = await ApiService.makeRequest<HttpResponse<ProductInterface[]>>(`/products/${page ? `?page=${page}` : ''}`);
     return response;
   }
   
@@ -41,13 +41,18 @@ export default class ProductService {
     const response = await ApiService.makeRequest(`/variants/sku/${sku}`);
     return response;
   }
+  
+  static async getVariantByProductId(productId: string) {
+    const response = await ApiService.makeRequest(`/variants/product/${productId}`);
+    return response;
+  }
 
-  static async postProduct(product: Product) {
+  static async postProduct(product: ProductInterface) {
     const response = await ApiService.makeRequest('/products', 'POST', product);
     return response;
   }
 
-  static async updateProduct(product: Product) {
+  static async updateProduct(product: ProductInterface) {
     const response = await ApiService.makeRequest('/products', 'PUT', product);
     return response;
   }

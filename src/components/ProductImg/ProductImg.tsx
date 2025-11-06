@@ -28,7 +28,7 @@ export const ProductImg: React.FC<Props> = ({ product }) => {
             imageStyles="h-full w-full object-cover duration-500 hover:scale-125"
             loading="lazy"
           /> */}
-          <img src={`http://localhost:8000/${product.image?.image}`} alt={product.name} className="h-full w-full object-cover duration-500 hover:scale-125" loading="lazy"/>
+          <img src={import.meta.env.VITE_BACKEND_URL+product.image?.image} alt={product.name} className="h-full w-full object-cover duration-500 hover:scale-125" loading="lazy"/>
         </Link>
         {
           user?.id_role !== 1 &&
@@ -51,9 +51,10 @@ export const ProductImg: React.FC<Props> = ({ product }) => {
           </ul>
         </div>
       </div>
-      <figcaption className="p-4 text-sm -text--color-black md:text-base">
-        <h1 className="font-semibold text-nowrap overflow-x-hidden text-ellipsis md:font-bold ">{product.name}</h1>
-        <p className="">${product.price}</p>
+      <figcaption className="p-4 text-sm md:text-base font-semibold text-gray-800">
+        <h1 className="text-nowrap overflow-x-hidden text-ellipsis" title={product.name}>{product.name}</h1>
+        <p className="text-gray-800/80 text-nowrap overflow-x-hidden text-ellipsis" title={product.category}>{product.category}</p>
+        <p className="font-bold">${product.price}</p>
       </figcaption>
     </figure>
   )

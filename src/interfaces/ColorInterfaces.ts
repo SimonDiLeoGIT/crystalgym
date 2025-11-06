@@ -1,7 +1,7 @@
 export interface ColorInterface {
-  code: number
-  data: ColorDataInterface[]
-  message: string
+  id: number
+  name: string
+  hex_code: string
 }
 
 export interface ColorDataInterface {
